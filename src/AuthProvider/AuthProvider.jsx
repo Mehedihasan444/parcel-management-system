@@ -46,7 +46,7 @@ const AuthProvider = ({children}) => {
           name: currentUser.displayName,
           email: currentUser.email,
         image: currentUser.photoURL,
-       
+       role:'user'
         };
         axiosPublic.post("/jwt", userInfo).then((res) => {
           // console.log("hi",res.data.token)

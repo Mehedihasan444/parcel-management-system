@@ -3,6 +3,7 @@ import useAxiosSecure from "../Hooks/useAxiosSecure";
 import { Link } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 import Swal from "sweetalert2";
+import SectionTitle from "../Components/SectionTitle/SectionTitle";
 
 const My_Parcels = () => {
 const {user}=useAuth();
@@ -44,7 +45,8 @@ const handleDelete=(id)=>{
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-center mb-5">My_Parcels</h1>
+      {/* <h1 className="text-3xl font-bold text-center mb-5">My_Parcels</h1> */}
+      <SectionTitle heading={"My Parcels"}></SectionTitle>
       <span className="divider"></span>
       <div className="overflow-x-auto">
         <table className="table table-xs">

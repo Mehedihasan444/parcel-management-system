@@ -1,9 +1,23 @@
 
-// import { FaTrash, FaUsers } from "react-icons/fa";
+import { FaTrash, FaUsers } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
+import useAuth from "../Hooks/useAuth";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
 
 const All_Users = () => {
-   
+  const {user}=useAuth()
+  const axiosSecure = useAxiosSecure();
+
+  const { data: allUsers = [], refetch } = useQuery({
+    queryKey: ["allUsers"],
+    queryFn: async () => {
+      const res = await axiosSecure.get('/users/admin')
+      return res.data;
+    },
+  });
+
+console.log(allUsers)
   
     return (
       <div className="">
@@ -12,7 +26,7 @@ const All_Users = () => {
           subHeading={"How Many??"}
         ></SectionTitle>
         <div className="flex justify-around ">
-          <h1 className="text-4xl font-bold ">Total Users: </h1>
+          <h1 className="text-4xl font-bold ">Total Users: {allUsers.length}</h1>
         </div>
         {/* table */}
   
@@ -24,44 +38,50 @@ const All_Users = () => {
                 <th>#</th>
   
                 <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Action</th>
+                <th>Phone</th>
+                <th>Number of Parcel Booked</th>
+                <th>Total Spent Amount</th>
+                <th>Make Delivery Men</th>
+                <th>Make Admin</th>
               </tr>
             </thead>
             <tbody>
-              {/* {users.map((item, i) => (
+              {allUsers.map((item, i) => (
                 <tr key={item._id}>
                   <td>{i + 1}</td>
   
-                  <td>
-                    <div className="font-bold">{item.name}</div>
-                  </td>
-                  <td>{item.email}</td>
+                  <td> {item?.name} </td>
+                  <td>{item?.phone}</td>
+                  <td>{item?.numberOfParcelBook} </td>
+                  <td>{item?.totalSpentAmount}</td>
+                  <th>
+                    <button
+                      // onClick={() => {
+                      //   handleDeleteUser(item._id, item.name);
+                      // }}
+                      className="btn btn-primary bg-[#D1A054] border-none text-white"
+                      disabled={item.role==='deliveryMen'?true:false}
+                    >
+                     Delivery Men
+                    </button>
+                  </th>
                   <td> 
                       {
-                          item.role==='admin'?"Admin": <button
-                      onClick={() => {
-                        handleMakeAdmin(item._id, item.name);
-                      }}
+                          // item.role==='admin'?"Admin":
+                           <button
+                      // onClick={() => {
+                      //   handleMakeAdmin(item._id, item.name);
+                      // }}
+                      disabled={item.role==='admin'?true:false}
                       className="btn btn-primary bg-[#D1A054] border-none text-white"
                     >
-                      <FaUsers />
+                     Admin
                     </button>
                       }
                      </td>
-                  <th>
-                    <button
-                      onClick={() => {
-                        handleDeleteUser(item._id, item.name);
-                      }}
-                      className="btn btn-primary bg-[#D1A054] border-none text-white"
-                    >
-                      <FaTrash />
-                    </button>
-                  </th>
+                  
                 </tr>
-              ))} */}
+              ))}
             </tbody>
           </table>
         </div>

@@ -8,7 +8,7 @@ import { CgProfile } from "react-icons/cg";
 
 const Dashboard = () => {
   // TODO: get isAdmin value from the database
-  const isAdmin =false;
+  const isAdmin =true;
 
   const isDeliveryMan = false;
   return (
