@@ -18,7 +18,7 @@ const DeliveryManRoute = ({ children }) => {
         return children;
     }
 
-    return <Navigate to="/" state={{ from: location }} replace></Navigate>
+    return <Navigate to="/" state={location.pathname} replace></Navigate>
 
 };
 
