@@ -1,0 +1,94 @@
+import { FaBarsStaggered, FaRegBell } from "react-icons/fa6";
+import { FaSearch } from "react-icons/fa";
+import useAuth from "../../Hooks/useAuth";
+import { Link, NavLink } from "react-router-dom";
+const Navbar = () => {
+  const { user, logOut } = useAuth();
+
+  const handleLogOut = () => {
+    logOut()
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto navbar bg-base-100">
+      <div className="navbar-start">
+        <div className="dropdown">
+          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+            <FaBarsStaggered className="text-xl" />
+          </div>
+          <ul className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+            <li>
+              <NavLink to="/">Home</NavLink>
+            </li>
+            <li>
+              <NavLink to="/dashboard">Dashboard</NavLink>
+            </li>
+          </ul>
+        </div>
+        <a className="btn btn-ghost text-xl">daisyUI</a>
+      </div>
+      <div className="navbar-center hidden lg:flex">
+        <ul className="menu menu-horizontal px-1">
+          <li>
+            <NavLink to="/">Home</NavLink>
+          </li>
+          <li>
+            <NavLink to="/dashboard">Dashboard</NavLink>
+          </li>
+        </ul>
+      </div>
+      <div className="navbar-end">
+        <button className="btn btn-ghost btn-circle">
+          <FaSearch className="text-xl" />
+        </button>
+        <button className="btn btn-ghost btn-circle">
+          <div className="indicator">
+            <FaRegBell className="text-xl" />
+            <span className="badge badge-xs badge-primary indicator-item"></span>
+          </div>
+        </button>
+        {/* --------- */}
+
+        {user ? (
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar"
+            >
+              <div className="w-10 rounded-full">
+                <img alt="User Image" src={user?.photoURL} />
+              </div>
+            </div>
+            <ul className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+              <li className=" ">
+                <input
+                  type="text"
+                  className=""
+                  value={user?.displayName}
+                  readOnly
+                />
+              </li>
+              <li>
+                <Link to="/dashboard">Dashboard</Link>
+              </li>
+              <li>
+                <button className="" onClick={handleLogOut}>Logout</button>
+              </li>
+            </ul>
+          </div>
+        ) : (
+          <Link to="/login">
+            <button className="btn">Login</button>
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Navbar;

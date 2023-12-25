@@ -1,0 +1,39 @@
+[
+    {
+      "id": 1,
+      "img": "https://dtlogistics.wpenginepowered.com/wp-content/uploads/2016/11/icon1.png",
+      "title": "ECONOMICAL AIR FREIGHT",
+      "description": "Our economical air freight service provides cost-effective and reliable transportation solutions for your cargo by air. We ensure timely deliveries with a focus on efficiency and affordability."
+    },
+    {
+      "id": 2,
+      "img": "https://dtlogistics.wpenginepowered.com/wp-content/uploads/2016/11/icon2.png",
+      "title": "WAREHOUSING",
+      "description": "Our warehousing solutions offer secure storage facilities for your goods. With state-of-the-art warehouses and efficient inventory management, we ensure the safety and accessibility of your inventory."
+    },
+    {
+      "id": 3,
+      "img": "https://dtlogistics.wpenginepowered.com/wp-content/uploads/2016/11/icon3.png",
+      "title": "SAME DAY DELIVERY",
+      "description": "Experience the convenience of same-day delivery with our reliable service. We prioritize speed and efficiency to meet your urgent delivery needs, ensuring your packages reach their destination on the same day."
+    },
+    {
+      "id": 4,
+      "img": "https://dtlogistics.wpenginepowered.com/wp-content/uploads/2016/11/icon4.png",
+      "title": "PACKAGING & STORAGE",
+      "description": "Our packaging and storage services guarantee the safe handling and storage of your goods. We use top-notch packaging materials and advanced storage solutions to ensure the integrity of your products during transit and storage."
+    },
+    {
+      "id": 5,
+      "img": "https://dtlogistics.wpenginepowered.com/wp-content/uploads/2016/11/icon5.png",
+      "title": "TIME BOUND DELIVERIES",
+      "description": "Optimize your supply chain with our time-bound delivery services. We are committed to delivering your shipments within specified timeframes, helping you meet your business deadlines and maintain a reliable supply chain."
+    },
+    {
+      "id": 6,
+      "img": "https://dtlogistics.wpenginepowered.com/wp-content/uploads/2016/11/icon6.png",
+      "title": "MULTI-MODAL TRANSPORT",
+      "description": "Our multi-modal transport solutions offer a seamless combination of various transportation modes to optimize the efficiency and cost-effectiveness of your logistics. Benefit from a well-integrated transportation network for your cargo."
+    }
+  ]
+  
