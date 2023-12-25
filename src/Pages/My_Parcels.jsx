@@ -1,8 +1,21 @@
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
+import { Link } from "react-router-dom";
+import useAuth from "../Hooks/useAuth";
 
 
 const My_Parcels = () => {
+const {user}=useAuth();
+  const axiosSecure = useAxiosSecure();
+  const { data: parcels = [], refetch } = useQuery({
+    queryKey: ["parcels"],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/users/bookings/${user.email}`);
+      return res.data;
+    },
+  });
 
-
+  
 
   return (
     <div>
@@ -23,7 +36,7 @@ const My_Parcels = () => {
             </tr>
           </thead>
           <tbody>
-            {/* {parcel?.map((item, idx) => (
+            {parcels?.map((item, idx) => (
               <tr key={item._id}>
                 <th>{idx + 1}</th>
                 <td>{item?.parcelType}</td>
@@ -33,29 +46,34 @@ const My_Parcels = () => {
                 <td></td>
                 <td>
                   {" "}
-                  <button className="btn btn-sm">{item?.status}</button>
+                  <span className="text-lg font-semibold">{item?.status}</span>
                 </td>
                 <td>
                   <div className="flex gap-3">
                     <Link to={`/dashboard/updateBooking/${item?._id}`}>
                       <button className="btn btn-sm">Update</button>
-                    </Link>
-                    <button
-                      className="btn btn-sm"
-                      onClick={() => handleDelete(item?._id)}
-                    >
-                      Cancel
-                    </button>
-                    <Link to={`/review/${item?._id}`}>
+                      </Link>
+                      {
+                        item?.status === "pending" &&
+                        <button // onClick={() => handleDelete(item?._id)} 
+                        className="btn btn-sm">Cancel</button>
+                      }
+                    {
+                      item?.status === "delivered" &&
+                    <Link to={`/dashboard/reviewPage/${item?._id}`}>
                       <button className="btn btn-sm">Review</button>
                     </Link>
-                    <Link to={`/billPay/${item?._id}`}>
+                    }
+                    {/* {
+                      item?.status === "delivered" &&
+                    } */}
+                    <Link to={`/dashboard/payments/${item?._id}`}>
                       <button className="btn btn-sm">Pay</button>
                     </Link>
                   </div>
                 </td>
               </tr>
-            ))} */}
+            ))}
           </tbody>
         </table>
       </div>

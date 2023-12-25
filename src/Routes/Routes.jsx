@@ -20,6 +20,8 @@ import Statistics from "../Pages/Statistics";
 import UpdateBooking from "../Pages/UpdateBooking";
 import AdminHome from "../Pages/AdminHome";
 import UpdateItem from "../Pages/UpdateItem";
+import ReviewPage from "../Pages/ReviewPage";
+import Payments from "../Pages/Payments";
 
 const Routes = createBrowserRouter([
   {
@@ -61,6 +63,13 @@ const Routes = createBrowserRouter([
          const result = fetch(`http://localhost:5000/api/v1/bookings/${params.id}`)
          return result;
         }
+      },{
+        path:"reviewPage",
+        element: <ReviewPage></ReviewPage>
+      },
+      {
+        path: "payments/:id",
+        element: <Payments></Payments>,
       },
       {
         path: "myParcels",

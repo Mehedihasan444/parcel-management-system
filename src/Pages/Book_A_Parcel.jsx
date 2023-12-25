@@ -30,7 +30,7 @@ const Book_A_Parcel = () => {
 return ;
     }
 const info = {
-  ...data,price: price,
+  ...data,price: price,status:'pending',
 }
    const res= await  axiosPublic.post('/users/bookings',info)
     console.log(res.data)
