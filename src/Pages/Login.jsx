@@ -128,7 +128,7 @@ const Login = () => {
           </button>
         </form>
         <h3 className="text-[#D1A054] font-medium text-center mt-2">
-          New here? <a href="/signUp">Create a New Account</a>
+          New here? <a href="/register">Create a New Account</a>
         </h3>
         <p className="text-center mb-3">Or sign in with </p>
         <SocialLogin></SocialLogin>

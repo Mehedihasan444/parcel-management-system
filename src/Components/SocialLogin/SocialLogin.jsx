@@ -9,6 +9,8 @@ const {googleLogin}=useAuth()
 const navigate = useNavigate()
 const location = useLocation()
 const axiosPublic = useAxiosPublic()
+
+
 const handleGoogleLogin =()=>{
     googleLogin()
 .then((result) => {
