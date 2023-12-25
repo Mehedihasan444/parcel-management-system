@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import { Link } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
-
+import Swal from "sweetalert2";
 
 const My_Parcels = () => {
 const {user}=useAuth();
@@ -14,7 +14,32 @@ const {user}=useAuth();
       return res.data;
     },
   });
+const handleDelete=(id)=>{
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!"
+}).then((result) => {
+    if (result.isConfirmed) {
 
+        axiosSecure.delete(`/users/bookings/${id}`)
+            .then(res => {
+                if (res.data.deletedCount > 0) {
+                    refetch();
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success"
+                    });
+                }
+            })
+    }
+});
+}
   
 
   return (
@@ -55,7 +80,7 @@ const {user}=useAuth();
                       </Link>
                       {
                         item?.status === "pending" &&
-                        <button // onClick={() => handleDelete(item?._id)} 
+                        <button onClick={() => handleDelete(item?._id)} 
                         className="btn btn-sm">Cancel</button>
                       }
                     {
