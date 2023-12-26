@@ -3,6 +3,7 @@ import SectionTitle from "../Components/SectionTitle/SectionTitle";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import useAuth from "../Hooks/useAuth";
 import { Link } from "react-router-dom";
+import AllParcelsModal from "../Components/AllParcelsModal/AllParcelsModal";
 
 
 const All_Parcels = () => {
@@ -47,7 +48,15 @@ console.log(allParcels)
                 <td>
                   <div className="flex gap-3">
                     {/* <Link to={`/dashboard/payments/${item?._id}`}> */}
-                      <button className="btn btn-sm">Manage</button>
+                      {/* <button className="btn btn-sm">Manage</button> */}
+                      {/* You can open the modal using document.getElementById('ID').showModal() method */}
+      <button
+        className="btn"
+        onClick={() => document.getElementById("my_modal_3").showModal()}
+      >
+        Manage
+        <AllParcelsModal id={item._id}></AllParcelsModal>
+      </button>
                     {/* </Link> */}
                   </div>
                 </td>

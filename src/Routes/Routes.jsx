@@ -83,11 +83,11 @@ const Routes = createBrowserRouter([
       // Delivery Men Will See only routes
       {
         path: "myDeliveryList",
-        element: <DeliveryManRoute><My_Delivery_List></My_Delivery_List></DeliveryManRoute> ,
+        element: <My_Delivery_List></My_Delivery_List> ,
       },
       {
         path: "myReviews",
-        element: <DeliveryManRoute><My_Reviews></My_Reviews></DeliveryManRoute> ,
+        element: <My_Reviews></My_Reviews>,
       },
 
       // // admin only routes
