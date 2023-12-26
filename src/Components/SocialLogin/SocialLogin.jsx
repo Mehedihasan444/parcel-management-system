@@ -3,25 +3,28 @@ import useAuth from "../../Hooks/useAuth";
 import { useLocation, useNavigate } from "react-router-dom";
 // import useAxiosPublic from "../../Hooks/useAxiosPublic";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
 
 const SocialLogin = () => {
   const { googleLogin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  // const axiosPublic = useAxiosPublic()
+  const axiosPublic = useAxiosPublic()
 
   const handleGoogleLogin = () => {
     googleLogin()
       .then((result) => {
         console.log("from social", result);
 
-        // const userInfo = {
-        //     name:result.user.displayName,
-        //     email:result.user.email,
-        //   };
-        //   axiosPublic.post("/users", userInfo).then((res) => {
-        //     console.log(res.data);
-        //     if (res.data.insertedId) {
+        const userInfo = {
+            name:result.user.displayName,
+            email:result.user.email,
+            image:result.user.photoURL,
+            role:'user'
+          };
+          axiosPublic.post("/users", userInfo).then((res) => {
+            console.log(res.data);
+            if (res.data.insertedId) {
         Swal.fire({
           position: "top-end",
           icon: "success",
@@ -30,9 +33,9 @@ const SocialLogin = () => {
           timer: 1500,
         });
 
-        //     }
+            }
         navigate(location?.state || "/");
-        //   });
+          });
       })
       .catch((error) => {
         console.log(error);

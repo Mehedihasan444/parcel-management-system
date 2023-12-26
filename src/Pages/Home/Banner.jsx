@@ -12,7 +12,7 @@ const Banner = ({ setSearch }) => {
             })
     }
     return (
-        <div className="hero min-h-screen " style={{ backgroundImage: 'url(https://blogs.intugine.com/wp-content/uploads/2023/05/Parcel-management-system-1.png)' }}>
+        <div className="hero min-h-screen " style={{ backgroundImage: 'url(https://assets-nzcouriers.ep-prod.freightways.co.nz/uploads/sites/15/2021/08/iStock-1071030302.jpg)' }}>
             <div className="hero-overlay bg-black bg-opacity-60"></div>
             <div className="hero-content text-center text-neutral-content">
                 <div className="">

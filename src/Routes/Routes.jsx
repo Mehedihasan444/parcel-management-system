@@ -15,7 +15,7 @@ import All_Users from "../Pages/All_Users";
 import All_Delivery_Men from "../Pages/All_Delivery_Men";
 import My_Delivery_List from "../Pages/My_Delivery_List";
 import My_Reviews from "../Pages/My_Reviews";
-import DeliveryManRoute from "./DeliveryManRoute";
+import DeliveryMenRoute from "./DeliveryMenRoute";
 import Statistics from "../Pages/Statistics";
 import UpdateBooking from "../Pages/UpdateBooking";
 import AdminHome from "../Pages/AdminHome";
@@ -59,13 +59,13 @@ const Routes = createBrowserRouter([
       {
         path: "updateBooking/:id",
         element: <UpdateBooking></UpdateBooking>,
-        loader: ({params})=> {
-         const result = fetch(`http://localhost:5000/api/v1/bookings/${params.id}`)
-         return result;
-        }
-      },{
+        loader: ({params})=>fetch(`http://localhost:5000/api/v1/users/booking/${params.id}`)
+      },
+      {
         path:"reviewPage",
-        element: <ReviewPage></ReviewPage>
+        element: <ReviewPage></ReviewPage>,
+      
+
       },
       {
         path: "payments/:id",

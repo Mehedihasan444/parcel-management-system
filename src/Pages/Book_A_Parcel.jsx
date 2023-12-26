@@ -30,11 +30,12 @@ const Book_A_Parcel = () => {
 return ;
     }
 const info = {
-  ...data,price: price,status:'pending',
+  ...data,bookingDate:new Date(),price: price,status:'pending',deliveryMenID:'',
 }
    const res= await  axiosPublic.post('/users/bookings',info)
     console.log(res.data)
     if (res.data.insertedId) {
+      reset();
       Swal.fire({
         position: "top-end",
         icon: "success",

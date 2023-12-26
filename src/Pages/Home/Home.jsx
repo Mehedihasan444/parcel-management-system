@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import Banner from "./Banner";
 import OurFeatures from "./OurFeatures";
-import TheTopDeliveryMan from "./TheTopDeliveryMan";
+import TheTopDeliveryMen from "./TheTopDeliveryMen";
 
 
 const Home = () => {
@@ -12,7 +12,7 @@ const Home = () => {
             </Helmet>
             <Banner></Banner>
             <OurFeatures></OurFeatures>
-            <TheTopDeliveryMan></TheTopDeliveryMan>
+            <TheTopDeliveryMen></TheTopDeliveryMen>
         </div>
     );
 };

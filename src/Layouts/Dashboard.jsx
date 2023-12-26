@@ -4,13 +4,20 @@ import { NavLink, Outlet } from "react-router-dom";
 import { MdReviews } from "react-icons/md";
 import { TbTruckDelivery } from "react-icons/tb";
 import { CgProfile } from "react-icons/cg";
+import useAdmin from "../hooks/useAdmin";
+import useDeliveryMen from "../Hooks/useDeliveryMen";
+import AdminRoute from "../Routes/AdminRoute";
+import DeliveryMenRoute from "../Routes/DeliveryMenRoute";
+import PrivateRoute from "../Routes/PrivateRoute";
 
 
 const Dashboard = () => {
-  // TODO: get isAdmin value from the database
-  const isAdmin =true;
 
-  const isDeliveryMan = false;
+
+  const [isAdmin] =useAdmin();
+  const [isDeliveryMen] = useDeliveryMen();
+
+
   return (
     <div className="flex">
       <div className="w-64 min-h-screen bg-orange-400">
@@ -18,65 +25,77 @@ const Dashboard = () => {
           {isAdmin ? (
             <>
               <li>
-                <NavLink to="/dashboard/adminHome">
+                <AdminRoute> <NavLink to="/dashboard/adminHome">
                   <FaHome></FaHome>
                   Admin Home
-                </NavLink>
+                </NavLink></AdminRoute>
+               
               </li>
               <li>
-                <NavLink to="/dashboard/allParcels">
+                <AdminRoute><NavLink to="/dashboard/allParcels">
                 <FaBoxes />
                   All Parcels
-                </NavLink>
+                </NavLink></AdminRoute>
+                
               </li>
               <li>
-                <NavLink to="/dashboard/allUsers">
+              <AdminRoute> <NavLink to="/dashboard/allUsers">
                 <FaUsers />
                   All Users
-                </NavLink>
+                </NavLink></AdminRoute>
+               
               </li>
               <li>
-                <NavLink to="/dashboard/allDeliveryMen">
+              <AdminRoute>  <NavLink to="/dashboard/allDeliveryMen">
                   <FaBook></FaBook>
                   All Delivery Men
-                </NavLink>
+                </NavLink></AdminRoute>
+              
               </li>
             </>
           ) : (
             <>
             {
-              isDeliveryMan?
+              isDeliveryMen?
               <>
+             
                <li>
-                <NavLink to="/dashboard/myDeliveryList">
+                <DeliveryMenRoute> <NavLink to="/dashboard/myDeliveryList">
                 <TbTruckDelivery />
                   My Delivery List
-                </NavLink>
+                </NavLink></DeliveryMenRoute>
               </li>
               <li>
-                <NavLink to="/dashboard/myReviews">
+              <DeliveryMenRoute><NavLink to="/dashboard/myReviews">
                 <MdReviews />
                   My Reviews
-                </NavLink>
+                </NavLink></DeliveryMenRoute>
+
+                
               </li>
               </>:<>
               <li>
-                <NavLink to="/dashboard/bookAParcel">
+                <PrivateRoute><NavLink to="/dashboard/bookAParcel">
                 <FaBoxOpen />
                   Book A Parcel
-                </NavLink>
+                </NavLink></PrivateRoute>
+                
               </li>
               <li>
-                <NavLink to="/dashboard/myParcels">
+              <PrivateRoute><NavLink to="/dashboard/myParcels">
                 <FaBoxes />
                   My Parcels
-                </NavLink>
+                </NavLink></PrivateRoute>
+
+                
               </li>
               <li>
-                <NavLink to="/dashboard/myProfile">
+              <PrivateRoute><NavLink to="/dashboard/myProfile">
                 <CgProfile />
                   My Profile
-                </NavLink>
+                </NavLink></PrivateRoute>
+
+                
               </li>
               </>
             }
@@ -96,13 +115,7 @@ const Dashboard = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/order/salad">
-              <FaSearch></FaSearch>
-              Menu
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/order/contact">
+            <NavLink to="/dashboard/contact">
               <FaEnvelope></FaEnvelope>
               Contact
             </NavLink>

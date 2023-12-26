@@ -2,11 +2,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa6";
 
-const TheTopDeliveryMan = () => {
+const TheTopDeliveryMen = () => {
 
     const [data, setData] = useState([]);
     useEffect(() => {
-      axios.get('TopDeliveryManData.json')
+      axios.get('TopDeliveryMenData.json')
       .then(res => setData(res.data));
     }, []);
 
@@ -47,4 +47,4 @@ const TheTopDeliveryMan = () => {
     );
 };
 
-export default TheTopDeliveryMan;
+export default TheTopDeliveryMen;

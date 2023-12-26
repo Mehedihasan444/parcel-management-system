@@ -1,9 +1,10 @@
 import loginImg from '../assets/authentication2.png'
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import useAxiosPublic from "../Hooks/useAxiosPublic";
+// import useAxiosPublic from "../Hooks/useAxiosPublic";
 import useAuth from "../Hooks/useAuth";
 import SocialLogin from '../Components/SocialLogin/SocialLogin';
+import useAxiosPublic from '../Hooks/useAxiosPublic';
 const Register = () => {
     const navigate = useNavigate();
     const { createUser, updateUserProfile } = useAuth();
@@ -29,11 +30,14 @@ const Register = () => {
           console.log(user);
          
           updateUserProfile(name, photo)
-            .then(() => {
-              console.log("user profile info updated");
+            .then((res) => {
+              console.log("user profile info updated",res);
+              // navigate("/");
               const userInfo = {
                 name,
                 email,
+                image: photo,
+                role:'user'
               };
               axiosPublic.post("/users", userInfo).then((res) => {
                 console.log(res.data);

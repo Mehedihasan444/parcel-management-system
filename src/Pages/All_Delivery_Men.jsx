@@ -11,7 +11,7 @@ const All_Delivery_Men = () => {
     const { data: allDeliveryMen = [], refetch } = useQuery({
       queryKey: ["allDeliveryMen"],
       queryFn: async () => {
-        const res = await axiosSecure.get('/admin/deliveryMens')
+        const res = await axiosSecure.get('/users/admin/deliveryMens')
         return res.data;
       },
     });
