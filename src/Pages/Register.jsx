@@ -18,7 +18,7 @@ const Register = () => {
       const name = form.name.value;
       const email = form.email.value;
       const password = form.password.value;
-      console.log(name, email, password);
+     // console.log(name, email, password);
   
       const photo =
         "https://www.libarts.colostate.edu/wp-content/uploads/2018/02/userphoto.png";

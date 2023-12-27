@@ -1,72 +1,51 @@
 import { useQuery } from "@tanstack/react-query";
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
-import useAuth from "../Hooks/useAuth";
-import { Link } from "react-router-dom";
-import AllParcelsModal from "../Components/AllParcelsModal/AllParcelsModal";
+import AlparcelsTable from "../Components/AlparcelsTable/AlparcelsTable";
 
 const All_Parcels = () => {
-  const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
 
-  const { data: allParcels = [], refetch } = useQuery({
-    queryKey: ["allParcels"],
+ 
+  const { data: users = [] } = useQuery({
+    queryKey: ["users"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/users/admin/bookings");
+      const res = await axiosSecure.get("/admin/users/collection");
       return res.data;
     },
   });
-
-  console.log(allParcels);
+// console.log(users)
   return (
     <div>
       <SectionTitle heading={"all Parcels"}></SectionTitle>
-      {/* <span className="divider"></span> */}
-
       <div className="flex justify-between items-center">
         <h3 className="text-2xl font-bold ">Filter booking by date:</h3>
         <div className="flex justify-end  gap-5 my-5">
-           <div className="">
-          <label className="form-control w-full max-w-xs">
-            <div className="label">
-              <span className="label-text font-medium">Staring date</span>
-            </div>
-            <input
-              type="date"
-              placeholder="Type here"
-              className="input input-bordered w-full max-w-xs"
-            />
-          </label>
+          <div className="">
+            <label className="form-control w-full max-w-xs">
+              <div className="label">
+                <span className="label-text font-medium">Staring date</span>
+              </div>
+              <input
+                type="date"
+                placeholder="Type here"
+                className="input input-bordered w-full max-w-xs"
+              />
+            </label>
+          </div>
+          <div className="">
+            <label className="form-control w-full max-w-xs">
+              <div className="label">
+                <span className="label-text font-medium">Ending date</span>
+              </div>
+              <input
+                type="date"
+                placeholder="Type here"
+                className="input input-bordered w-full max-w-xs"
+              />
+            </label>
+          </div>
         </div>
-        <div className="">
-          <label className="form-control w-full max-w-xs">
-            <div className="label">
-              <span className="label-text font-medium">Ending date</span>
-            </div>
-            <input
-              type="date"
-              placeholder="Type here"
-              className="input input-bordered w-full max-w-xs"
-            />
-          </label>
-        </div>
-        <div className="flex justify-center items-end  gap-3">
-                    {/* <Link to={`/dashboard/payments/${item?._id}`}> */}
-                    {/* <button className="btn btn-sm">Manage</button> */}
-                    {/* You can open the modal using document.getElementById('ID').showModal() method */}
-                    <button
-                      className="btn btn-primary"
-                      onClick={() =>
-                        document.getElementById("my_modal_3").showModal()
-                      }
-                    >
-                      Manage
-                      <AllParcelsModal></AllParcelsModal>
-                    </button>
-                    {/* </Link> */}
-                  </div>
-        </div>
-       
       </div>
 
       <div className="overflow-x-auto">
@@ -79,21 +58,16 @@ const All_Parcels = () => {
               <th>Requested Delivery Date</th>
               <th>Booking Date</th>
               <th>Cost</th>
-              {/* <th className="text-center">Actions</th> */}
+              <th className="text-center">Action</th>
             </tr>
           </thead>
           <tbody>
-            {allParcels?.map((item, idx) => (
-              <tr key={item._id}>
-                <th>{idx + 1}</th>
-                <td>{item?.name}</td>
-                <td>{item?.phone}</td>
-                <td>{item?.requestedDeliveryDate}</td>
-                <td>{item?.bookingDate}</td>
-                <td>{item?.price} TK</td>
-              </tr>
-            ))}
+            {users.map((user, index) => (
+
+            <AlparcelsTable key={index} userEmail={user.email}></AlparcelsTable>
+          ))}
           </tbody>
+          
         </table>
       </div>
     </div>

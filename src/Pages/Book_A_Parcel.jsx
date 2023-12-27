@@ -9,7 +9,7 @@ const Book_A_Parcel = () => {
   const { register, handleSubmit,watch,reset } = useForm()
   const onSubmit = async (data) =>{
   
-    console.log(data.weight);
+   // console.log(data.weight);
 
   let price;
 

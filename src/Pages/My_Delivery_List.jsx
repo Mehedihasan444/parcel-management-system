@@ -31,6 +31,7 @@ const My_Delivery_List = () => {
       return res.data;
     },
   });
+  console.log(deliveryList)
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",

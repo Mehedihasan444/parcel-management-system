@@ -14,7 +14,7 @@ const SocialLogin = () => {
   const handleGoogleLogin = () => {
     googleLogin()
       .then((result) => {
-        console.log("from social", result);
+       // console.log("from social", result);
 
         const userInfo = {
             name:result.user.displayName,

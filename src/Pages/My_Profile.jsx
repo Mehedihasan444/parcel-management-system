@@ -26,7 +26,7 @@ const My_Profile = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log(watch(data));
+   // console.log(watch(data));
     if (data.image.length > 0) {
       // console.log("from >0",data);
       const imageFile = { image: data.image[0] };

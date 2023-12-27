@@ -4,12 +4,12 @@ const Banner = ({ setSearch }) => {
         e.preventDefault();
         const form = new FormData(e.currentTarget);
         const searchValue = form.get('home-input');
-        fetch(`http:://localhost:5000/${searchValue}`)
-            .then(res => res.json())
-            .then(data => {
-                console.log(data);
-                setSearch(data);
-            })
+        // fetch(`http:://localhost:5000/${searchValue}`)
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         console.log(data);
+        //         setSearch(data);
+        //     })
     }
     return (
         <div className="hero min-h-screen " style={{ backgroundImage: 'url(https://assets-nzcouriers.ep-prod.freightways.co.nz/uploads/sites/15/2021/08/iStock-1071030302.jpg)' }}>

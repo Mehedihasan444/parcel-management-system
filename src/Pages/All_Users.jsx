@@ -17,7 +17,7 @@ const All_Users = () => {
   });
 
   const handleMakeAdmin = async (email) => {
-    console.log(email);
+   // console.log(email);
     const info = {
       role: "admin",
     };
@@ -27,7 +27,7 @@ const All_Users = () => {
     });
   };
   const handleMakeDeliveryMen = async (email) => {
-    console.log(email);
+   // console.log(email);
     const info = {
       role: "deliveryMen",
     };

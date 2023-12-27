@@ -16,7 +16,7 @@ const All_Delivery_Men = () => {
       },
     });
 
-console.log(allDeliveryMen)
+//console.log(allDeliveryMen)
     return (
         <div>
       <SectionTitle heading={"all DeliveryMen's"}></SectionTitle>
