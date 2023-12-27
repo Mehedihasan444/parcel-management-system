@@ -20,10 +20,10 @@ console.log(allDeliveryMen)
     return (
         <div>
       <SectionTitle heading={"all DeliveryMen's"}></SectionTitle>
-      <span className="divider"></span>
+      {/* <span className="divider"></span> */}
       <div className="overflow-x-auto">
         <table className="table table-xs">
-          <thead>
+          <thead className="border">
             <tr className="text-base">
               <th>#</th>
               <th>Name</th>

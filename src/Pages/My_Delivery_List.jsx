@@ -8,11 +8,25 @@ import { Link } from "react-router-dom";
 const My_Delivery_List = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+
+  const { data: userData = {} } = useQuery({
+    queryKey: ["userData"],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/users/${user?.email}`);
+      return res.data;
+    },
+  });
+
+  const info = {
+    email: userData.email,
+    deliveryMenID: userData._id,
+  };
   const { data: deliveryList = [], refetch } = useQuery({
     queryKey: ["deliveryList"],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/deliveryMen/deliveryList/${user.email}`
+        `/users/deliveryMen/deliveryList`,
+        info
       );
       return res.data;
     },
@@ -25,19 +39,92 @@ const My_Delivery_List = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes, Cancel it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axiosSecure.delete(`/deliveryMen/deliveryList/${id}`).then((res) => {
-          if (res.data.deletedCount > 0) {
-            refetch();
-            Swal.fire({
-              title: "Deleted!",
-              text: "Your file has been deleted.",
-              icon: "success",
-            });
-          }
+        const info = {
+          status: "Cancelled",
+        };
+        axiosSecure
+          .patch(`/deliveryMen/deliveryList/cancel/deliver/${id}`, info)
+          .then((res) => {
+            console.log(res.data);
+            if (res.data.modifiedCount > 0) {
+              // axiosSecure.delete(`/deliveryMen/deliveryList/${id}`).then((res) => {
+              //   if (res.data.deletedCount > 0) {
+              refetch();
+              Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Cancelled!",
+                text: "Parcel has been Cancelled.",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              // }
+              // else{
+              //   Swal.fire({
+              //     position: "top-end",
+              //     icon: "error",
+              //     title: "Something went wrong",
+              //     showConfirmButton: false,
+              //     timer: 1500,
+              //   });
+              // }
+              // });
+            } else {
+              Swal.fire({
+                position: "top-end",
+                icon: "error",
+                title: "Something went wrong",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            }
+          });
+      }
+    });
+  };
+
+  const handleDeliver = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Delivered!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const info = {
+          status: "Delivered",
+        };
+        axiosSecure
+          .patch(`/deliveryMen/deliveryList/cancel/deliver/${id}`, info)
+          .then((res) => {
+            console.log(res.data);
+
+            if (res.data.modifiedCount > 0) {
+               refetch();
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
         });
+            }
+            else{
+              Swal.fire({
+                position: "top-end",
+                icon: "error",
+                title: "Something went wrong",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            }
+          });
+
+       
       }
     });
   };
@@ -48,41 +135,54 @@ const My_Delivery_List = () => {
 
       <span className="divider"></span>
       <div className="overflow-x-auto">
-        <table className="table table-xs">
-          <thead>
+        <table className="table table-xs text-center">
+          <thead className="text-center">
             <tr className="text-base">
               <th>#</th>
-              <th>Booked User's Name</th>
+              <th>Name</th>
               <th>Receivers Name</th>
-              <th>Booked user's Phone</th>
+              <th>Phone</th>
+              <th>Receivers Phone</th>
               <th>Requested Delivery Date</th>
+              <th>Approximate Delivery Date</th>
+              <th>Receivers Address</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {deliveryList?.map((item, idx) => (
               <tr key={item._id}>
                 <th>{idx + 1}</th>
-                <td>{item?.bookedUserName}</td>
-                <td>{item?.receiversName}</td>
-                <td>{item?.bookedUserPhone}</td>
+                <td>{item?.name}</td>
+                <td>{item?.receiverName}</td>
+                <td>{item?.phone}</td>
+                <td>{item?.receiverPhone}</td>
                 <td>{item?.requestedDeliveryDate}</td>
                 <td>{item?.approximateDeliveryDate}</td>
-                <td>{item?.recieversPhoneNumber}</td>
-                <td>{item?.recieversAddress}</td>
+                <td>{item?.recieverAddress}</td>
                 <td>
-                  <Link to={`/dashboard/updateBooking/${item?._id}`}>
-                    <button className="btn btn-sm">View Location</button>
-                  </Link>
-                </td>
-                <td>
-                  <Link to={`/dashboard/updateBooking/${item?._id}`}>
-                    <button className="btn btn-sm">Cancel</button>
-                  </Link>
-                </td>
-                <td>
-                  <Link to={`/dashboard/updateBooking/${item?._id}`}>
-                    <button className="btn btn-sm">Cancel</button>
-                  </Link>
+                  <div className="flex justify-center mb-1">
+                    <Link to={`/dashboard/viewLocation/${item?._id}`}>
+                      <button className="btn btn-sm btn-primary ">
+                        View Location
+                      </button>
+                    </Link>
+                  </div>
+
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => handleDelete(item?._id)}
+                      className="btn btn-sm btn-secondary  bg-red-500"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={() => handleDeliver(item?._id)}
+                      className="btn btn-sm btn-success text-white"
+                    >
+                      Deliver
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

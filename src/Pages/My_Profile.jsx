@@ -44,10 +44,7 @@ const My_Profile = () => {
           image: res.data.data.display_url,
         };
         // console.log(info)
-        const userRes = await axiosSecure.patch(
-          `/users/${userInfo.email}`,
-          info
-        );
+        const userRes = await axiosSecure.put(`/users/updateProfile/${userInfo.email}`,info);
         console.log(userRes.data);
         if (userRes.data.modifiedCount > 0) {
           // reset();
@@ -59,6 +56,16 @@ const My_Profile = () => {
             timer: 1500,
           });
         }
+        else{
+            Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Something went wrong",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        }
+      
       }
     } else if (data.image.length === 0) {
       // console.log("from =0",data);
@@ -70,7 +77,7 @@ const My_Profile = () => {
         image: user.photoURL,
       };
       // console.log(info)
-      const userRes = await axiosSecure.patch(`/users/${userInfo.email}`, info);
+      const userRes = await axiosSecure.put(`/users/updateProfile/${userInfo.email}`, info);
       console.log(userRes.data);
       if (userRes.data.modifiedCount > 0) {
         // reset();
@@ -78,6 +85,14 @@ const My_Profile = () => {
           position: "top-end",
           icon: "success",
           title: "Profile updated Successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }else{
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Something went wrong",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -95,7 +110,7 @@ const My_Profile = () => {
             <div className="mb-4">
               {/* <label htmlFor="profilePicture">Current Profile Picture:</label> */}
               <img
-                src={user?.photoURL}
+                src={userInfo?.image}
                 alt="Current Profile"
                 className="rounded-full h-20 w-20 object-cover mb-2"
               />
@@ -108,8 +123,8 @@ const My_Profile = () => {
             <input
               type="file"
               {...register("image")}
-              id="newProfilePicture"
-              name="newProfilePicture"
+              id="image"
+              name="image"
               //   accept="image/*"
               //   onChange={handleFileChange}
               className="form-input"

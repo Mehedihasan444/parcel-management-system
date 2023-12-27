@@ -4,11 +4,9 @@ import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 // import useAxiosSecure from "../../hooks/useAxiosSecure";
 
-
 const AllParcelsModal = () => {
   const { register, handleSubmit, watch } = useForm();
   const axiosSecure = useAxiosSecure();
-
 
   const { data: deliveryMen = [], refetch } = useQuery({
     queryKey: ["deliveryMen"],
@@ -17,28 +15,41 @@ const AllParcelsModal = () => {
       return res.data;
     },
   });
+
+  const deliMenFilter = deliveryMen.filter(
+    (deliMan) => deliMan.role !== 'admin'&& deliMan.role !=='deliveryMen'
+  );
+
   const onSubmit = async (data) => {
     
-    const deliMenEmail = deliveryMen.find((deliMan) => deliMan._id === data.selectedDeliveryMen);
-      // console.log(deliMenEmail)
-      let flag=0;
+    const deliMenEmail = deliveryMen.find(
+      (deliMan) => deliMan._id === data.selectedDeliveryMen
+    );
+    // console.log(deliMenEmail)
+    let flag = 0;
     const info = {
       role: "deliveryMen",
     };
-     await axiosSecure.patch(`/users/${deliMenEmail.email}`, info).then((res) => {
-      console.log(res.data);
-      if (res.data.modifiedCount>0) {
-        flag++;
-      }
-    });
-    
-    await axiosSecure.patch(`/users/bookings/${data.selectedDeliveryMen}`,{approximateDeliveryDate: data.approximateDeliveryDate}).then((res) => {
-      console.log(res.data);
-      if (res.data.modifiedCount>0) {
-        flag++;
-      }
-    });
-    if (flag==2) {
+    await axiosSecure
+      .patch(`/users/${deliMenEmail.email}`, info)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.modifiedCount > 0) {
+          flag++;
+        }
+      });
+
+    await axiosSecure
+      .patch(`/users/bookings/${data.selectedDeliveryMen}`, {
+        approximateDeliveryDate: data.approximateDeliveryDate,
+      })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.modifiedCount > 0) {
+          flag++;
+        }
+      });
+    if (flag == 2) {
       refetch();
       Swal.fire({
         position: "top-end",
@@ -47,8 +58,7 @@ const AllParcelsModal = () => {
         showConfirmButton: false,
         timer: 1500,
       });
-    }
-    else{
+    } else {
       Swal.fire({
         position: "top-end",
         icon: "error",
@@ -79,7 +89,6 @@ const AllParcelsModal = () => {
                   </label>
                   <select
                     {...register("selectedDeliveryMen")}
-                
                     id="deliveryMen"
                     name="selectedDeliveryMen"
                     className="select select-bordered w-full sm:w-[430px]"
@@ -89,8 +98,8 @@ const AllParcelsModal = () => {
                     <option disabled selected>
                       Pick one
                     </option>
-                    {deliveryMen?.map((deliMan) => (
-                      <option key={deliMan._id} value={deliMan._id} >
+                    {deliMenFilter?.map((deliMan) => (
+                      <option key={deliMan._id} value={deliMan._id}>
                         {deliMan.name} - {deliMan._id}
                       </option>
                     ))}

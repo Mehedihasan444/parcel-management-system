@@ -48,9 +48,9 @@ const All_Users = () => {
       {/* table */}
 
       <div className="overflow-x-auto mt-3">
-        <table className="table">
+        <table className="table table-xs">
           {/* head */}
-          <thead className="text-lg border">
+          <thead className="text-base border">
             <tr>
               <th>#</th>
 
