@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
 import useAuth from "../Hooks/useAuth";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
+import { useEffect } from "react";
+import DeliveryCounter from "../Components/DeliveryCounter/DeliveryCounter";
 
 
 const All_Delivery_Men = () => {
@@ -17,6 +19,9 @@ const All_Delivery_Men = () => {
     });
 
 //console.log(allDeliveryMen)
+
+
+
     return (
         <div>
       <SectionTitle heading={"all DeliveryMen's"}></SectionTitle>
@@ -39,7 +44,10 @@ const All_Delivery_Men = () => {
                 <th>{idx + 1}</th>
                 <td>{item?.name}</td>
                 <td>{item?.phone}</td>
-                <td>{item?.numberOfParcelDelivered}</td>
+                <td>
+                  <DeliveryCounter id={item._id}></DeliveryCounter>
+                  {/* {item?.numberOfParcelDelivered} */}
+                  </td>
                 <td>{item?.averageReview}</td>
                 
               </tr>

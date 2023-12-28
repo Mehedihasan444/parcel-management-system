@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
-import useAxiosSecure from "../hooks/useAxiosSecure";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
 import useAuth from "../Hooks/useAuth";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
@@ -16,18 +16,18 @@ const My_Delivery_List = () => {
       return res.data;
     },
   });
+  // console.log(userData)
+  // console.log("userData",userData._id,"email",userData.email);
 
-  const info = {
-    email: userData.email,
-    deliveryMenID: userData._id,
-  };
+  // const info = {
+  //   email: userData.email,
+  //   deliveryMenID: userData._id,
+  // };
   const { data: deliveryList = [], refetch } = useQuery({
     queryKey: ["deliveryList"],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/users/deliveryMen/deliveryList`,
-        info
-      );
+        `/users/deliveryMen/deliveryList/${userData._id}`,);
       return res.data;
     },
   });
@@ -160,15 +160,15 @@ const My_Delivery_List = () => {
                 <td>{item?.receiverPhone}</td>
                 <td>{item?.requestedDeliveryDate}</td>
                 <td>{item?.approximateDeliveryDate}</td>
-                <td>{item?.recieverAddress}</td>
-                <td>
-                  <div className="flex justify-center mb-1">
+                <td> <div className="flex justify-center mb-1">
                     <Link to={`/dashboard/viewLocation/${item?._id}`}>
                       <button className="btn btn-sm btn-primary ">
                         View Location
                       </button>
                     </Link>
-                  </div>
+                  </div></td>
+                <td>
+                 
 
                   <div className="flex gap-1">
                     <button
