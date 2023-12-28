@@ -45,11 +45,7 @@ const Routes = createBrowserRouter([
   },
   {
     path: "dashboard",
-    element: (
-  
-        <Dashboard></Dashboard>
-  
-    ),
+    element: <Dashboard></Dashboard>,
     children: [
       // normal user routes
       {
@@ -59,13 +55,12 @@ const Routes = createBrowserRouter([
       {
         path: "updateBooking/:id",
         element: <UpdateBooking></UpdateBooking>,
-        loader: ({params})=>fetch(`http://localhost:5000/api/v1/users/booking/${params.id}`)
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/api/v1/users/booking/${params.id}`),
       },
       {
-        path:"reviewPage",
+        path: "reviewPage",
         element: <ReviewPage></ReviewPage>,
-      
-
       },
       {
         path: "payments/:id",
@@ -83,7 +78,7 @@ const Routes = createBrowserRouter([
       // Delivery Men Will See only routes
       {
         path: "myDeliveryList",
-        element: <My_Delivery_List></My_Delivery_List> ,
+        element: <My_Delivery_List></My_Delivery_List>,
       },
       {
         path: "myReviews",
@@ -93,48 +88,27 @@ const Routes = createBrowserRouter([
       // // admin only routes
       {
         path: "adminHome",
-        element: (
-         
-            <AdminHome></AdminHome>
-         
-        ),
+        element: <AdminHome></AdminHome>,
       },
       {
         path: "allParcels",
-        element: (
-         
-            <All_Parcels></All_Parcels>
-         
-        ),
+        element: <All_Parcels></All_Parcels>,
       },
       {
         path: "allUsers",
-        element: (
-         
-            <All_Users></All_Users>
-         
-        ),
+        element: <All_Users></All_Users>,
       },
       {
-        path: 'updateItem/:id',
-        element:<UpdateItem></UpdateItem>,
-        // loader: ({params}) => fetch(`http://localhost:5000/menu/${params.id}`)
+        path: "updateItem/:id",
+        element: <UpdateItem></UpdateItem>,
       },
       {
         path: "allDeliveryMen",
-        element: (
-         
-            <All_Delivery_Men></All_Delivery_Men>
-         
-        ),
+        element: <All_Delivery_Men></All_Delivery_Men>,
       },
       {
         path: "contact",
-        element: (
-         
-            <Contact></Contact>
-         
-        ),
+        element: <Contact></Contact>,
       },
     ],
   },

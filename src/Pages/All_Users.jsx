@@ -3,11 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
 import useAuth from "../Hooks/useAuth";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import TotalSpendAmountCal from "../Components/TotalSpendAmountCal/TotalSpendAmountCal";
+import { useState } from "react";
+import NumberOfParcelBooked from "../Components/NumberOfParcelBooked/NumberOfParcelBooked";
 
 const All_Users = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
-
   const { data: allUsers = [], refetch } = useQuery({
     queryKey: ["allUsers"],
     queryFn: async () => {
@@ -36,6 +38,11 @@ const All_Users = () => {
       refetch();
     });
   };
+
+
+// console.log('check',numberOfParcelBooked)
+
+
   return (
     <div className="">
       <SectionTitle
@@ -48,7 +55,7 @@ const All_Users = () => {
       {/* table */}
 
       <div className="overflow-x-auto mt-3">
-        <table className="table table-xs">
+        <table className="table table-xs text-center">
           {/* head */}
           <thead className="text-base border">
             <tr>
@@ -66,11 +73,16 @@ const All_Users = () => {
             {allUsers.map((item, i) => (
               <tr key={item._id}>
                 <td>{i + 1}</td>
-
                 <td> {item?.name} </td>
                 <td>{item?.phone}</td>
-                <td>{item?.numberOfParcelBook} </td>
-                <td>{item?.totalSpentAmount}</td>
+                <td>
+                  {/* {numberOfParcelBooked.length}  */}
+                  <NumberOfParcelBooked email={item?.email}></NumberOfParcelBooked>
+                </td>
+                <td>
+                  
+                  <TotalSpendAmountCal email={item?.email} />
+                  </td>
                 <th>
                   <button
                     onClick={() => {

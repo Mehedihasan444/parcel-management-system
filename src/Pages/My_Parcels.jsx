@@ -97,12 +97,12 @@ const My_Parcels = () => {
 
                 <td>{item?.approximateDeliveryDate}</td>
                 <td>{item?.bookingDate}</td>
-                <td className="">
+                <td className="flex gap-1">
                   {item?.status === "delivered" && (
                     // <Link to={`/dashboard/reviewPage/${item?._id}`}>
 
                     <button
-                      className="btn btn-sm"
+                      className="btn btn-sm btn-primary text-white"
                       onClick={() =>
                         document.getElementById("my_modal_3").showModal()
                       }
@@ -116,11 +116,11 @@ const My_Parcels = () => {
                   {item?.status === "pending" && (
                     <>
                       <Link to={`/dashboard/updateBooking/${item?._id}`}>
-                        <button className="btn btn-sm">Update</button>
+                        <button className="btn btn-sm btn-accent text-white" >Update</button>
                       </Link>
                       <button
                         onClick={() => handleDelete(item?._id)}
-                        className="btn btn-sm"
+                        className="btn btn-sm btn-error text-white"
                       >
                         Cancel
                       </button>
@@ -130,7 +130,7 @@ const My_Parcels = () => {
                       item?.status === "delivered" &&
                     } */}
                   <Link to={`/dashboard/payments/${item?._id}`}>
-                    <button className="btn btn-sm">Pay</button>
+                    <button className="btn btn-sm btn-info text-white">Pay</button>
                   </Link>
                 </td>
               </tr>

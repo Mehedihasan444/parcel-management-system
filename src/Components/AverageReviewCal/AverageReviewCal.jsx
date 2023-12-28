@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import { useEffect } from "react";
 
 const AverageReviewCal = ({ id }) => {
   const axiosSecure = useAxiosSecure();
@@ -18,6 +19,22 @@ const AverageReviewCal = ({ id }) => {
   }
   let result = avgReview / reviews.length;
   console.log(result);
+
+
+
+
+
+
+  useEffect(()=>{
+    axiosSecure.patch(`/deliveryMen/reviews/average/${id}`,{rating:result})
+    .then((res)=>{
+      console.log(res.data)
+    
+    })
+  },[axiosSecure,id,result])
+
+
+
   return <div className="text-center">{result}</div>;
 };
 

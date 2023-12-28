@@ -46,7 +46,7 @@ const parcelData =useLoaderData()
       Swal.fire({
         position: "top-end",
         icon: "success",
-        title: "Booking success",
+        title: "Update success",
         showConfirmButton: false,
         timer: 1500,
       });
@@ -247,7 +247,7 @@ const parcelData =useLoaderData()
               type="submit"
               className="btn px-10 text-lg bg-blue-500 text-white "
             >
-              Book
+              Update
             </button>
           </div>
         </form>

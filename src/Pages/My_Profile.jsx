@@ -4,7 +4,7 @@ import useAuth from "../Hooks/useAuth";
 import useAxiosPublic from "../Hooks/useAxiosPublic";
 import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../hooks/useAxiosSecure";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 
@@ -12,21 +12,21 @@ const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_ke
 
 const My_Profile = () => {
   const { user } = useAuth();
-
   const { register, handleSubmit, watch, reset } = useForm();
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
 
+  console.log(user)
   const { data: userInfo, refetch } = useQuery({
-    queryKey: ["userInfo"],
+    queryKey: ["userInfo",user?.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/users/${user.email}`);
+      const res = await axiosSecure.get(`/users/${user?.email}`);
       return res.data;
     },
   });
-
+console.log(userInfo)
   const onSubmit = async (data) => {
-   // console.log(watch(data));
+    // console.log(watch(data));
     if (data.image.length > 0) {
       // console.log("from >0",data);
       const imageFile = { image: data.image[0] };
@@ -44,7 +44,10 @@ const My_Profile = () => {
           image: res.data.data.display_url,
         };
         // console.log(info)
-        const userRes = await axiosSecure.put(`/users/updateProfile/${userInfo.email}`,info);
+        const userRes = await axiosSecure.put(
+          `/users/updateProfile/${userInfo.email}`,
+          info
+        );
         console.log(userRes.data);
         if (userRes.data.modifiedCount > 0) {
           // reset();
@@ -55,17 +58,15 @@ const My_Profile = () => {
             showConfirmButton: false,
             timer: 1500,
           });
+        } else {
+          Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: "Something went wrong",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         }
-        else{
-            Swal.fire({
-          position: "top-end",
-          icon: "error",
-          title: "Something went wrong",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        }
-      
       }
     } else if (data.image.length === 0) {
       // console.log("from =0",data);
@@ -77,7 +78,10 @@ const My_Profile = () => {
         image: user.photoURL,
       };
       // console.log(info)
-      const userRes = await axiosSecure.put(`/users/updateProfile/${userInfo.email}`, info);
+      const userRes = await axiosSecure.put(
+        `/users/updateProfile/${userInfo.email}`,
+        info
+      );
       console.log(userRes.data);
       if (userRes.data.modifiedCount > 0) {
         // reset();
@@ -88,7 +92,7 @@ const My_Profile = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-      }else{
+      } else {
         Swal.fire({
           position: "top-end",
           icon: "error",

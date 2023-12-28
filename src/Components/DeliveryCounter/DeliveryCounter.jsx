@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import { useEffect } from "react";
 
 
 const DeliveryCounter = ({id}) => {
@@ -14,6 +15,15 @@ const { data: numberOfDelivery, refetch } = useQuery({
     },
   });
 console.log(numberOfDelivery)
+
+useEffect(()=>{
+  axiosSecure.patch(`/deliveryMen/parcel/delivered/${id}`,{parcelDelivered:numberOfDelivery?.length})
+  .then((res)=>{
+    console.log(res.data)
+  
+  })
+},[axiosSecure,id,numberOfDelivery?.length])
+
 
     return (
         <div>
