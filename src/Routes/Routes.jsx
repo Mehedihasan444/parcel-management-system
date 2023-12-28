@@ -16,7 +16,7 @@ import All_Delivery_Men from "../Pages/All_Delivery_Men";
 import My_Delivery_List from "../Pages/My_Delivery_List";
 import My_Reviews from "../Pages/My_Reviews";
 import DeliveryMenRoute from "./DeliveryMenRoute";
-import Statistics from "../Pages/Statistics";
+import Contact from "../Pages/Contact";
 import UpdateBooking from "../Pages/UpdateBooking";
 import AdminHome from "../Pages/AdminHome";
 import UpdateItem from "../Pages/UpdateItem";
@@ -129,10 +129,10 @@ const Routes = createBrowserRouter([
         ),
       },
       {
-        path: "statistics",
+        path: "contact",
         element: (
          
-            <Statistics></Statistics>
+            <Contact></Contact>
          
         ),
       },

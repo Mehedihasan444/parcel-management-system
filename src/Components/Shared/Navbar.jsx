@@ -2,9 +2,12 @@ import { FaBarsStaggered, FaRegBell } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa";
 import useAuth from "../../Hooks/useAuth";
 import { Link, NavLink } from "react-router-dom";
+import useAdmin from "../../Hooks/useAdmin";
+import useDeliveryMen from "../../Hooks/useDeliveryMen";
 const Navbar = () => {
   const { user, logOut } = useAuth();
-
+  const [isAdmin] = useAdmin();
+  const [isDeliveryMen] = useDeliveryMen();
   const handleLogOut = () => {
     logOut()
       .then((res) => {
@@ -12,7 +15,7 @@ const Navbar = () => {
       })
       .catch((error) => console.log(error));
   };
-
+ 
   return (
     <div className="max-w-7xl mx-auto navbar bg-base-100">
       <div className="navbar-start">
@@ -25,11 +28,24 @@ const Navbar = () => {
               <NavLink to="/">Home</NavLink>
             </li>
             <li>
-              <NavLink to="/dashboard">Dashboard</NavLink>
+              <NavLink to={`/dashboard/${isAdmin
+      ? "adminHome"
+      : isDeliveryMen
+      ? "myDeliveryList"
+      : "bookAParcel"}`}>
+                {" "}
+                {isAdmin
+                  ? "Admin Panel"
+                  : isDeliveryMen
+                  ? "Delivery Men Panel"
+                  : "Dashboard"}
+              </NavLink>
             </li>
           </ul>
         </div>
-        <a href="/" className="btn btn-ghost text-xl font-bold">RapidParcel<span className="text-[#1CA774]">Hub</span></a>
+        <a href="/" className="btn btn-ghost text-xl font-bold">
+          RapidParcel<span className="text-[#1CA774]">Hub</span>
+        </a>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
@@ -37,7 +53,18 @@ const Navbar = () => {
             <NavLink to="/">Home</NavLink>
           </li>
           <li>
-            <NavLink to="/dashboard">Dashboard</NavLink>
+            <NavLink to={`/dashboard/${isAdmin
+      ? "adminHome"
+      : isDeliveryMen
+      ? "myDeliveryList"
+      : "bookAParcel"}`}>
+              {" "}
+              {isAdmin
+                ? "Admin Panel"
+                : isDeliveryMen
+                ? "Delivery Men Panel"
+                : "Dashboard"}
+            </NavLink>
           </li>
         </ul>
       </div>
@@ -77,7 +104,9 @@ const Navbar = () => {
                 <Link to="/dashboard">Dashboard</Link>
               </li>
               <li>
-                <button className="" onClick={handleLogOut}>Logout</button>
+                <button className="" onClick={handleLogOut}>
+                  Logout
+                </button>
               </li>
             </ul>
           </div>

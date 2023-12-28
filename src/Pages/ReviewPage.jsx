@@ -20,10 +20,10 @@ const [ratingValue,setRatingValue]=useState()
     },
   });
 
-  console.log(bookingData);
+  // console.log(bookingData);
 
   const onSubmit = async (data) => {
-    console.log(data)
+    // console.log(data)
     // console.log(ratingValue)
 
     const res = await axiosSecure.post('/users/reviews',{...data, rating: ratingValue ,image:user?.photoURL})
