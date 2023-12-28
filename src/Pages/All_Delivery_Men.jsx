@@ -4,6 +4,7 @@ import useAuth from "../Hooks/useAuth";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import { useEffect } from "react";
 import DeliveryCounter from "../Components/DeliveryCounter/DeliveryCounter";
+import AverageReviewCal from "../Components/AverageReviewCal/AverageReviewCal";
 
 
 const All_Delivery_Men = () => {
@@ -27,7 +28,7 @@ const All_Delivery_Men = () => {
       <SectionTitle heading={"all DeliveryMen's"}></SectionTitle>
       {/* <span className="divider"></span> */}
       <div className="overflow-x-auto">
-        <table className="table table-xs">
+        <table className="table table-xs text-center">
           <thead className="border">
             <tr className="text-base">
               <th>#</th>
@@ -38,7 +39,7 @@ const All_Delivery_Men = () => {
               
             </tr>
           </thead>
-          <tbody>
+          <tbody className="">
           {
             allDeliveryMen?.map((item, idx) => (<tr key={item._id}>
                 <th>{idx + 1}</th>
@@ -48,7 +49,10 @@ const All_Delivery_Men = () => {
                   <DeliveryCounter id={item._id}></DeliveryCounter>
                   {/* {item?.numberOfParcelDelivered} */}
                   </td>
-                <td>{item?.averageReview}</td>
+                <td>
+
+                  <AverageReviewCal id={item?._id}></AverageReviewCal>
+                </td>
                 
               </tr>
             ))

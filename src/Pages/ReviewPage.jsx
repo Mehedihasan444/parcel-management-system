@@ -20,10 +20,10 @@ const [ratingValue,setRatingValue]=useState()
     },
   });
 
-//   console.log(bookingData);
+  console.log(bookingData);
 
   const onSubmit = async (data) => {
-    // console.log(data)
+    console.log(data)
     // console.log(ratingValue)
 
     const res = await axiosSecure.post('/users/reviews',{...data, rating: ratingValue ,image:user?.photoURL})
@@ -105,8 +105,8 @@ const [ratingValue,setRatingValue]=useState()
                     Delivery Men Id:
                   </label>
                   <input
-                    defaultValue={bookingData?.deliveryMenID}
                     {...register("deliveryMenID")}
+                    defaultValue={bookingData?.deliveryMenID}
                     type="text"
                     readOnly
                     placeholder="Type here"
