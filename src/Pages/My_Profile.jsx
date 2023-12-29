@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
 import useAuth from "../Hooks/useAuth";
-// import useAxiosSecure from "../Hooks/useAxiosSecure";
 import useAxiosPublic from "../Hooks/useAxiosPublic";
 import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
@@ -16,7 +15,7 @@ const My_Profile = () => {
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
 
-  console.log(user)
+  // console.log(user)
   const { data: userInfo, refetch } = useQuery({
     queryKey: ["userInfo",user?.email],
     queryFn: async () => {
@@ -24,7 +23,7 @@ const My_Profile = () => {
       return res.data;
     },
   });
-console.log(userInfo)
+// console.log(userInfo)
   const onSubmit = async (data) => {
     // console.log(watch(data));
     if (data.image.length > 0) {

@@ -22,6 +22,7 @@ import AdminHome from "../Pages/AdminHome";
 import UpdateItem from "../Pages/UpdateItem";
 import ReviewPage from "../Pages/ReviewPage";
 import Payments from "../Pages/Payments";
+import Location from "../Components/Location/Location";
 
 const Routes = createBrowserRouter([
   {
@@ -83,6 +84,10 @@ const Routes = createBrowserRouter([
       {
         path: "myReviews",
         element: <My_Reviews></My_Reviews>,
+      },
+      {
+        path: "viewLocation/:location",
+        element: <Location></Location>,
       },
 
       // // admin only routes

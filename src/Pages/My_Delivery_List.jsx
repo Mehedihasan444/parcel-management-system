@@ -16,22 +16,16 @@ const My_Delivery_List = () => {
       return res.data;
     },
   });
-  // console.log(userData)
-  // console.log("userData",userData._id,"email",userData.email);
-
-  // const info = {
-  //   email: userData.email,
-  //   deliveryMenID: userData._id,
-  // };
   const { data: deliveryList = [], refetch } = useQuery({
     queryKey: ["deliveryList"],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/users/deliveryMen/deliveryList/${userData._id}`,);
+        `/users/deliveryMen/deliveryList/${userData._id}`
+      );
       return res.data;
     },
   });
-  console.log(deliveryList)
+  // console.log(deliveryList);
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -51,8 +45,6 @@ const My_Delivery_List = () => {
           .then((res) => {
             console.log(res.data);
             if (res.data.modifiedCount > 0) {
-              // axiosSecure.delete(`/deliveryMen/deliveryList/${id}`).then((res) => {
-              //   if (res.data.deletedCount > 0) {
               refetch();
               Swal.fire({
                 position: "top-end",
@@ -62,17 +54,7 @@ const My_Delivery_List = () => {
                 showConfirmButton: false,
                 timer: 1500,
               });
-              // }
-              // else{
-              //   Swal.fire({
-              //     position: "top-end",
-              //     icon: "error",
-              //     title: "Something went wrong",
-              //     showConfirmButton: false,
-              //     timer: 1500,
-              //   });
-              // }
-              // });
+           
             } else {
               Swal.fire({
                 position: "top-end",
@@ -107,14 +89,13 @@ const My_Delivery_List = () => {
             console.log(res.data);
 
             if (res.data.modifiedCount > 0) {
-               refetch();
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success",
-        });
-            }
-            else{
+              refetch();
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success",
+              });
+            } else {
               Swal.fire({
                 position: "top-end",
                 icon: "error",
@@ -124,15 +105,12 @@ const My_Delivery_List = () => {
               });
             }
           });
-
-       
       }
     });
   };
-
   return (
     <div>
-      <SectionTitle heading={"My Delivery List"} subHeading={""}></SectionTitle>
+      <SectionTitle heading={"My Delivery List"} subHeading={"Assign Parcels"}></SectionTitle>
 
       <span className="divider"></span>
       <div className="overflow-x-auto">
@@ -160,16 +138,19 @@ const My_Delivery_List = () => {
                 <td>{item?.receiverPhone}</td>
                 <td>{item?.requestedDeliveryDate}</td>
                 <td>{item?.approximateDeliveryDate}</td>
-                <td> <div className="flex justify-center mb-1">
-                    <Link to={`/dashboard/viewLocation/${item?._id}`}>
-                      <button className="btn btn-sm btn-primary ">
+                <td>
+                  {" "}
+                  <div className="flex justify-center mb-1">
+                    <Link
+                      to={`/dashboard/viewLocation/${item?.deliveryAddressLatitude},${item?.deliveryAddressLongitude}`}
+                    >
+                      <button className="btn btn-sm btn-primary " >
                         View Location
                       </button>
                     </Link>
-                  </div></td>
+                  </div>
+                </td>
                 <td>
-                 
-
                   <div className="flex gap-1">
                     <button
                       onClick={() => handleDelete(item?._id)}
