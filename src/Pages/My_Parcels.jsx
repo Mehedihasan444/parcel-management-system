@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 import Swal from "sweetalert2";
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
-import useAxiosSecure from "../hooks/useAxiosSecure";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
 import ReviewPage from "./ReviewPage";
 import {  useState } from "react";
 
@@ -81,7 +81,7 @@ const My_Parcels = () => {
 
       {/* <span className="divider"></span> */}
       <div className="overflow-x-auto">
-        <table className="table table-xs">
+        <table className="table table-xs border">
           <thead>
             <tr className="text-base">
               <th>#</th>
@@ -102,10 +102,8 @@ const My_Parcels = () => {
                 <td>{item?.requestedDeliveryDate}</td>
                 <td>{item?.deliveryMenID}</td>
                 <td>
-                  {" "}
                   <span className="">{item?.status}</span>
                 </td>
-
                 <td>{item?.approximateDeliveryDate}</td>
                 <td>{item?.bookingDate}</td>
                 <td className="flex gap-1">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import { Rating } from "@smastrom/react-rating";
 import SectionTitle from "../../Components/SectionTitle/SectionTitle";
 

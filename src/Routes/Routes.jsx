@@ -24,6 +24,7 @@ import ReviewPage from "../Pages/ReviewPage";
 import Payments from "../Pages/Payments";
 import Location from "../Components/Location/Location";
 import Test from "../../../Test";
+import PaymentHistory from "../Pages/PaymentHistory";
 
 const Routes = createBrowserRouter([
   {
@@ -71,6 +72,10 @@ const Routes = createBrowserRouter([
       {
         path: "payments/:id",
         element: <Payments></Payments>,
+      },
+      {
+        path: "paymentHistory",
+        element: <PaymentHistory></PaymentHistory>,
       },
       {
         path: "myParcels",

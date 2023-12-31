@@ -100,6 +100,14 @@ const Dashboard = () => {
 
                 
               </li>
+              <li>
+              <PrivateRoute><NavLink to="/dashboard/paymentHistory">
+                <CgProfile />
+                Payment History
+                </NavLink></PrivateRoute>
+
+                
+              </li>
               </>
             }
              
