@@ -5,14 +5,17 @@ import Swal from "sweetalert2";
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import ReviewPage from "./ReviewPage";
+import {  useState } from "react";
 
 const My_Parcels = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const [stat,setStat] = useState('');
+
   const { data: parcels = [], refetch } = useQuery({
-    queryKey: ["parcels"],
+    queryKey: ["parcels",stat],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/users/bookings/${user.email}`);
+      const res = await axiosSecure.get(`/users/bookings/${user?.email}?status=${stat}`);
       return res.data;
     },
   });
@@ -41,6 +44,14 @@ const My_Parcels = () => {
     });
   };
 
+
+
+  const handleFilter = (e) => {
+    const Value = e.target.value;
+    setStat(Value)
+    refetch();
+  };
+
   return (
     <div>
       {/* <h1 className="text-3xl font-bold text-center mb-5">My_Parcels</h1> */}
@@ -49,20 +60,20 @@ const My_Parcels = () => {
         <div className="text-2xl font-bold ">
           <h3 className="">Filter By Status:</h3>
         </div>
-        <div className="">
+        <div className="" >
           <label className="form-control w-full max-w-xs">
             <div className="label">
               <span className="label-text font-medium">Pick status</span>
             </div>
-            <select className="select select-bordered">
+            <select className="select select-bordered" name="filter" onChange={handleFilter}>
               <option disabled selected>
                 Select one
               </option>
-              <option>Delivered</option>
-              <option>Pending</option>
-              <option>On the way</option>
-              <option>Returned</option>
-              <option>cancel</option>
+              <option value="delivered">Delivered</option>
+              <option value="pending">Pending</option>
+              <option value="On The Way">On the way</option>
+              <option value="returned">Returned</option>
+              <option value="cancelled">cancelled</option>
             </select>
           </label>
         </div>
@@ -116,7 +127,9 @@ const My_Parcels = () => {
                   {item?.status === "pending" && (
                     <>
                       <Link to={`/dashboard/updateBooking/${item?._id}`}>
-                        <button className="btn btn-sm btn-accent text-white" >Update</button>
+                        <button className="btn btn-sm btn-accent text-white">
+                          Update
+                        </button>
                       </Link>
                       <button
                         onClick={() => handleDelete(item?._id)}
@@ -130,7 +143,9 @@ const My_Parcels = () => {
                       item?.status === "delivered" &&
                     } */}
                   <Link to={`/dashboard/payments/${item?._id}`}>
-                    <button className="btn btn-sm btn-info text-white">Pay</button>
+                    <button className="btn btn-sm btn-info text-white">
+                      Pay
+                    </button>
                   </Link>
                 </td>
               </tr>

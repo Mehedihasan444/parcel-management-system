@@ -15,7 +15,7 @@ const Navbar = () => {
       })
       .catch((error) => console.log(error));
   };
- 
+
   return (
     <div className="max-w-7xl mx-auto navbar bg-base-100">
       <div className="navbar-start">
@@ -28,11 +28,15 @@ const Navbar = () => {
               <NavLink to="/">Home</NavLink>
             </li>
             <li>
-              <NavLink to={`/dashboard/${isAdmin
-      ? "adminHome"
-      : isDeliveryMen
-      ? "myDeliveryList"
-      : "bookAParcel"}`}>
+              <NavLink
+                to={`/dashboard/${
+                  isAdmin
+                    ? "adminHome"
+                    : isDeliveryMen
+                    ? "myDeliveryList"
+                    : "bookAParcel"
+                }`}
+              >
                 {" "}
                 {isAdmin
                   ? "Admin Panel"
@@ -52,12 +56,19 @@ const Navbar = () => {
           <li>
             <NavLink to="/">Home</NavLink>
           </li>
+          {/* <li>
+            <NavLink to="/test">Test</NavLink>
+          </li> */}
           <li>
-            <NavLink to={`/dashboard/${isAdmin
-      ? "adminHome"
-      : isDeliveryMen
-      ? "myDeliveryList"
-      : "bookAParcel"}`}>
+            <NavLink
+              to={`/dashboard/${
+                isAdmin
+                  ? "adminHome"
+                  : isDeliveryMen
+                  ? "myDeliveryList"
+                  : "bookAParcel"
+              }`}
+            >
               {" "}
               {isAdmin
                 ? "Admin Panel"
@@ -68,10 +79,7 @@ const Navbar = () => {
           </li>
         </ul>
       </div>
-      <div className="navbar-end">
-        <button className="btn btn-ghost btn-circle">
-          <FaSearch className="text-xl" />
-        </button>
+      <div className="navbar-end ">
         <button className="btn btn-ghost btn-circle">
           <div className="indicator">
             <FaRegBell className="text-xl" />
@@ -92,14 +100,16 @@ const Navbar = () => {
               </div>
             </div>
             <ul className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
-              <li className=" ">
+              {/* <li className=" ">
                 <input
                   type="text"
                   className=""
                   value={user?.displayName}
                   readOnly
                 />
-              </li>
+              </li> */}
+                <h3 className="font-bold text-center text-info text-xl" >{user?.displayName}</h3>
+              <hr />
               <li>
                 <Link to="/dashboard">Dashboard</Link>
               </li>
@@ -115,6 +125,8 @@ const Navbar = () => {
             <button className="btn">Login</button>
           </Link>
         )}
+
+      
       </div>
     </div>
   );

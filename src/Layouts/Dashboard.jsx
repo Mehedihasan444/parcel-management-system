@@ -9,7 +9,7 @@ import useDeliveryMen from "../Hooks/useDeliveryMen";
 import AdminRoute from "../Routes/AdminRoute";
 import DeliveryMenRoute from "../Routes/DeliveryMenRoute";
 import PrivateRoute from "../Routes/PrivateRoute";
-
+import logo from '../assets/Logo.png'
 
 const Dashboard = () => {
 
@@ -17,10 +17,13 @@ const Dashboard = () => {
   const [isAdmin] =useAdmin();
   const [isDeliveryMen] = useDeliveryMen();
 
-
+//bg-orange-400
   return (
     <div className="flex">
       <div className="w-64 min-h-screen bg-orange-400">
+        <div className="mt-10">
+          <img src={logo} alt="" className="" />
+        </div>
         <ul className="menu p-4">
           {isAdmin ? (
             <>

@@ -1,25 +1,32 @@
-import { FaTrash, FaUsers } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
-import useAuth from "../Hooks/useAuth";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import TotalSpendAmountCal from "../Components/TotalSpendAmountCal/TotalSpendAmountCal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NumberOfParcelBooked from "../Components/NumberOfParcelBooked/NumberOfParcelBooked";
 
 const All_Users = () => {
-  const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const { data: allUsers = [], refetch } = useQuery({
-    queryKey: ["allUsers"],
+  const [currentPage, setCurrentPage] = useState(1);
+  const [numberOfPages, setNumberOfPages] = useState(1);
+
+  const { data: allUsers, refetch } = useQuery({
+    queryKey: ["allUsers",currentPage],
     queryFn: async () => {
-      const res = await axiosSecure.get("/users/admin");
+      const res = await axiosSecure.get(`/users?page=${currentPage}`);
       return res.data;
     },
   });
-
+  useEffect(() => {
+    if (allUsers) {
+      const count = allUsers?.count;
+      // console.log(count);
+      const NumOfPages = Math.ceil(count / 5);
+      setNumberOfPages(NumOfPages);
+    }
+  }, [allUsers]);
   const handleMakeAdmin = async (email) => {
-   // console.log(email);
+    // console.log(email);
     const info = {
       role: "admin",
     };
@@ -29,7 +36,7 @@ const All_Users = () => {
     });
   };
   const handleMakeDeliveryMen = async (email) => {
-   // console.log(email);
+    // console.log(email);
     const info = {
       role: "deliveryMen",
     };
@@ -38,10 +45,24 @@ const All_Users = () => {
       refetch();
     });
   };
+  refetch()
+  const pages = [...Array(numberOfPages)];
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+   
+      console.log('hello')
+    }
+  };
+  const handleNextPage = () => {
+    if (currentPage < pages.length) {
+      setCurrentPage(currentPage + 1);
+      // refetch()
+      console.log('hello')
 
-
-// console.log('check',numberOfParcelBooked)
-
+    }
+  };
+  // console.log('check',numberOfParcelBooked)
 
   return (
     <div className="">
@@ -50,7 +71,9 @@ const All_Users = () => {
         subHeading={"How Many??"}
       ></SectionTitle>
       <div className="flex justify-around ">
-        <h1 className="text-4xl font-bold ">Total Users: {allUsers.length}</h1>
+        <h1 className="text-4xl font-bold ">
+          Total Users: {allUsers?.count}
+        </h1>
       </div>
       {/* table */}
 
@@ -70,19 +93,20 @@ const All_Users = () => {
             </tr>
           </thead>
           <tbody>
-            {allUsers.map((item, i) => (
+            {allUsers?.result?.map((item, i) => (
               <tr key={item._id}>
                 <td>{i + 1}</td>
                 <td> {item?.name} </td>
                 <td>{item?.phone}</td>
                 <td>
                   {/* {numberOfParcelBooked.length}  */}
-                  <NumberOfParcelBooked email={item?.email}></NumberOfParcelBooked>
+                  <NumberOfParcelBooked
+                    email={item?.email}
+                  ></NumberOfParcelBooked>
                 </td>
                 <td>
-                  
                   <TotalSpendAmountCal email={item?.email} />
-                  </td>
+                </td>
                 <th>
                   <button
                     onClick={() => {
@@ -112,6 +136,24 @@ const All_Users = () => {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="">
+        <button className={`btn btn-accent mr-3 ${currentPage === 1 ? "btn-disabled" : ""
+            }`} onClick={handlePreviousPage}>
+          «
+        </button>
+        {pages?.map((page, idx) => (
+          <button key={idx} className={`${ currentPage === idx + 1 ? "btn-disabled" : ""
+            } mr-2 btn btn-accent`}
+            onClick={() => setCurrentPage(idx + 1)}
+          >
+            {idx + 1}
+          </button>
+        ))}
+        <button className={`btn btn-accent mr-3 ${currentPage === pages.length ? "btn-disabled" : ""
+            }`}  onClick={handleNextPage}>
+          »
+        </button>
       </div>
     </div>
   );
