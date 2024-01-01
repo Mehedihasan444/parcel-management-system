@@ -53,7 +53,7 @@ const My_Parcels = () => {
   };
 
   return (
-    <div>
+    <div className="sm:w-[70vw] ">
       {/* <h1 className="text-3xl font-bold text-center mb-5">My_Parcels</h1> */}
       <SectionTitle heading={"My Parcels"}></SectionTitle>
       <div className="flex justify-between items-center my-5">
@@ -81,7 +81,7 @@ const My_Parcels = () => {
 
       {/* <span className="divider"></span> */}
       <div className="overflow-x-auto">
-        <table className="table table-xs border">
+        <table className="table table-md border text-center">
           <thead>
             <tr className="text-base">
               <th>#</th>

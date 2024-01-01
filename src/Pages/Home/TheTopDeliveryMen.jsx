@@ -30,17 +30,19 @@ const TheTopDeliveryMen = () => {
         heading={"The Top Delivery Man"}
         subHeading={"Users Choice"}
       />
-      <div className="grid grid-cols-1 sm:grid-cols-5 gap-5">
+      <div className="grid grid-cols-1 px-10 sm:px-0 justify-center sm:grid-cols-5 gap-5">
         {deliveryMen?.slice(0, 5).map((card) => (
-          <div
-            className="relative flex flex-col text-gray-700 bg-white shadow-md rounded-xl bg-clip-border"
-            key={card?.id}
+
+          <div className="flex justify-center items-center"  key={card?.id}>
+<div
+            className="relative flex flex-col w-64 sm:w-full  text-gray-700 bg-white shadow-md rounded-xl bg-clip-border"
+           
           >
             <div className="relative flex justify-center mx-4 mt-4 overflow-hidden text-gray-700 bg-white shadow-md  h-40 rounded-xl bg-clip-border">
               <img
                 src={card?.image}
                 alt="profile-picture "
-                className="bg-cover  h-full"
+                className="bg-cover w-full object-cover  h-full"
               />
             </div>
             <div className="p-6 text-center">
@@ -59,6 +61,8 @@ const TheTopDeliveryMen = () => {
               </div>
             </div>
           </div>
+          </div>
+          
         ))}
       </div>
     </div>

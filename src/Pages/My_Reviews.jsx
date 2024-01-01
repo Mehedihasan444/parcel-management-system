@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
 import useAuth from "../Hooks/useAuth";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
-
 import { Rating } from "@smastrom/react-rating";
 
 const My_Reviews = () => {
@@ -25,9 +24,9 @@ const My_Reviews = () => {
 
   return (
     <div>
-      <SectionTitle heading={"My Reviews"} subHeading={""}></SectionTitle>
+      <SectionTitle heading={"My Reviews"} subHeading={"User's Thought About You"}></SectionTitle>
 
-      <div className="" onChange={()=>refetch()}>
+      <div className="p-5 sm:p-0 sm:w-[70vw]" onChange={()=>refetch()}>
         {reviews?.map((review) => ( 
           <div key={review.id} className="bg-white p-4 rounded shadow-md flex gap-4 mb-5">
             <div className="mb-2 ">

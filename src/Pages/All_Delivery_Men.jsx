@@ -28,7 +28,7 @@ const All_Delivery_Men = () => {
       <SectionTitle heading={"all DeliveryMen's"}></SectionTitle>
       {/* <span className="divider"></span> */}
       <div className="overflow-x-auto">
-        <table className="table table-xs text-center">
+        <table className="table table-md text-center border">
           <thead className="border">
             <tr className="text-base">
               <th>#</th>

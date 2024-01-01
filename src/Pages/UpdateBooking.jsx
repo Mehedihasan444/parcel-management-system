@@ -68,7 +68,7 @@ const parcelData =useLoaderData()
         subHeading={"Make Your Life Easy"}
       ></SectionTitle>
       {/* <div className="divider"></div> */}
-      <div className=" shadow-md rounded-md p-10 bg-slate-200">
+      <div className=" shadow-md rounded-md sm:w-[60vw] p-10 bg-slate-200">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col space-y-4"

@@ -78,9 +78,9 @@ const All_Users = () => {
       {/* table */}
 
       <div className="overflow-x-auto mt-3">
-        <table className="table table-xs text-center">
+        <table className="table table-md text-center border">
           {/* head */}
-          <thead className="text-base border">
+          <thead className="text-base ">
             <tr>
               <th>#</th>
 
@@ -137,7 +137,7 @@ const All_Users = () => {
           </tbody>
         </table>
       </div>
-      <div className="">
+      <div className=" flex justify-center my-10">
         <button className={`btn btn-accent mr-3 ${currentPage === 1 ? "btn-disabled" : ""
             }`} onClick={handlePreviousPage}>
           «

@@ -109,12 +109,12 @@ const My_Delivery_List = () => {
     });
   };
   return (
-    <div>
+    <div className="sm:w-[70vw]">
       <SectionTitle heading={"My Delivery List"} subHeading={"Assign Parcels"}></SectionTitle>
 
-      <span className="divider"></span>
-      <div className="overflow-x-auto">
-        <table className="table table-xs text-center">
+      {/* <span className="divider"></span> */}
+      <div className="overflow-x-auto ">
+        <table className="table table-md text-center border">
           <thead className="text-center">
             <tr className="text-base">
               <th>#</th>

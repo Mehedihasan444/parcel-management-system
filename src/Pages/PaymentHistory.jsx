@@ -19,11 +19,11 @@ const { data: payments=[] } = useQuery({
 console.log(payments)
     
     return (
-        <div>
+        <div className="sm:w-[70vw]">
             <h1 className=""></h1>
             <SectionTitle heading={"Payment History"} subHeading={"At a Glance!"}></SectionTitle>
             <div className="overflow-x-auto mt-3">
-        <table className="table table-xs border">
+        <table className="table table-md text-center border">
           {/* head */}
           <thead className="">
             <tr>

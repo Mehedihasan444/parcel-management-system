@@ -64,7 +64,7 @@ const info = {
   
       <SectionTitle heading={" Book a Parcel"} subHeading={"Make Your Life Easy"}></SectionTitle>
       {/* <div className="divider"></div> */}
-      <div className=" shadow-md rounded-md p-10 bg-slate-200">
+      <div className=" shadow-md rounded-md p-10 sm:w-[60vw] bg-slate-200">
          <form  onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
         <div className="flex justify-between gap-5">
           <div className="flex flex-col flex-1">

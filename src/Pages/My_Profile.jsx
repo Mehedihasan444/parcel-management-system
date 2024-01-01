@@ -104,7 +104,7 @@ const My_Profile = () => {
   };
 
   return (
-    <div>
+    <div className="">
       <div className="max-w-lg mx-auto mt-8 p-6 bg-white rounded shadow-md">
         <h2 className="text-2xl font-semibold mb-4 text-center">My Profile</h2>
 

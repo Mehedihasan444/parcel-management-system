@@ -60,10 +60,10 @@ const All_Parcels = () => {
   return (
     <div>
       <SectionTitle heading={"all Parcels"}></SectionTitle>
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg sm:text-2xl font-bold ">
+      <div className="flex justify-end items-center">
+        {/* <h3 className="text-lg sm:text-2xl font-bold ">
           Filter By Requested Delivery Date:
-        </h3>
+        </h3> */}
         <form onSubmit={handleFilter}>
           <div className="flex justify-end  gap-5 my-5">
             <div className="">
@@ -100,7 +100,7 @@ const All_Parcels = () => {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="table table-xs text-center">
+        <table className="table table-md text-center border">
           <thead className="border">
             <tr className="text-base">
               {/* <th>#</th> */}

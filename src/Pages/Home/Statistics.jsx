@@ -26,8 +26,9 @@ const delivered = parcels.filter((item)=>item.status === "delivered")
 
 
   return (
-    <div className="flex justify-center items-center gap-10">
-      <div className="card w-96 bg-gradient-to-t from-[#ffa628] shadow-xl to-[#fe4504] text-white ">
+    <div className=" flex justify-center  items-center ">
+     <div className="grid grid-cols-1 sm:grid-cols-3 justify-center items-center gap-10">
+     <div className="card w-96 bg-gradient-to-t from-[#ffa628] shadow-xl to-[#fe4504] text-white ">
         <div className="card-body">
           <div className="text-6xl font-bold flex justify-center ">
             {" "}
@@ -57,6 +58,7 @@ const delivered = parcels.filter((item)=>item.status === "delivered")
           <div className="card-actions justify-end"></div>
         </div>
       </div>
+     </div>
     </div>
   );
 };

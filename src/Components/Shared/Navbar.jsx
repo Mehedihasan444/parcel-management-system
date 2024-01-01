@@ -19,7 +19,7 @@ const Navbar = () => {
   return (
     <div className="max-w-7xl mx-auto navbar bg-base-100">
       <div className="navbar-start">
-        <div className="dropdown">
+        {/* <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
             <FaBarsStaggered className="text-xl" />
           </div>
@@ -46,19 +46,17 @@ const Navbar = () => {
               </NavLink>
             </li>
           </ul>
-        </div>
+        </div> */}
         <a href="/" className="btn btn-ghost text-xl font-bold">
           RapidParcel<span className="text-[#1CA774]">Hub</span>
         </a>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
+        {/* <ul className="menu menu-horizontal px-1">
           <li>
             <NavLink to="/">Home</NavLink>
           </li>
-          {/* <li>
-            <NavLink to="/test">Test</NavLink>
-          </li> */}
+         
           <li>
             <NavLink
               to={`/dashboard/${
@@ -77,7 +75,7 @@ const Navbar = () => {
                 : "Dashboard"}
             </NavLink>
           </li>
-        </ul>
+        </ul> */}
       </div>
       <div className="navbar-end ">
         <button className="btn btn-ghost btn-circle">
@@ -108,10 +106,20 @@ const Navbar = () => {
                   readOnly
                 />
               </li> */}
-                <h3 className="font-bold text-center text-info text-xl" >{user?.displayName}</h3>
+                <h3 className="font-bold   text-xl mb-2" >{user?.displayName}</h3>
               <hr />
-              <li>
-                <Link to="/dashboard">Dashboard</Link>
+              <li className="mt-2">
+                <Link to={`/dashboard/${
+                  isAdmin
+                    ? "adminHome"
+                    : isDeliveryMen
+                    ? "myDeliveryList"
+                    : "bookAParcel"
+                }`}>{isAdmin
+                ? "Admin Panel"
+                : isDeliveryMen
+                ? "Delivery Men Panel"
+                : "Dashboard"}</Link>
               </li>
               <li>
                 <button className="" onClick={handleLogOut}>
