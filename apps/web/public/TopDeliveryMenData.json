@@ -1,0 +1,59 @@
+[
+    {
+      "id": 1,
+      "name": "John Doe",
+      "image": "https://img.freepik.com/free-photo/delivery-concept-portrait-happy-african-american-delivery-man-red-cloth-holding-box-package-isolated-grey-studio-background-copy-space_1258-1261.jpg",
+      "parcelsDelivered": 500,
+      "averageRatings": 4.5
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "image": "https://media.istockphoto.com/id/480750456/photo/cheerful-delivery-man.jpg?s=612x612&w=0&k=20&c=uDeGKUQIZm_-gizlvsflfGA4DUURzDMSnuE60jqc8A0=",
+      "parcelsDelivered": 450,
+      "averageRatings": 4.2
+    },
+    {
+      "id": 3,
+      "name": "Bob Johnson",
+      "image": "https://media.istockphoto.com/id/905865682/photo/portrait-of-courier-with-digital-tablet-delivering-package.jpg?s=612x612&w=0&k=20&c=WbZu7QdzQHVqqgKI78SA4bGLzKo7jZqp5jYaGPvQaRs=",
+      "parcelsDelivered": 600,
+      "averageRatings": 4.8
+    },
+    {
+      "id": 4,
+      "name": "Alice Williams",
+      "image": "https://c8.alamy.com/comp/2BTMA2T/waiting-for-parcel-delivery-man-in-uniform-gives-parcel-at-home-2BTMA2T.jpg",
+      "parcelsDelivered": 520,
+      "averageRatings": 4.6
+    },
+    {
+      "id": 5,
+      "name": "Michael Brown",
+      "image": "https://previews.123rf.com/images/comzeal/comzeal1510/comzeal151000031/46265085-delivery-man-holding-a-parcel-box.jpg",
+      "parcelsDelivered": 700,
+      "averageRatings": 4.7
+    },
+    {
+      "id": 6,
+      "name": "Emily Davis",
+      "image": "https://img.freepik.com/premium-photo/delivery-man-box-courier-service-with-package-shipment-parcel-from-van-transportation-outdoor-cargo-vehicle-logistics-portrait-friendly-delivery-guy-shipping-online-wholesale-order_590464-96759.jpg?w=2000",
+      "parcelsDelivered": 480,
+      "averageRatings": 4.4
+    },
+    {
+      "id": 7,
+      "name": "Daniel Miller",
+      "image": "https://i.pinimg.com/550x/d7/70/b6/d770b6956ef669d330f0b0fc63be1f01.jpg",
+      "parcelsDelivered": 550,
+      "averageRatings": 4.9
+    },
+    {
+      "id": 8,
+      "name": "Sophia Wilson",
+      "image": "https://e7.pngegg.com/pngimages/865/797/png-clipart-delivery-logistics-courier-freight-transport-delivery-miscellaneous-furniture-thumbnail.png",
+      "parcelsDelivered": 610,
+      "averageRatings": 4.5
+    }
+  ]
+  
