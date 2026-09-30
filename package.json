@@ -19,6 +19,9 @@
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules .turbo apps/web/dist apps/api/dist",
     "audit:secrets": "./scripts/audit-secrets.sh",
+    "check:imports": "node scripts/check-imports.js",
+    "check:docs": "node scripts/check-docs.js",
+    "check": "npm run check:imports && npm run check:docs && npm run audit:secrets",
     "api:contract": "node scripts/extract-api-contract.js",
     "graph": "turbo run build --graph=graph.html"
   },
