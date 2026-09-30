@@ -31,12 +31,11 @@ echo
 # leaked secret, and must not be reported.
 PATTERNS='sk_live_|sk_test_[0-9A-Za-z]{8,}|pk_live_|whsec_|rk_live_|AIza[0-9A-Za-z_-]{35}|ghp_[0-9A-Za-z]{36}|github_pat_|gho_[0-9A-Za-z]{36}|-----BEGIN [A-Z ]*PRIVATE KEY-----|mongodb(\+srv)?://[^[:space:]"'"'"'$]+:[^[:space:]"'"'"'$]+@'
 
-# Lines that are clearly not credentials, and so are exempt:
-#   - placeholder values used by the test and smoke scripts
-#   - the PATTERNS line of this script, including older committed copies of
-#     it, which necessarily spell out "sk_live_", "AIza[...]" and friends.
-# Without this the audit would flag its own source on every run.
-ALLOW='sk_test_dummy|test-secret|test-user|test-password|sk_live_\||sk_test_\||AIza\[0-9A-Za-z_-\]'
+# Placeholder values used by the test and smoke scripts. These are not
+# credentials. Note that the real Stripe test-key pattern above already
+# requires eight characters after the prefix, so a bare "sk_test_" never
+# matches on its own.
+ALLOW='sk_test_dummy|test-secret|test-user|test-password'
 
 status=0
 
