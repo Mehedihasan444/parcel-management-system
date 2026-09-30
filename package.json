@@ -1,0 +1,36 @@
+{
+  "name": "parcel-management-system",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Parcel Management System — Turborepo monorepo containing the React web app and the Express API.",
+  "license": "ISC",
+  "packageManager": "npm@12.0.1",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:web": "turbo run dev --filter=@parcel/web",
+    "dev:api": "turbo run dev --filter=@parcel/api",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "clean": "turbo run clean && rm -rf node_modules .turbo apps/web/dist apps/api/dist",
+    "audit:secrets": "./scripts/audit-secrets.sh",
+    "api:contract": "node scripts/extract-api-contract.js",
+    "graph": "turbo run build --graph=graph.html"
+  },
+  "devDependencies": {
+    "turbo": "^2.11.5"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "allowScripts": {
+    "esbuild": true,
+    "protobufjs": true,
+    "core-js-pure": true
+  }
+}

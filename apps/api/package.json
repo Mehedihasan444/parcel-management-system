@@ -1,22 +1,27 @@
 {
-  "name": "parcel-management-app-server-side",
+  "name": "@parcel/api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
+  "private": true,
+  "description": "Express + MongoDB API for the Parcel Management System",
   "license": "ISC",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "build": "node --check src/server.js && echo '@parcel/api: syntax OK'",
+    "lint": "echo \"no linter configured for @parcel/api\"",
+    "test": "node scripts/route-contract.test.js",
+    "clean": "rm -rf dist .turbo"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.3.0",
-    "nodemon": "^3.0.2",
     "stripe": "^14.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
   }
 }
