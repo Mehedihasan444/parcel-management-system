@@ -11,7 +11,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import { MdReviews } from "react-icons/md";
 import { TbTruckDelivery } from "react-icons/tb";
 import { CgProfile } from "react-icons/cg";
-import useAdmin from "../hooks/useAdmin";
+import useAdmin from "../Hooks/useAdmin";
 import useDeliveryMen from "../Hooks/useDeliveryMen";
 import AdminRoute from "../Routes/AdminRoute";
 import DeliveryMenRoute from "../Routes/DeliveryMenRoute";

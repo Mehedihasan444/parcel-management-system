@@ -1,11 +1,12 @@
 import axios from "axios";
+import { API_BASE_URL } from "../config/api";
 
 const axiosPublic = axios.create({
-    baseURL: 'http://localhost:5000/api/v1'
-})
+  baseURL: API_BASE_URL,
+});
 
 const useAxiosPublic = () => {
-    return axiosPublic;
+  return axiosPublic;
 };
 
 export default useAxiosPublic;

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
-import useAxiosSecure from "../hooks/useAxiosSecure";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
 import TotalSpendAmountCal from "../Components/TotalSpendAmountCal/TotalSpendAmountCal";
 import { useEffect, useState } from "react";
 import NumberOfParcelBooked from "../Components/NumberOfParcelBooked/NumberOfParcelBooked";

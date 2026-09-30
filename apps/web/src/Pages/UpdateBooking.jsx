@@ -2,7 +2,7 @@ import SectionTitle from "../Components/SectionTitle/SectionTitle";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAuth from "../Hooks/useAuth";
-import useAxiosSecure from "../hooks/useAxiosSecure";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
 import { useLoaderData } from "react-router-dom";
 const UpdateBooking = () => {
   const { user } = useAuth();

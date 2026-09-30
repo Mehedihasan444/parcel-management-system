@@ -1,13 +1,16 @@
 {
-  "name": "parcel-management-app-client-side",
+  "name": "@parcel/web",
+  "version": "1.0.0",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "node scripts/lint.js",
+    "lint:strict": "node scripts/lint.js --strict",
+    "lint:fix": "eslint . --ext js,jsx --fix",
+    "clean": "rm -rf dist .turbo"
   },
   "dependencies": {
     "@smastrom/react-rating": "^1.4.0",
@@ -21,9 +24,8 @@
     "localforage": "^1.10.0",
     "mapbox-gl": "^3.0.1",
     "match-sorter": "^6.3.1",
-    "nodemon": "^3.0.2",
+    "react-apexcharts": "1.4.1",
     "react": "^18.2.0",
-    "react-apexcharts": "^1.4.1",
     "react-countup": "^6.5.0",
     "react-date-range": "^2.0.0-alpha.4",
     "react-dom": "^18.2.0",
