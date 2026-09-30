@@ -29,7 +29,14 @@ echo
 # The MongoDB pattern deliberately excludes `$` from both credential segments:
 # a URI built from `${process.env.X}` interpolation is a template, not a
 # leaked secret, and must not be reported.
-PATTERNS='sk_live_|sk_test_|pk_live_|whsec_|rk_live_|AIza[0-9A-Za-z_-]{35}|ghp_[0-9A-Za-z]{36}|github_pat_|gho_[0-9A-Za-z]{36}|-----BEGIN [A-Z ]*PRIVATE KEY-----|mongodb(\+srv)?://[^[:space:]"'"'"'$]+:[^[:space:]"'"'"'$]+@'
+PATTERNS='sk_live_|sk_test_[0-9A-Za-z]{8,}|pk_live_|whsec_|rk_live_|AIza[0-9A-Za-z_-]{35}|ghp_[0-9A-Za-z]{36}|github_pat_|gho_[0-9A-Za-z]{36}|-----BEGIN [A-Z ]*PRIVATE KEY-----|mongodb(\+srv)?://[^[:space:]"'"'"'$]+:[^[:space:]"'"'"'$]+@'
+
+# Lines that are clearly not credentials, and so are exempt:
+#   - placeholder values used by the test and smoke scripts
+#   - the PATTERNS line of this script, including older committed copies of
+#     it, which necessarily spell out "sk_live_", "AIza[...]" and friends.
+# Without this the audit would flag its own source on every run.
+ALLOW='sk_test_dummy|test-secret|test-user|test-password|sk_live_\||sk_test_\||AIza\[0-9A-Za-z_-\]'
 
 status=0
 
@@ -40,7 +47,7 @@ for blob in $blobs; do
   # Only inspect blobs, not trees or commits.
   type=$(git cat-file -t "$blob" 2>/dev/null || true)
   [ "$type" = "blob" ] || continue
-  if git cat-file -p "$blob" 2>/dev/null | grep -InE "$PATTERNS" | sed "s|^|  $blob: |"; then
+  if git cat-file -p "$blob" 2>/dev/null | grep -InE "$PATTERNS" | grep -vE "$ALLOW" | sed "s|^|  $blob: |"; then
     hits=$((hits + 1))
   fi
 done
