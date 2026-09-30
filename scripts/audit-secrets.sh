@@ -39,13 +39,27 @@ ALLOW='sk_test_dummy|test-secret|test-user|test-password'
 
 status=0
 
+# This script necessarily contains the very patterns it searches for, so its own
+# blob is skipped by path. Skipping by path rather than by an allowlist is
+# deliberate: an allowlist has to spell out the pattern, which then matches the
+# line that spells it out, and every revision flags the previous one.
+SELF="scripts/audit-secrets.sh"
+
 echo "-- scanning all blobs in history --"
-blobs=$(git rev-list --objects --all | awk '{print $1}' | sort -u)
+# blob-id -> path, built once so the loop below does not re-run rev-list.
+object_paths=$(git rev-list --objects --all)
+blobs=$(echo "$object_paths" | awk '{print $1}' | sort -u)
 hits=0
 for blob in $blobs; do
   # Only inspect blobs, not trees or commits.
   type=$(git cat-file -t "$blob" 2>/dev/null || true)
   [ "$type" = "blob" ] || continue
+  # Skip this script wherever it appears in the tree.
+  if echo "$object_paths" | awk -v b="$blob" -v self="$SELF" \
+      '$1 == b { for (i = 2; i <= NF; i++) if ($i == self) found = 1 }
+       END { exit !found }'; then
+    continue
+  fi
   if git cat-file -p "$blob" 2>/dev/null | grep -InE "$PATTERNS" | grep -vE "$ALLOW" | sed "s|^|  $blob: |"; then
     hits=$((hits + 1))
   fi
