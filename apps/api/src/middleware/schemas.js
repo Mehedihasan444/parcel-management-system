@@ -10,7 +10,9 @@ const { z } = require("zod");
  */
 
 const emailParam = z.object({ email: z.string().email() });
-const objectIdParam = z.object({ id: z.string().regex(/^[0-9a-fA-F]{24}$/, "must be a 24-char hex id") });
+const objectIdParam = z.object({
+  id: z.string().regex(/^[0-9a-fA-F]{24}$/, "must be a 24-char hex id"),
+});
 
 const bookingBody = z
   .object({

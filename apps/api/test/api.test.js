@@ -118,11 +118,9 @@ describe("request validation", () => {
 
 describe("auth runs before validation", () => {
   it("protected routes answer 401 even with a malformed id", async () => {
-    const { status } = await req(
-      "PATCH",
-      "/api/v1/users/bookings/assign/deliveryMen/not-an-id",
-      { body: {} }
-    );
+    const { status } = await req("PATCH", "/api/v1/users/bookings/assign/deliveryMen/not-an-id", {
+      body: {},
+    });
     assert.equal(status, 401);
   });
 });

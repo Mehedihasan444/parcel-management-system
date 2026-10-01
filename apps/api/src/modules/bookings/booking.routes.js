@@ -28,30 +28,15 @@ const router = express.Router();
  */
 router.get("/admin/bookings", listAllBookings);
 router.post("/bookings", verifyToken, validate({ body: bookingBody }), createBooking);
-router.get(
-  "/bookings/:email",
-  verifyToken,
-  validate({ params: emailParam }),
-  listBookingsByUser
-);
-router.get(
-  "/booking/:id",
-  verifyToken,
-  validate({ params: objectIdParam }),
-  getBookingById
-);
+router.get("/bookings/:email", verifyToken, validate({ params: emailParam }), listBookingsByUser);
+router.get("/booking/:id", verifyToken, validate({ params: objectIdParam }), getBookingById);
 router.patch(
   "/bookings/assign/deliveryMen/:id",
   verifyToken,
   validate({ params: objectIdParam, body: assignBody }),
   assignDeliveryMan
 );
-router.delete(
-  "/bookings/:id",
-  verifyToken,
-  validate({ params: objectIdParam }),
-  deleteBooking
-);
+router.delete("/bookings/:id", verifyToken, validate({ params: objectIdParam }), deleteBooking);
 router.patch(
   "/updateBooking/:id",
   verifyToken,
