@@ -3,8 +3,7 @@ import { FiAlertTriangle, FiArrowLeft, FiHome } from "react-icons/fi";
 
 export default function RouteError() {
   const error = useRouteError();
-  const message =
-    error?.statusText || error?.message || "Something went wrong loading this page.";
+  const message = error?.statusText || error?.message || "Something went wrong loading this page.";
 
   return (
     <div className="mx-auto grid min-h-[70vh] max-w-xl place-items-center px-4 py-16 text-center">

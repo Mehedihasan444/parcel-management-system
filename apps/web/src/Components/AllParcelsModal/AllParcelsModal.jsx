@@ -9,7 +9,6 @@ const AllParcelsModal = ({ id }) => {
   const { register, handleSubmit, watch } = useForm();
   const axiosSecure = useAxiosSecure();
 
-  
   const { data: deliveryMen = [], refetch } = useQuery({
     queryKey: ["deliveryMen"],
     queryFn: async () => {
@@ -22,38 +21,35 @@ const AllParcelsModal = ({ id }) => {
     (deliMan) => deliMan.role !== "admin" && deliMan.role !== "user"
   );
 
-
-// console.log(id)
+  // console.log(id)
 
   const onSubmit = async (data) => {
     // console.log(data);
     const info = {
       approximateDeliveryDate: data.approximateDeliveryDate,
-      selectedDeliveryMen: data.selectedDeliveryMen
+      selectedDeliveryMen: data.selectedDeliveryMen,
     };
-    await axiosSecure
-      .patch(`/users/bookings/assign/deliveryMen/${id}`, info)
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.modifiedCount > 0) {
-          refetch();
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Process completed successfully",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        } else {
-          Swal.fire({
-            position: "top-end",
-            icon: "error",
-            title: "Something went wrong",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        }
-      });
+    await axiosSecure.patch(`/users/bookings/assign/deliveryMen/${id}`, info).then((res) => {
+      console.log(res.data);
+      if (res.data.modifiedCount > 0) {
+        refetch();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Process completed successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } else {
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Something went wrong",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
   };
 
   return (
@@ -61,9 +57,7 @@ const AllParcelsModal = ({ id }) => {
       <dialog id="my_modal_3" className="modal text-black">
         <div className="modal-box">
           <form method="dialog">
-            <button  className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-              ✕
-            </button>
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
 
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -106,16 +100,11 @@ const AllParcelsModal = ({ id }) => {
                     type="date"
                     name="approximateDeliveryDate"
                     id="deliveryDate"
-                   
                   />
                 </div>
               </div>
 
-              <button
-                className="btn btn-primary "
-              >
-                Assign
-              </button>
+              <button className="btn btn-primary ">Assign</button>
             </div>
           </form>
         </div>

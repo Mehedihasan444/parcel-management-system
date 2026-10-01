@@ -45,7 +45,7 @@ declared before parameter segments, and the mount order in
 **2. Never commit secrets.**
 
 Real `.env` files are gitignored. Use the `.env.example` templates. If you
-accidentally commit a credential, remove it from the working tree *and* rotate
+accidentally commit a credential, remove it from the working tree _and_ rotate
 it — deleting the commit is not enough once it has been pushed. Tell a
 maintainer so the history can be rewritten with `git filter-repo`.
 

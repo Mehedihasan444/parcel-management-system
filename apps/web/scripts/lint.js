@@ -28,11 +28,10 @@ const BUDGET = 47;
 
 const strict = process.argv.includes("--strict");
 
-const result = spawnSync(
-  "npx",
-  ["eslint", ".", "--ext", "js,jsx", "-f", "json"],
-  { cwd: APP_ROOT, encoding: "utf8" }
-);
+const result = spawnSync("npx", ["eslint", ".", "--ext", "js,jsx", "-f", "json"], {
+  cwd: APP_ROOT,
+  encoding: "utf8",
+});
 
 if (result.error) {
   console.error("Failed to run eslint:", result.error.message);
@@ -101,11 +100,7 @@ if (total > BUDGET) {
 }
 
 console.log("");
-console.log(
-  `PASS: ${total} problems, within the inherited budget of ${BUDGET}.`
-);
-console.log(
-  "These are pre-existing issues carried over from the original repository,"
-);
+console.log(`PASS: ${total} problems, within the inherited budget of ${BUDGET}.`);
+console.log("These are pre-existing issues carried over from the original repository,");
 console.log("not regressions. Run `npm run lint:strict --workspace=@parcel/web`");
 console.log("to see them all, or `npm run lint:fix` to auto-fix what ESLint can.");

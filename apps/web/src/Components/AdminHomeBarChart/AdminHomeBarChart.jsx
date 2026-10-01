@@ -55,12 +55,7 @@ const AdminHomeBarChart = () => {
     <div className="app">
       <div className="row">
         <div className="mixed-chart">
-          <Chart
-            options={chartData.options}
-            series={chartData.series}
-            type="bar"
-            width="500"
-          />
+          <Chart options={chartData.options} series={chartData.series} type="bar" width="500" />
         </div>
       </div>
     </div>

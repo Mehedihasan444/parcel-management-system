@@ -7,7 +7,8 @@ const FALLBACK = [
     id: "booking",
     icon: FiCalendar,
     title: "Effortless booking",
-    description: "Price, pickup and delivery in under a minute — with instant confirmation and receipt.",
+    description:
+      "Price, pickup and delivery in under a minute — with instant confirmation and receipt.",
   },
   {
     id: "tracking",

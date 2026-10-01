@@ -30,8 +30,7 @@ const All_Parcels = () => {
     for (let i = 0; i < users?.length; i++) {
       const filteredData = allParcels.filter(
         (item) =>
-          item?.email.toLowerCase() === users[i]?.email.toLowerCase() &&
-          item?.status === "pending"
+          item?.email.toLowerCase() === users[i]?.email.toLowerCase() && item?.status === "pending"
         //"On The Way"
       );
       filteredBookings.push(...filteredData);

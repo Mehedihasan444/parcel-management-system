@@ -90,10 +90,7 @@ const updateBooking = asyncHandler(async (req, res) => {
     $set[field] = data?.[field];
   }
 
-  const result = await bookings.updateOne(
-    { _id: toObjectId(req.params.id) },
-    { $set }
-  );
+  const result = await bookings.updateOne({ _id: toObjectId(req.params.id) }, { $set });
   res.send(result);
 });
 

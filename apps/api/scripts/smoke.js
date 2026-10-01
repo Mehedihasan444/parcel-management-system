@@ -26,16 +26,13 @@ server.once("listening", async () => {
     console.log(`POST /api/v1/jwt          -> ${jwt.status}  token segments: ${segments}`);
 
     // A protected route with no Authorization header must be rejected.
-    const protectedRoute = await fetch(
-      "http://127.0.0.1:5099/api/v1/users/someone@example.com"
-    );
+    const protectedRoute = await fetch("http://127.0.0.1:5099/api/v1/users/someone@example.com");
     console.log(`GET  /users/:email (no auth) -> ${protectedRoute.status}`);
 
     // ...and accepted with a valid token.
-    const authorized = await fetch(
-      "http://127.0.0.1:5099/api/v1/users/someone@example.com",
-      { headers: { Authorization: `Bearer ${body.token}` } }
-    );
+    const authorized = await fetch("http://127.0.0.1:5099/api/v1/users/someone@example.com", {
+      headers: { Authorization: `Bearer ${body.token}` },
+    });
     console.log(`GET  /users/:email (auth)   -> ${authorized.status} (500 = reached db)`);
 
     server.close();

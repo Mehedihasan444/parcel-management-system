@@ -6,10 +6,10 @@ and message.
 
 ## Provenance
 
-| Archive                                  | Original remote                                                              | Commits |
-| ---------------------------------------- | ---------------------------------------------------------------------------- | ------- |
-| `Parcel-Management-App.git`               | `https://github.com/Mehedihasan444/Parcel-Management-App.git`                | 20      |
-| `Parcel-Management-App-Server.git`        | `https://github.com/Mehedihasan444/Parcel-Management-App-Server.git`         | 12      |
+| Archive                            | Original remote                                                      | Commits |
+| ---------------------------------- | -------------------------------------------------------------------- | ------- |
+| `Parcel-Management-App.git`        | `https://github.com/Mehedihasan444/Parcel-Management-App.git`        | 20      |
+| `Parcel-Management-App-Server.git` | `https://github.com/Mehedihasan444/Parcel-Management-App-Server.git` | 12      |
 
 Both are archived as bare repositories at `../.parcel-archive/`. To work with one:
 
@@ -39,11 +39,11 @@ git clone ../.parcel-archive/Parcel-Management-App-Server.git /tmp/api-original
 
 ## Reference tags
 
-| Tag                | Meaning                                                          |
-| ------------------ | ---------------------------------------------------------------- |
-| `archive/api-head` | Last server commit. Unchanged — that history held no secrets.    |
-| `archive/web-head` | Last web commit **after** the secret purge (hashes differ).      |
-| `pre-monorepo`     | Point where both histories sat under `apps/`.                    |
+| Tag                | Meaning                                                       |
+| ------------------ | ------------------------------------------------------------- |
+| `archive/api-head` | Last server commit. Unchanged — that history held no secrets. |
+| `archive/web-head` | Last web commit **after** the secret purge (hashes differ).   |
+| `pre-monorepo`     | Point where both histories sat under `apps/`.                 |
 
 Inspect the merged history:
 
@@ -58,18 +58,18 @@ git log --full-history --oneline -- apps/web
 
 ## Safety backups
 
-| Path                                                     | What it is                                          |
-| -------------------------------------------------------- | --------------------------------------------------- |
-| `../.parcel-git-BACKUP-20260930-144542/`                 | Bare mirrors of both original `.git` directories    |
-| `../.parcel-archive/`                                    | Long-term archive of both original repositories     |
-| `../.parcel-worktree-STAGING-20260930-144542/`           | Copy of the two original working trees              |
+| Path                                           | What it is                                       |
+| ---------------------------------------------- | ------------------------------------------------ |
+| `../.parcel-git-BACKUP-20260930-144542/`       | Bare mirrors of both original `.git` directories |
+| `../.parcel-archive/`                          | Long-term archive of both original repositories  |
+| `../.parcel-worktree-STAGING-20260930-144542/` | Copy of the two original working trees           |
 
 ## ⚠️ Security — rotate the Firebase API key
 
 `Parcel-Management-App` committed a Firebase **Web API key** in
 `src/Firebase/firebase.config.js`. The key has been removed from this
 repository's history by `git-filter-repo` and replaced with a
-`VITE_FIREBASE_API_KEY` environment read, but that only protects *this* copy.
+`VITE_FIREBASE_API_KEY` environment read, but that only protects _this_ copy.
 The key is still present in:
 
 - the archived repositories in `../.parcel-archive/`
@@ -95,7 +95,7 @@ Before deploying:
 3. Set `VITE_FIREBASE_API_KEY` (and the other `VITE_FIREBASE_*` values) in the
    deployment environment from the rotated key.
 
-Note that a Firebase *web* API key is designed to ship to browsers, so its
+Note that a Firebase _web_ API key is designed to ship to browsers, so its
 exposure is low severity on its own — the real risk is an unrestricted key
 being used to burn quota or access other Google APIs. Domain and API
 restrictions are the actual fix; the history purge is defence in depth.

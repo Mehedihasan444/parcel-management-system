@@ -7,10 +7,10 @@ import ReviewRating from "../Components/ReviewRating/ReviewRating";
 import { useState } from "react";
 
 const ReviewPage = ({ id }) => {
-  const { register, handleSubmit, watch ,reset} = useForm();
+  const { register, handleSubmit, watch, reset } = useForm();
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
-const [ratingValue,setRatingValue]=useState()
+  const [ratingValue, setRatingValue] = useState();
 
   const { data: bookingData = {} } = useQuery({
     queryKey: ["bookingData"],
@@ -26,30 +26,30 @@ const [ratingValue,setRatingValue]=useState()
     // console.log(data)
     // console.log(ratingValue)
 
-    const res = await axiosSecure.post('/users/reviews',{...data, rating: ratingValue ,image:user?.photoURL})
-      console.log(res.data);
-      if (res.data.insertedId) {
-        reset()
-          Swal.fire({
+    const res = await axiosSecure.post("/users/reviews", {
+      ...data,
+      rating: ratingValue,
+      image: user?.photoURL,
+    });
+    console.log(res.data);
+    if (res.data.insertedId) {
+      reset();
+      Swal.fire({
         position: "top-end",
         icon: "success",
         title: "Review submitted successfully",
         showConfirmButton: false,
         timer: 1500,
       });
-      }else{
-             Swal.fire({
+    } else {
+      Swal.fire({
         position: "top-end",
         icon: "error",
         title: "Something went wrong",
         showConfirmButton: false,
         timer: 1500,
       });
-      }
-
-
-    
- 
+    }
   };
 
   return (
@@ -57,16 +57,14 @@ const [ratingValue,setRatingValue]=useState()
       <dialog id="my_modal_3" className="modal text-black">
         <div className="modal-box">
           <form method="dialog">
-            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-              ✕
-            </button>
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <h3 className="font-bold text-2xl mb-5">Give Review</h3>
             <div className="space-y-3">
               <div className="flex justify-center items-center ">
-                <img src={user?.photoURL}  alt="" className="rounded-full" />
+                <img src={user?.photoURL} alt="" className="rounded-full" />
               </div>
               <div className="flex justify-center items-center">
                 <div className="flex flex-col ">
@@ -85,18 +83,22 @@ const [ratingValue,setRatingValue]=useState()
               </div>
               <div className="">
                 {/*rating  */}
-                <ReviewRating setRatingValue ={setRatingValue}></ReviewRating>
-                </div>
+                <ReviewRating setRatingValue={setRatingValue}></ReviewRating>
+              </div>
               <div className="flex justify-center items-center">
                 <div className="flex flex-col ">
                   <label htmlFor="deliveryMen" className="text-base text-left">
                     Feedback:
                   </label>
-                  <textarea {...register("feedback")} 
-                  className="textarea textarea-bordered h-24 max-w-xs sm:w-[450px]"  
-                  placeholder="Type here" 
-                  name="feedback" id="" cols="30" rows="10"/>
-
+                  <textarea
+                    {...register("feedback")}
+                    className="textarea textarea-bordered h-24 max-w-xs sm:w-[450px]"
+                    placeholder="Type here"
+                    name="feedback"
+                    id=""
+                    cols="30"
+                    rows="10"
+                  />
                 </div>
               </div>
               <div className="flex justify-center items-center">

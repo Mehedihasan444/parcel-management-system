@@ -59,10 +59,7 @@ const updateUserRole = asyncHandler(async (req, res) => {
   const { email } = req.params;
   const { role } = req.body;
 
-  const result = await users.updateOne(
-    { email },
-    { $set: { role } }
-  );
+  const result = await users.updateOne({ email }, { $set: { role } });
   res.send(result);
 });
 

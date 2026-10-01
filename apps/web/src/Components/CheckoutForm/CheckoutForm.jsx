@@ -17,12 +17,10 @@ const CheckoutForm = ({ data }) => {
 
   useEffect(() => {
     if (data?.price > 0) {
-      axiosSecure
-        .post("/create-payment-intent", { price: data?.price })
-        .then((res) => {
-          console.log(res.data.clientSecret);
-          setClientSecret(res.data.clientSecret);
-        });
+      axiosSecure.post("/create-payment-intent", { price: data?.price }).then((res) => {
+        console.log(res.data.clientSecret);
+        setClientSecret(res.data.clientSecret);
+      });
     }
   }, [axiosSecure, data?.price]);
 
@@ -52,16 +50,15 @@ const CheckoutForm = ({ data }) => {
       setError(" ");
     }
 
-    const { paymentIntent, error: confirmError } =
-      await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: card,
-          billing_details: {
-            email: user?.email || "anonymous",
-            name: user?.displayName || "anonymous",
-          },
+    const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: card,
+        billing_details: {
+          email: user?.email || "anonymous",
+          name: user?.displayName || "anonymous",
         },
-      });
+      },
+    });
     if (confirmError) {
       console.log("confirm error", confirmError);
     } else {
@@ -126,12 +123,7 @@ const CheckoutForm = ({ data }) => {
           Pay
         </button>
         <p className="text-red-500 text-center">{error}</p>
-        {transactionId && (
-          <p className="text-green-600">
-            {" "}
-            Your transaction id: {transactionId}
-          </p>
-        )}
+        {transactionId && <p className="text-green-600"> Your transaction id: {transactionId}</p>}
         {/* </div>
         </div> */}
       </form>

@@ -1,6 +1,5 @@
-
 import AllParcelsModal from "../AllParcelsModal/AllParcelsModal";
-import {  useState } from "react";
+import { useState } from "react";
 
 const AllParcelsTable = ({ bookings }) => {
   const [id, setId] = useState("");
@@ -16,10 +15,7 @@ const AllParcelsTable = ({ bookings }) => {
           <td>{item?.bookingDate}</td>
           <td>{item?.price} TK</td>
           <td>
-            <div
-              onClick={() => setId(item?._id)}
-              className="flex justify-center items-end  gap-3"
-            >
+            <div onClick={() => setId(item?._id)} className="flex justify-center items-end  gap-3">
               <button
                 className="btn btn-primary"
                 onClick={() => {

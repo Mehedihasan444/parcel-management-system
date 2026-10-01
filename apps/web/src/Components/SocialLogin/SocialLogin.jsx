@@ -9,33 +9,32 @@ const SocialLogin = () => {
   const { googleLogin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const axiosPublic = useAxiosPublic()
+  const axiosPublic = useAxiosPublic();
 
   const handleGoogleLogin = () => {
     googleLogin()
       .then((result) => {
-       // console.log("from social", result);
+        // console.log("from social", result);
 
         const userInfo = {
-            name:result.user.displayName,
-            email:result.user.email,
-            image:result.user.photoURL,
-            role:'user'
-          };
-          axiosPublic.post("/users", userInfo).then((res) => {
-            console.log(res.data);
-            if (res.data.insertedId) {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Your account is registered successfully",
-          showConfirmButton: false,
-          timer: 1500,
+          name: result.user.displayName,
+          email: result.user.email,
+          image: result.user.photoURL,
+          role: "user",
+        };
+        axiosPublic.post("/users", userInfo).then((res) => {
+          console.log(res.data);
+          if (res.data.insertedId) {
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Your account is registered successfully",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+          navigate(location?.state || "/");
         });
-
-            }
-        navigate(location?.state || "/");
-          });
       })
       .catch((error) => {
         console.log(error);
@@ -49,11 +48,7 @@ const SocialLogin = () => {
           <FaFacebook className="text-4xl " type="" />
         </button>
         <button>
-          <FaGoogle
-            onClick={handleGoogleLogin}
-            className="text-4xl "
-            type=""
-          ></FaGoogle>
+          <FaGoogle onClick={handleGoogleLogin} className="text-4xl " type=""></FaGoogle>
         </button>
         <button>
           <FaGithub className="text-4xl " type=""></FaGithub>

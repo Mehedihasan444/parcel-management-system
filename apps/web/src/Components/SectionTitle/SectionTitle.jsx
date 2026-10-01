@@ -13,9 +13,7 @@ const SectionTitle = ({ heading, subHeading, align = "center", tone = "light" })
         {subHeading}
         {centered && <span className="h-px w-8 bg-current opacity-60" aria-hidden="true" />}
       </p>
-      <h2
-        className={`font-display mt-3 text-3xl font-bold text-balance sm:text-4xl ${titleColor}`}
-      >
+      <h2 className={`font-display mt-3 text-3xl font-bold text-balance sm:text-4xl ${titleColor}`}>
         {heading}
       </h2>
     </div>

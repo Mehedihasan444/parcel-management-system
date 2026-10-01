@@ -21,11 +21,7 @@ router.get("/admin/bookings", listAllBookings);
 router.post("/bookings", verifyToken, createBooking);
 router.get("/bookings/:email", verifyToken, listBookingsByUser);
 router.get("/booking/:id", verifyToken, getBookingById);
-router.patch(
-  "/bookings/assign/deliveryMen/:id",
-  verifyToken,
-  assignDeliveryMan
-);
+router.patch("/bookings/assign/deliveryMen/:id", verifyToken, assignDeliveryMan);
 router.delete("/bookings/:id", verifyToken, deleteBooking);
 router.patch("/updateBooking/:id", verifyToken, updateBooking);
 

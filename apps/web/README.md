@@ -1,6 +1,5 @@
 # Parcel Management App
 
-
 Login Credentials
 
 - Admin email: admin@g.com

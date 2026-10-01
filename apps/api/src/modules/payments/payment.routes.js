@@ -1,9 +1,5 @@
 const express = require("express");
-const {
-  createPaymentIntent,
-  listPayments,
-  recordPayment,
-} = require("./payment.service");
+const { createPaymentIntent, listPayments, recordPayment } = require("./payment.service");
 const { verifyToken } = require("../../middleware/auth");
 
 const router = express.Router();

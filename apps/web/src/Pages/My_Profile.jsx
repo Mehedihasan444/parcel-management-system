@@ -17,13 +17,13 @@ const My_Profile = () => {
 
   // console.log(user)
   const { data: userInfo, refetch } = useQuery({
-    queryKey: ["userInfo",user?.email],
+    queryKey: ["userInfo", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/users/${user?.email}`);
       return res.data;
     },
   });
-// console.log(userInfo)
+  // console.log(userInfo)
   const onSubmit = async (data) => {
     // console.log(watch(data));
     if (data.image.length > 0) {
@@ -43,10 +43,7 @@ const My_Profile = () => {
           image: res.data.data.display_url,
         };
         // console.log(info)
-        const userRes = await axiosSecure.put(
-          `/users/updateProfile/${userInfo.email}`,
-          info
-        );
+        const userRes = await axiosSecure.put(`/users/updateProfile/${userInfo.email}`, info);
         console.log(userRes.data);
         if (userRes.data.modifiedCount > 0) {
           // reset();
@@ -77,10 +74,7 @@ const My_Profile = () => {
         image: user.photoURL,
       };
       // console.log(info)
-      const userRes = await axiosSecure.put(
-        `/users/updateProfile/${userInfo.email}`,
-        info
-      );
+      const userRes = await axiosSecure.put(`/users/updateProfile/${userInfo.email}`, info);
       console.log(userRes.data);
       if (userRes.data.modifiedCount > 0) {
         // reset();

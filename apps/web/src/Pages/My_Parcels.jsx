@@ -5,15 +5,15 @@ import Swal from "sweetalert2";
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import ReviewPage from "./ReviewPage";
-import {  useState } from "react";
+import { useState } from "react";
 
 const My_Parcels = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const [stat,setStat] = useState('');
+  const [stat, setStat] = useState("");
 
   const { data: parcels = [], refetch } = useQuery({
-    queryKey: ["parcels",stat],
+    queryKey: ["parcels", stat],
     queryFn: async () => {
       const res = await axiosSecure.get(`/users/bookings/${user?.email}?status=${stat}`);
       return res.data;
@@ -44,11 +44,9 @@ const My_Parcels = () => {
     });
   };
 
-
-
   const handleFilter = (e) => {
     const Value = e.target.value;
-    setStat(Value)
+    setStat(Value);
     refetch();
   };
 
@@ -60,7 +58,7 @@ const My_Parcels = () => {
         <div className="text-2xl font-bold ">
           <h3 className="">Filter By Status:</h3>
         </div>
-        <div className="" >
+        <div className="">
           <label className="form-control w-full max-w-xs">
             <div className="label">
               <span className="label-text font-medium">Pick status</span>
@@ -112,9 +110,7 @@ const My_Parcels = () => {
 
                     <button
                       className="btn btn-sm btn-primary text-white"
-                      onClick={() =>
-                        document.getElementById("my_modal_3").showModal()
-                      }
+                      onClick={() => document.getElementById("my_modal_3").showModal()}
                     >
                       Review
                       <ReviewPage id={item?._id}></ReviewPage>
@@ -125,9 +121,7 @@ const My_Parcels = () => {
                   {item?.status === "pending" && (
                     <>
                       <Link to={`/dashboard/updateBooking/${item?._id}`}>
-                        <button className="btn btn-sm btn-accent text-white">
-                          Update
-                        </button>
+                        <button className="btn btn-sm btn-accent text-white">Update</button>
                       </Link>
                       <button
                         onClick={() => handleDelete(item?._id)}
@@ -141,9 +135,7 @@ const My_Parcels = () => {
                       item?.status === "delivered" &&
                     } */}
                   <Link to={`/dashboard/payments/${item?._id}`}>
-                    <button className="btn btn-sm btn-info text-white">
-                      Pay
-                    </button>
+                    <button className="btn btn-sm btn-info text-white">Pay</button>
                   </Link>
                 </td>
               </tr>

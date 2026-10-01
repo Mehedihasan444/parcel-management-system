@@ -1,16 +1,24 @@
 import { createContext, useEffect, useState } from "react";
-import {GoogleAuthProvider,createUserWithEmailAndPassword,onAuthStateChanged,signInWithEmailAndPassword,signInWithPopup,signOut,updateProfile,} from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
 import auth from "../Firebase/firebase.config";
 import useAxiosPublic from "../Hooks/useAxiosPublic";
 import Swal from "sweetalert2";
 export const AuthContext = createContext(null);
 
-const AuthProvider = ({children}) => {
+const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
   const googleProvider = new GoogleAuthProvider();
   const axiosPublic = useAxiosPublic();
- 
+
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
@@ -37,12 +45,12 @@ const AuthProvider = ({children}) => {
     });
   };
 
-  useEffect( () => {
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
         // get token and store client
-        const userInfo = { 
+        const userInfo = {
           name: currentUser.displayName,
           email: currentUser.email,
         };
@@ -50,11 +58,8 @@ const AuthProvider = ({children}) => {
           // console.log("hi",res.data.token)
           if (res.data.token) {
             localStorage.setItem("access-token", res.data.token);
-          
           }
         });
-
-        
       } else {
         // TODO: remove token (if token stored in the client side: Local storage, caching, in memory)
         localStorage.removeItem("access-token");
@@ -65,7 +70,7 @@ const AuthProvider = ({children}) => {
       return unsubscribe();
     };
   }, [axiosPublic]);
- 
+
   const authInfo = {
     user,
     createUser,
@@ -75,9 +80,7 @@ const AuthProvider = ({children}) => {
     googleLogin,
     loading,
   };
-  return <AuthContext.Provider value={authInfo}>
-  {children}
-</AuthContext.Provider>
+  return <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;

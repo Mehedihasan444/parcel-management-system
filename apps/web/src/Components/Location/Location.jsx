@@ -5,14 +5,14 @@ import CustomMarker from "./CustomMarker"; // Import the CustomMarker component
 import { useParams } from "react-router-dom";
 
 const Location = () => {
-  const params=useParams()
+  const params = useParams();
   // console.log(params.location)
   const mapboxAccessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
-const info={
-  latitude: params.location.split(",")[0],
-  longitude: params.location.split(",")[1]
-}
+  const info = {
+    latitude: params.location.split(",")[0],
+    longitude: params.location.split(",")[1],
+  };
 
   const markerCoordinates = {
     latitude: info.latitude,
@@ -21,10 +21,7 @@ const info={
 
   return (
     <div className="max-h-screen">
-      <SectionTitle
-        heading={"Delivery location"}
-        subHeading={"See Receiver Location"}
-      />
+      <SectionTitle heading={"Delivery location"} subHeading={"See Receiver Location"} />
       <div className="flex justify-center items-center">
         <Map
           mapboxAccessToken={mapboxAccessToken}

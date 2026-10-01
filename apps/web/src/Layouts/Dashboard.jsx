@@ -37,11 +37,7 @@ const Dashboard = () => {
   };
 
   const role = isAdmin ? "Admin" : isDeliveryMen ? "Rider" : "Customer";
-  const roleBadge = isAdmin
-    ? "badge-primary"
-    : isDeliveryMen
-      ? "badge-secondary"
-      : "badge-accent";
+  const roleBadge = isAdmin ? "badge-primary" : isDeliveryMen ? "badge-secondary" : "badge-accent";
 
   const links = isAdmin
     ? [

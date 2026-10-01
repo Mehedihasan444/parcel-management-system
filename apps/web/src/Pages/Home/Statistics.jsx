@@ -31,9 +31,24 @@ const Statistics = () => {
   const delivered = parcels.filter((item) => item.status === "delivered");
 
   const stats = [
-    { icon: FiBox, value: parcels.length, label: "Parcels booked", accent: "from-brand-500 to-emerald-600" },
-    { icon: FiCheckCircle, value: delivered.length, label: "Parcels delivered", accent: "from-sky-500 to-cyan-500" },
-    { icon: FiUsers, value: users.length, label: "Registered users", accent: "from-violet-500 to-purple-600" },
+    {
+      icon: FiBox,
+      value: parcels.length,
+      label: "Parcels booked",
+      accent: "from-brand-500 to-emerald-600",
+    },
+    {
+      icon: FiCheckCircle,
+      value: delivered.length,
+      label: "Parcels delivered",
+      accent: "from-sky-500 to-cyan-500",
+    },
+    {
+      icon: FiUsers,
+      value: users.length,
+      label: "Registered users",
+      accent: "from-violet-500 to-purple-600",
+    },
   ];
 
   return (

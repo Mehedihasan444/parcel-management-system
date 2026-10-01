@@ -6,12 +6,11 @@ import useAxiosSecure from "../Hooks/useAxiosSecure";
 import { useLoaderData } from "react-router-dom";
 const UpdateBooking = () => {
   const { user } = useAuth();
-  const axiosSecure = useAxiosSecure()
+  const axiosSecure = useAxiosSecure();
   const { register, handleSubmit, watch, reset } = useForm();
-const parcelData =useLoaderData()
+  const parcelData = useLoaderData();
 
-// console.log(parcelData)
-
+  // console.log(parcelData)
 
   const onSubmit = async (data) => {
     // console.log(data.weight);
@@ -41,7 +40,7 @@ const parcelData =useLoaderData()
     };
     const res = await axiosSecure.patch(`/users/updateBooking/${parcelData._id}`, info);
     console.log(res.data);
-    if (res.data.modifiedCount>0) {
+    if (res.data.modifiedCount > 0) {
       reset();
       Swal.fire({
         position: "top-end",
@@ -63,16 +62,10 @@ const parcelData =useLoaderData()
 
   return (
     <div>
-      <SectionTitle
-        heading={" Book a Parcel"}
-        subHeading={"Make Your Life Easy"}
-      ></SectionTitle>
+      <SectionTitle heading={" Book a Parcel"} subHeading={"Make Your Life Easy"}></SectionTitle>
       {/* <div className="divider"></div> */}
       <div className=" shadow-md rounded-md sm:w-[60vw] p-10 bg-slate-200">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col space-y-4"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
           <div className="flex justify-between gap-5">
             <div className="flex flex-col flex-1">
               <label htmlFor="name" className="mb-1 text-gray-700">
@@ -182,15 +175,12 @@ const parcelData =useLoaderData()
           </div>
           <div className="flex justify-between items-center gap-5">
             <div className="flex flex-col flex-1">
-              <label
-                htmlFor="deliveryAddressLatitude "
-                className="mb-1 text-gray-700"
-              >
+              <label htmlFor="deliveryAddressLatitude " className="mb-1 text-gray-700">
                 Delivery Address Latitude
               </label>
               <input
                 {...register("deliveryAddressLatitude")}
-              defaultValue={parcelData?.deliveryAddressLatitude}
+                defaultValue={parcelData?.deliveryAddressLatitude}
 
                 type="text"
                 name="deliveryAddressLatitude"
@@ -200,15 +190,12 @@ const parcelData =useLoaderData()
               />
             </div>
             <div className="flex flex-col flex-1">
-              <label
-                htmlFor="deliveryAddressLongitude"
-                className="mb-1 text-gray-700"
-              >
+              <label htmlFor="deliveryAddressLongitude" className="mb-1 text-gray-700">
                 Delivery Address longitude
               </label>
               <input
                 {...register("deliveryAddressLongitude")}
-              defaultValue={parcelData?.deliveryAddressLongitude}
+                defaultValue={parcelData?.deliveryAddressLongitude}
 
                 type="text"
                 name="deliveryAddressLongitude"
@@ -219,10 +206,7 @@ const parcelData =useLoaderData()
             </div>
           </div>
           <div className="flex flex-col">
-            <label
-              htmlFor="requestedDeliveryDate"
-              className="mb-1 text-gray-700"
-            >
+            <label htmlFor="requestedDeliveryDate" className="mb-1 text-gray-700">
               Requested Delivery Date:
             </label>
             <input
@@ -243,10 +227,7 @@ const parcelData =useLoaderData()
           >
             Calculate Price
           </button> */}
-            <button
-              type="submit"
-              className="btn px-10 text-lg bg-blue-500 text-white "
-            >
+            <button type="submit" className="btn px-10 text-lg bg-blue-500 text-white ">
               Update
             </button>
           </div>

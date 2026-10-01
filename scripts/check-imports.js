@@ -45,7 +45,8 @@ const problems = [];
 for (const file of files) {
   const text = fs.readFileSync(file, "utf8");
   // Match the import/require specifier, skipping commented-out lines.
-  const re = /(?:^|\n)\s*(?:import\s[^'"]*from\s*|import\s*|export\s[^'"]*from\s*)['"](\.[^'"]+)['"]/g;
+  const re =
+    /(?:^|\n)\s*(?:import\s[^'"]*from\s*|import\s*|export\s[^'"]*from\s*)['"](\.[^'"]+)['"]/g;
   let m;
   while ((m = re.exec(text)) !== null) {
     const specifier = m[1];

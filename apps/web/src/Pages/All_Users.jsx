@@ -11,7 +11,7 @@ const All_Users = () => {
   const [numberOfPages, setNumberOfPages] = useState(1);
 
   const { data: allUsers, refetch } = useQuery({
-    queryKey: ["allUsers",currentPage],
+    queryKey: ["allUsers", currentPage],
     queryFn: async () => {
       const res = await axiosSecure.get(`/users?page=${currentPage}`);
       return res.data;
@@ -45,35 +45,29 @@ const All_Users = () => {
       refetch();
     });
   };
-  refetch()
+  refetch();
   const pages = [...Array(numberOfPages)];
   const handlePreviousPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
-   
-      console.log('hello')
+
+      console.log("hello");
     }
   };
   const handleNextPage = () => {
     if (currentPage < pages.length) {
       setCurrentPage(currentPage + 1);
       // refetch()
-      console.log('hello')
-
+      console.log("hello");
     }
   };
   // console.log('check',numberOfParcelBooked)
 
   return (
     <div className="">
-      <SectionTitle
-        heading={"Manage all users"}
-        subHeading={"How Many??"}
-      ></SectionTitle>
+      <SectionTitle heading={"Manage all users"} subHeading={"How Many??"}></SectionTitle>
       <div className="flex justify-around ">
-        <h1 className="text-4xl font-bold ">
-          Total Users: {allUsers?.count}
-        </h1>
+        <h1 className="text-4xl font-bold ">Total Users: {allUsers?.count}</h1>
       </div>
       {/* table */}
 
@@ -100,9 +94,7 @@ const All_Users = () => {
                 <td>{item?.phone}</td>
                 <td>
                   {/* {numberOfParcelBooked.length}  */}
-                  <NumberOfParcelBooked
-                    email={item?.email}
-                  ></NumberOfParcelBooked>
+                  <NumberOfParcelBooked email={item?.email}></NumberOfParcelBooked>
                 </td>
                 <td>
                   <TotalSpendAmountCal email={item?.email} />
@@ -138,20 +130,25 @@ const All_Users = () => {
         </table>
       </div>
       <div className=" flex justify-center my-10">
-        <button className={`btn btn-accent mr-3 ${currentPage === 1 ? "btn-disabled" : ""
-            }`} onClick={handlePreviousPage}>
+        <button
+          className={`btn btn-accent mr-3 ${currentPage === 1 ? "btn-disabled" : ""}`}
+          onClick={handlePreviousPage}
+        >
           «
         </button>
         {pages?.map((page, idx) => (
-          <button key={idx} className={`${ currentPage === idx + 1 ? "btn-disabled" : ""
-            } mr-2 btn btn-accent`}
+          <button
+            key={idx}
+            className={`${currentPage === idx + 1 ? "btn-disabled" : ""} mr-2 btn btn-accent`}
             onClick={() => setCurrentPage(idx + 1)}
           >
             {idx + 1}
           </button>
         ))}
-        <button className={`btn btn-accent mr-3 ${currentPage === pages.length ? "btn-disabled" : ""
-            }`}  onClick={handleNextPage}>
+        <button
+          className={`btn btn-accent mr-3 ${currentPage === pages.length ? "btn-disabled" : ""}`}
+          onClick={handleNextPage}
+        >
           »
         </button>
       </div>

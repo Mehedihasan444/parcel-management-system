@@ -21,11 +21,7 @@ const router = express.Router();
  */
 router.get("/deliveryMen/:email", verifyToken, isDeliveryMan);
 router.get("/users/admin/deliveryMens", verifyToken, listAllDeliveryMen);
-router.get(
-  "/users/deliveryMen/deliveryList/:id",
-  verifyToken,
-  listDeliveryList
-);
+router.get("/users/deliveryMen/deliveryList/:id", verifyToken, listDeliveryList);
 router.get("/deliveryMen/delivery/count/:id", verifyToken, countDelivered);
 /*
  * Only "cancel/deliver" exists in the original API. A sibling
@@ -33,21 +29,9 @@ router.get("/deliveryMen/delivery/count/:id", verifyToken, countDelivered);
  * this merge and the web client never called it, so it is deliberately not
  * reintroduced here.
  */
-router.patch(
-  "/deliveryMen/deliveryList/cancel/deliver/:id",
-  verifyToken,
-  updateBookingStatus
-);
+router.patch("/deliveryMen/deliveryList/cancel/deliver/:id", verifyToken, updateBookingStatus);
 router.get("/delivery/reviews/:id", verifyToken, listReviewsForDeliveryMan);
-router.patch(
-  "/deliveryMen/reviews/average/:id",
-  verifyToken,
-  updateAverageRating
-);
-router.patch(
-  "/deliveryMen/parcel/delivered/:id",
-  verifyToken,
-  updateParcelDelivered
-);
+router.patch("/deliveryMen/reviews/average/:id", verifyToken, updateAverageRating);
+router.patch("/deliveryMen/parcel/delivered/:id", verifyToken, updateParcelDelivered);
 
 module.exports = router;

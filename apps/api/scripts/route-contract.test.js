@@ -68,9 +68,7 @@ const EXPECTED_ROUTES = [
 
 /** Substitutes concrete, safe sample values into the ":param" placeholders. */
 function concretePath(path) {
-  return path
-    .replace(":email", "someone@example.com")
-    .replace(":id", "64b7f1c2e4b0a1b2c3d4e5f6");
+  return path.replace(":email", "someone@example.com").replace(":id", "64b7f1c2e4b0a1b2c3d4e5f6");
 }
 
 /**

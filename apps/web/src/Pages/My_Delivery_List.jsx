@@ -19,9 +19,7 @@ const My_Delivery_List = () => {
   const { data: deliveryList = [], refetch } = useQuery({
     queryKey: ["deliveryList"],
     queryFn: async () => {
-      const res = await axiosSecure.get(
-        `/users/deliveryMen/deliveryList/${userData._id}`
-      );
+      const res = await axiosSecure.get(`/users/deliveryMen/deliveryList/${userData._id}`);
       return res.data;
     },
   });
@@ -40,31 +38,28 @@ const My_Delivery_List = () => {
         const info = {
           status: "Cancelled",
         };
-        axiosSecure
-          .patch(`/deliveryMen/deliveryList/cancel/deliver/${id}`, info)
-          .then((res) => {
-            console.log(res.data);
-            if (res.data.modifiedCount > 0) {
-              refetch();
-              Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "Cancelled!",
-                text: "Parcel has been Cancelled.",
-                showConfirmButton: false,
-                timer: 1500,
-              });
-           
-            } else {
-              Swal.fire({
-                position: "top-end",
-                icon: "error",
-                title: "Something went wrong",
-                showConfirmButton: false,
-                timer: 1500,
-              });
-            }
-          });
+        axiosSecure.patch(`/deliveryMen/deliveryList/cancel/deliver/${id}`, info).then((res) => {
+          console.log(res.data);
+          if (res.data.modifiedCount > 0) {
+            refetch();
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Cancelled!",
+              text: "Parcel has been Cancelled.",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          } else {
+            Swal.fire({
+              position: "top-end",
+              icon: "error",
+              title: "Something went wrong",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+        });
       }
     });
   };
@@ -83,28 +78,26 @@ const My_Delivery_List = () => {
         const info = {
           status: "Delivered",
         };
-        axiosSecure
-          .patch(`/deliveryMen/deliveryList/cancel/deliver/${id}`, info)
-          .then((res) => {
-            console.log(res.data);
+        axiosSecure.patch(`/deliveryMen/deliveryList/cancel/deliver/${id}`, info).then((res) => {
+          console.log(res.data);
 
-            if (res.data.modifiedCount > 0) {
-              refetch();
-              Swal.fire({
-                title: "Deleted!",
-                text: "Your file has been deleted.",
-                icon: "success",
-              });
-            } else {
-              Swal.fire({
-                position: "top-end",
-                icon: "error",
-                title: "Something went wrong",
-                showConfirmButton: false,
-                timer: 1500,
-              });
-            }
-          });
+          if (res.data.modifiedCount > 0) {
+            refetch();
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success",
+            });
+          } else {
+            Swal.fire({
+              position: "top-end",
+              icon: "error",
+              title: "Something went wrong",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+        });
       }
     });
   };
@@ -144,9 +137,7 @@ const My_Delivery_List = () => {
                     <Link
                       to={`/dashboard/viewLocation/${item?.deliveryAddressLatitude},${item?.deliveryAddressLongitude}`}
                     >
-                      <button className="btn btn-sm btn-primary " >
-                        View Location
-                      </button>
+                      <button className="btn btn-sm btn-primary ">View Location</button>
                     </Link>
                   </div>
                 </td>

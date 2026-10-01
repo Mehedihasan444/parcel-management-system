@@ -1,5 +1,3 @@
-
-
 const CustomMarker = () => {
   return (
     <div style={{ width: "32px", height: "32px", textAlign: "center" }}>

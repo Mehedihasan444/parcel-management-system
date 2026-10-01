@@ -13,27 +13,18 @@ const AverageReviewCal = ({ id }) => {
     },
   });
   // console.log(reviews.length);
-  let avgReview=0;
+  let avgReview = 0;
   for (let i = 0; i < reviews.length; i++) {
     avgReview += reviews[i].rating;
   }
   let result = avgReview / reviews.length;
   console.log(result);
 
-
-
-
-
-
-  useEffect(()=>{
-    axiosSecure.patch(`/deliveryMen/reviews/average/${id}`,{rating:result})
-    .then((res)=>{
-      console.log(res.data)
-    
-    })
-  },[axiosSecure,id,result])
-
-
+  useEffect(() => {
+    axiosSecure.patch(`/deliveryMen/reviews/average/${id}`, { rating: result }).then((res) => {
+      console.log(res.data);
+    });
+  }, [axiosSecure, id, result]);
 
   return <div className="text-center">{result}</div>;
 };

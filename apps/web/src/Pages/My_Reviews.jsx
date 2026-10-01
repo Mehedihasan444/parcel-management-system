@@ -14,7 +14,7 @@ const My_Reviews = () => {
       return res.data;
     },
   });
-  const { data: reviews = [],refetch } = useQuery({
+  const { data: reviews = [], refetch } = useQuery({
     queryKey: ["reviews"], // You might need to adjust the key based on your API response structure
     queryFn: async () => {
       const res = await axiosSecure.get(`/delivery/reviews/${users._id}`);
@@ -26,8 +26,8 @@ const My_Reviews = () => {
     <div>
       <SectionTitle heading={"My Reviews"} subHeading={"User's Thought About You"}></SectionTitle>
 
-      <div className="p-5 sm:p-0 sm:w-[70vw]" onChange={()=>refetch()}>
-        {reviews?.map((review) => ( 
+      <div className="p-5 sm:p-0 sm:w-[70vw]" onChange={() => refetch()}>
+        {reviews?.map((review) => (
           <div key={review.id} className="bg-white p-4 rounded shadow-md flex gap-4 mb-5">
             <div className="mb-2 ">
               <img
@@ -38,17 +38,21 @@ const My_Reviews = () => {
             </div>
             <div className="space-y-2 flex-1">
               <div className="flex justify-between items-center ">
-                   <h3 className="font-bold text-2xl">
-               {review?.name}
-              </h3>
-              <p className="">{review?.reviewDate}</p>
+                <h3 className="font-bold text-2xl">{review?.name}</h3>
+                <p className="">{review?.reviewDate}</p>
               </div>
-           
-              <div className=" " >
-      <Rating style={{ maxWidth: 100 }} value={review?.rating} readOnly />
-    </div>
-              
-              <p className="text-xs"><span className="font-semibold">Feedback:<br /> </span> {review.feedback}</p>
+
+              <div className=" ">
+                <Rating style={{ maxWidth: 100 }} value={review?.rating} readOnly />
+              </div>
+
+              <p className="text-xs">
+                <span className="font-semibold">
+                  Feedback:
+                  <br />{" "}
+                </span>{" "}
+                {review.feedback}
+              </p>
             </div>
           </div>
         ))}
@@ -58,6 +62,3 @@ const My_Reviews = () => {
 };
 
 export default My_Reviews;
-
-
-

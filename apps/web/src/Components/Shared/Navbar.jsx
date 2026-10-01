@@ -138,11 +138,7 @@ const Navbar = () => {
             <NavLink to={dest} className={linkClass} onClick={() => setOpen(false)}>
               {label}
             </NavLink>
-            <NavLink
-              to="/dashboard/myParcels"
-              className={linkClass}
-              onClick={() => setOpen(false)}
-            >
+            <NavLink to="/dashboard/myParcels" className={linkClass} onClick={() => setOpen(false)}>
               Track parcel
             </NavLink>
           </div>

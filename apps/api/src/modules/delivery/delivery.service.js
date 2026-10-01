@@ -56,9 +56,7 @@ const updateBookingStatus = asyncHandler(async (req, res) => {
 /** All reviews left against one delivery man. */
 const listReviewsForDeliveryMan = asyncHandler(async (req, res) => {
   const { reviews } = collections();
-  const result = await reviews
-    .find({ deliveryMenID: req.params.id })
-    .toArray();
+  const result = await reviews.find({ deliveryMenID: req.params.id }).toArray();
   res.send(result);
 });
 

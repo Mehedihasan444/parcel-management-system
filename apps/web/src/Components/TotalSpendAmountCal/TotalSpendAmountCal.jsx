@@ -19,8 +19,6 @@ const TotalSpendAmountCal = ({ email }) => {
       return parcel;
     });
 
-
-
   return <div>{totalSpendAmount}</div>;
 };
 
