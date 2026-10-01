@@ -1,12 +1,16 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Suspense, lazy } from "react";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Main from "../Layouts/Main";
+import RouteError from "../Components/Shared/RouteError";
 import Error from "../Components/Shared/Error";
+import Loading from "../Components/Shared/Loading";
 import Home from "../Pages/Home/Home";
 import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import PrivateRoute from "./PrivateRoute";
 import Dashboard from "../Layouts/Dashboard";
 import AdminRoute from "./AdminRoute";
+import DeliveryMenRoute from "./DeliveryMenRoute";
 import Book_A_Parcel from "../Pages/Book_A_Parcel";
 import My_Parcels from "../Pages/My_Parcels";
 import My_Profile from "../Pages/My_Profile";
@@ -15,115 +19,70 @@ import All_Users from "../Pages/All_Users";
 import All_Delivery_Men from "../Pages/All_Delivery_Men";
 import My_Delivery_List from "../Pages/My_Delivery_List";
 import My_Reviews from "../Pages/My_Reviews";
-import DeliveryMenRoute from "./DeliveryMenRoute";
 import Contact from "../Pages/Contact";
 import UpdateBooking from "../Pages/UpdateBooking";
-import AdminHome from "../Pages/AdminHome";
 import UpdateItem from "../Pages/UpdateItem";
 import ReviewPage from "../Pages/ReviewPage";
-import Payments from "../Pages/Payments";
-import Location from "../Components/Location/Location";
 import PaymentHistory from "../Pages/PaymentHistory";
+import { API_BASE_URL } from "../config/api";
+
+// Heavy, rarely-visited screens are split out so the landing bundle stays lean.
+// Charts (apex), maps (mapbox) and Stripe each pull hundreds of KB.
+const AdminHome = lazy(() => import("../Pages/AdminHome"));
+const Payments = lazy(() => import("../Pages/Payments"));
+const Location = lazy(() => import("../Components/Location/Location"));
+
+const lazyPage = (node) => <Suspense fallback={<Loading />}>{node}</Suspense>;
+const guard = (Guard, node) => <Guard>{node}</Guard>;
 
 const Routes = createBrowserRouter([
   {
     path: "/",
-    element: <Main></Main>,
-    errorElement: <Error></Error>,
+    element: <Main />,
+    errorElement: <RouteError />,
     children: [
-      {
-        path: "/",
-        element: <Home></Home>,
-      },
-      {
-        path: "/login",
-        element: <Login></Login>,
-      },
-      {
-        path: "/register",
-        element: <Register></Register>,
-      },
-      // {
-      //   path: "/test",
-      //   element: <Test></Test>,
-      // },
+      { index: true, element: <Home /> },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+      { path: "*", element: <Error /> },
     ],
   },
   {
     path: "dashboard",
-    element: <Dashboard></Dashboard>,
+    element: guard(PrivateRoute, <Dashboard />),
+    errorElement: <RouteError />,
     children: [
-      // normal user routes
-      {
-        path: "bookAParcel",
-        element: <Book_A_Parcel></Book_A_Parcel>,
-      },
+      { index: true, element: <Navigate to="bookAParcel" replace /> },
+      // Customer
+      { path: "bookAParcel", element: guard(PrivateRoute, <Book_A_Parcel />) },
       {
         path: "updateBooking/:id",
-        element: <UpdateBooking></UpdateBooking>,
-        loader: ({ params }) =>
-          fetch(`http://localhost:5000/api/v1/users/booking/${params.id}`),
+        element: guard(PrivateRoute, <UpdateBooking />),
+        loader: ({ params }) => fetch(`${API_BASE_URL}/users/booking/${params.id}`),
       },
-      {
-        path: "reviewPage",
-        element: <ReviewPage></ReviewPage>,
-      },
-      {
-        path: "payments/:id",
-        element: <Payments></Payments>,
-      },
-      {
-        path: "paymentHistory",
-        element: <PaymentHistory></PaymentHistory>,
-      },
-      {
-        path: "myParcels",
-        element: <My_Parcels></My_Parcels>,
-      },
-      {
-        path: "myProfile",
-        element: <My_Profile></My_Profile>,
-      },
-
-      // Delivery Men Will See only routes
+      { path: "reviewPage", element: guard(PrivateRoute, <ReviewPage />) },
+      { path: "payments/:id", element: guard(PrivateRoute, lazyPage(<Payments />)) },
+      { path: "paymentHistory", element: guard(PrivateRoute, <PaymentHistory />) },
+      { path: "myParcels", element: guard(PrivateRoute, <My_Parcels />) },
+      { path: "myProfile", element: guard(PrivateRoute, <My_Profile />) },
+      // Riders
       {
         path: "myDeliveryList",
-        element: <My_Delivery_List></My_Delivery_List>,
+        element: guard(DeliveryMenRoute, <My_Delivery_List />),
       },
-      {
-        path: "myReviews",
-        element: <My_Reviews></My_Reviews>,
-      },
+      { path: "myReviews", element: guard(DeliveryMenRoute, <My_Reviews />) },
       {
         path: "viewLocation/:location",
-        element: <Location></Location>,
+        element: guard(PrivateRoute, lazyPage(<Location />)),
       },
-
-      // // admin only routes
-      {
-        path: "adminHome",
-        element: <AdminHome></AdminHome>,
-      },
-      {
-        path: "allParcels",
-        element: <All_Parcels></All_Parcels>,
-      },
-      {
-        path: "allUsers",
-        element: <All_Users></All_Users>,
-      },
-      {
-        path: "updateItem/:id",
-        element: <UpdateItem></UpdateItem>,
-      },
-      {
-        path: "allDeliveryMen",
-        element: <All_Delivery_Men></All_Delivery_Men>,
-      },
-      {
-        path: "contact",
-        element: <Contact></Contact>,
-      },
+      // Admins
+      { path: "adminHome", element: guard(AdminRoute, lazyPage(<AdminHome />)) },
+      { path: "allParcels", element: guard(AdminRoute, <All_Parcels />) },
+      { path: "allUsers", element: guard(AdminRoute, <All_Users />) },
+      { path: "updateItem/:id", element: guard(AdminRoute, <UpdateItem />) },
+      { path: "allDeliveryMen", element: guard(AdminRoute, <All_Delivery_Men />) },
+      // Shared
+      { path: "contact", element: <Contact /> },
     ],
   },
 ]);
