@@ -1,76 +1,53 @@
-import { useEffect } from "react";
-import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {loadCaptchaEnginge,LoadCanvasTemplate,validateCaptcha} from "react-simple-captcha";
 import Swal from "sweetalert2";
 import useAuth from "../Hooks/useAuth";
-import loginImg from "../assets/authentication2.png"
+import loginImg from "../assets/authentication2.png";
 import SocialLogin from "../Components/SocialLogin/SocialLogin";
+import DocumentTitle from "../Components/Seo/DocumentTitle";
+
 const Login = () => {
-    const [disable, setDisable] = useState(true);
-  const navigate = useNavigate()
-  const location =  useLocation();
-  const {login}=useAuth()
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
 
+  const handleLogin = (e) => {
+    e.preventDefault();
 
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
 
-    useEffect(() => {
-      loadCaptchaEnginge(6);
-    }, []);
-  
-  // console.log("test",location.state)
-    const handleLogin = (e) => {
-      e.preventDefault();
-  
-      const form = e.target;
-      const email = form.email.value;
-      const password = form.password.value;
-      console.log(email, password);
-  
-      login(email, password)
-        .then((userCredential) => {
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Login Success",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-
-  
-          navigate(location?.state || "/")
-          // Signed in
-          const user = userCredential.user;
-          console.log(user);
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          Swal.fire({
-            position: "top-end",
-            icon: "error",
-            title: `${errorMessage}`,
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          console.log("error code:", errorCode, "errorMessage :", errorMessage);
+    login(email, password)
+      .then((userCredential) => {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Login Success",
+          showConfirmButton: false,
+          timer: 1500,
         });
-    };
-  
-    const handleValidateCaptcha = (e) => {
-      const user_captcha_value = e.target.value;
-      console.log(user_captcha_value);
-      if (validateCaptcha(user_captcha_value) == true) {
-        setDisable(false);
-      } else {
-        setDisable(true);
-      }
-    };
 
+        navigate(location?.state || "/");
+        const user = userCredential.user;
+        console.log(user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: `${errorMessage}`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log("error code:", errorCode, "errorMessage :", errorMessage);
+      });
+  };
 
-
-    return (
-        <div className="flex justify-between gap-10 items-center h-screen max-w-6xl mx-auto">
+  return (
+    <div className="flex justify-between gap-10 items-center h-screen max-w-6xl mx-auto">
+      <DocumentTitle title="RapidParcelHub | Login" />
       <div className="flex-1">
         <img src={loginImg} alt="" className="" />
       </div>
@@ -86,6 +63,7 @@ const Login = () => {
               name="email"
               className="form-control border p-3  w-full"
               placeholder="Enter email"
+              required
             />
           </div>
           <div className="mb-3">
@@ -97,34 +75,11 @@ const Login = () => {
               name="password"
               className="form-control border p-3  w-full"
               placeholder="Password"
+              required
             />
           </div>
 
-          <div className="mb-3 ">
-            <label className="form-label" htmlFor="exampleInputPassword1">
-              <LoadCanvasTemplate />
-            </label>
-            <div className="flex justify-between items-center">
-              <input
-                onBlur={handleValidateCaptcha}
-                type="text"
-                name="captcha"
-                className="form-control border p-3  w-5/6"
-                placeholder="Type here"
-              />
-              {/* <button
-                className="btn bg-[#D1A054] text-white"
-                onClick={handleValidateCaptcha}
-              >
-                Validate
-              </button> */}
-            </div>
-          </div>
-          <button
-            type="submit"
-            disabled={disable}
-            className="btn bg-[#D1A054] text-white w-full "
-          >
+          <button type="submit" className="btn bg-[#D1A054] text-white w-full ">
             Login
           </button>
         </form>
@@ -135,7 +90,7 @@ const Login = () => {
         <SocialLogin></SocialLogin>
       </div>
     </div>
-    )
+  );
 };
 
 export default Login;

@@ -3,22 +3,26 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import { RouterProvider } from "react-router-dom";
 import Routes from "./Routes/Routes.jsx";
-import { HelmetProvider } from "react-helmet-async";
 import AuthProvider from "./AuthProvider/AuthProvider.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30 * 1000,
+      gcTime: 5 * 60 * 1000,
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <AuthProvider>
-    <QueryClientProvider client={queryClient}>
-      <HelmetProvider>
-        <React.StrictMode>
-
-          <RouterProvider router={Routes}></RouterProvider>
-     
-        </React.StrictMode>
-      </HelmetProvider>
-    </QueryClientProvider>
-  </AuthProvider>
+  <React.StrictMode>
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={Routes} />
+      </QueryClientProvider>
+    </AuthProvider>
+  </React.StrictMode>
 );
