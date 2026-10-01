@@ -1,11 +1,15 @@
-import React, { useState } from "react";
-import Chart from "react-apexcharts";
-import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import ChartCard from "../Charts/ChartCard";
+import BarChart from "../Charts/BarChart";
+
+function dayOf(booking) {
+  return String(booking?.bookingDate || "").split("T")[0] || "unknown";
+}
 
 const AdminHomeBarChart = () => {
   const axiosSecure = useAxiosSecure();
-  let date = [];
 
   const { data: bookings = [] } = useQuery({
     queryKey: ["bookings"],
@@ -14,51 +18,30 @@ const AdminHomeBarChart = () => {
       return res.data;
     },
   });
-  //.split("T")[0]
-  bookings.map((booking) => {
-    date.push(booking.bookingDate.split("T")[0]); // Corrected split method
-  });
-  const uniqueDatesSet = new Set(date);
-  const uniqueDatesArray = [...uniqueDatesSet];
-  //   console.log(uniqueDatesArray);
-  let c = 0;
-  let bookingCount = [];
-  for (let i = 0; i < uniqueDatesArray.length; i++) {
-    for (let j = 0; j < bookings.length; j++) {
-      if (uniqueDatesArray[i] === bookings[j].bookingDate.split("T")[0]) {
-        c++;
-      }
-    }
-    // bookingCount.push({ [uniqueDatesArray[i]]: c });
-    bookingCount.push(c);
-    c = 0;
-  }
-  console.log(bookingCount);
-  const [chartData, setChartData] = useState({
-    options: {
-      chart: {
-        id: "basic-bar",
-      },
-      xaxis: {
-        categories: uniqueDatesArray,
-      },
-    },
-    series: [
-      {
-        name: "series-1",
-        data: bookingCount,
-      },
-    ],
-  });
+
+  const data = useMemo(() => {
+    const counts = new Map();
+    for (const b of bookings) counts.set(dayOf(b), (counts.get(dayOf(b)) || 0) + 1);
+    return [...counts.entries()]
+      .sort(([a], [b]) => (a < b ? -1 : 1))
+      .slice(-14)
+      .map(([label, value]) => ({ label, value }));
+  }, [bookings]);
+
+  const total = data.reduce((s, d) => s + d.value, 0);
 
   return (
-    <div className="app">
-      <div className="row">
-        <div className="mixed-chart">
-          <Chart options={chartData.options} series={chartData.series} type="bar" width="500" />
-        </div>
-      </div>
-    </div>
+    <ChartCard
+      title="Bookings per day"
+      subtitle="Last 14 active days"
+      action={<span className="badge badge-outline">{total} total</span>}
+    >
+      {data.length ? (
+        <BarChart data={data} />
+      ) : (
+        <p className="py-8 text-center text-sm text-base-content/50">No bookings yet.</p>
+      )}
+    </ChartCard>
   );
 };
 

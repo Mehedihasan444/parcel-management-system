@@ -15,8 +15,8 @@ export default defineConfig({
         manualChunks: {
           vendor: ["react", "react-dom", "react-router-dom"],
           query: ["@tanstack/react-query", "axios"],
-          maps: ["mapbox-gl", "react-map-gl"],
-          charts: ["apexcharts", "react-apexcharts"],
+          maps: ["leaflet", "react-leaflet"],
+          payments: ["@stripe/react-stripe-js", "@stripe/stripe-js"],
         },
       },
     },

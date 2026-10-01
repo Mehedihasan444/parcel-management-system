@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import AllParcelsTable from "../Components/AllParcelsTable/AllParcelsTable";
-import { DateRangePicker } from "react-date-range";
 import { useEffect, useState } from "react";
 
 const All_Parcels = () => {

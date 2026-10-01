@@ -1,18 +1,16 @@
 import AdminHomeBarChart from "../Components/AdminHomeBarChart/AdminHomeBarChart";
 import AdminHomeLineChart from "../Components/AdminHomeLineChart/AdminHomeLineChart";
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
+import DocumentTitle from "../Components/Seo/DocumentTitle";
 
 const AdminHome = () => {
   return (
-    <div className="">
-      <SectionTitle heading={"Statistics"} subHeading={"App Usage"}></SectionTitle>
-      <div className="flex justify-between ">
-        <div className="w-1/2 mx-auto">
-          <AdminHomeBarChart></AdminHomeBarChart>
-        </div>
-        <div className="w-1/2 mx-auto">
-          <AdminHomeLineChart></AdminHomeLineChart>
-        </div>
+    <div>
+      <DocumentTitle title="RapidParcelHub | Admin overview" />
+      <SectionTitle heading="Network overview" subHeading="Live operations" />
+      <div className="grid gap-5 lg:grid-cols-2">
+        <AdminHomeBarChart />
+        <AdminHomeLineChart />
       </div>
     </div>
   );
