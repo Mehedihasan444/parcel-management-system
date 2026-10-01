@@ -1,6 +1,6 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
+import { notify } from "../../lib/notify";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
@@ -79,13 +79,7 @@ const CheckoutForm = ({ data }) => {
         const res = await axiosSecure.post("/payments", payment);
         console.log("payment saved", res.data);
         if (res.data?.paymentResult?.insertedId) {
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Payment Complete",
-            showConfirmButton: false,
-            timer: 1500,
-          });
+          notify.success("Payment complete");
           navigate("/dashboard/paymentHistory");
         }
       }

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
-import Swal from "sweetalert2";
+import { notify } from "../../lib/notify";
 import { useState } from "react";
 // import useAxiosSecure from "../../hooks/useAxiosSecure";
 
@@ -33,21 +33,9 @@ const AllParcelsModal = ({ id }) => {
       console.log(res.data);
       if (res.data.modifiedCount > 0) {
         refetch();
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Process completed successfully",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        notify.success("Delivery partner assigned successfully");
       } else {
-        Swal.fire({
-          position: "top-end",
-          icon: "error",
-          title: "Something went wrong",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        notify.error("Something went wrong");
       }
     });
   };

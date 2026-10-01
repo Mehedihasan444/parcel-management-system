@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
-import Swal from "sweetalert2";
+import { notify } from "../lib/notify";
+import { confirmAction } from "../lib/confirm";
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import ReviewPage from "./ReviewPage";
@@ -19,29 +20,25 @@ const My_Parcels = () => {
       return res.data;
     },
   });
-  const handleDelete = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axiosSecure.delete(`/users/bookings/${id}`).then((res) => {
-          if (res.data.deletedCount > 0) {
-            refetch();
-            Swal.fire({
-              title: "Deleted!",
-              text: "Your file has been deleted.",
-              icon: "success",
-            });
-          }
-        });
-      }
+  const handleDelete = async (id) => {
+    const confirmed = await confirmAction({
+      title: "Cancel this parcel?",
+      message: "You won't be able to revert this!",
+      confirmLabel: "Yes, delete it!",
+      tone: "danger",
     });
+    if (!confirmed) return;
+    try {
+      const res = await axiosSecure.delete(`/users/bookings/${id}`);
+      if (res.data.deletedCount > 0) {
+        refetch();
+        notify.success("Parcel deleted");
+      } else {
+        notify.error("Something went wrong");
+      }
+    } catch {
+      notify.error("Something went wrong");
+    }
   };
 
   const handleFilter = (e) => {

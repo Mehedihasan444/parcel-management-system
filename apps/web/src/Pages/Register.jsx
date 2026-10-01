@@ -1,5 +1,5 @@
 import loginImg from "../assets/authentication2.png";
-import Swal from "sweetalert2";
+import { notify } from "../lib/notify";
 import { useNavigate } from "react-router-dom";
 // import useAxiosPublic from "../Hooks/useAxiosPublic";
 import useAuth from "../Hooks/useAuth";
@@ -39,13 +39,7 @@ const Register = () => {
             axiosPublic.post("/users", userInfo).then((res) => {
               console.log(res.data);
               if (res.data.insertedId) {
-                Swal.fire({
-                  position: "top-end",
-                  icon: "success",
-                  title: "Your account is registered successfully",
-                  showConfirmButton: false,
-                  timer: 1500,
-                });
+                notify.success("Your account is registered successfully");
                 navigate("/");
               }
             });

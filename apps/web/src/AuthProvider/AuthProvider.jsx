@@ -10,7 +10,6 @@ import {
 } from "firebase/auth";
 import auth from "../Firebase/firebase.config";
 import useAxiosPublic from "../Hooks/useAxiosPublic";
-import Swal from "sweetalert2";
 export const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {

@@ -1,7 +1,7 @@
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
 import { useForm } from "react-hook-form";
 import useAuth from "../Hooks/useAuth";
-import Swal from "sweetalert2";
+import { notify } from "../lib/notify";
 import useAxiosPublic from "../Hooks/useAxiosPublic";
 const Book_A_Parcel = () => {
   const { user } = useAuth();
@@ -19,13 +19,7 @@ const Book_A_Parcel = () => {
     } else if (data.weight > 2) {
       price = 150;
     } else {
-      Swal.fire({
-        position: "top-end",
-        icon: "warning",
-        title: `Invalid ${data.weight} weight. enter valid weight`,
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      notify.warning(`Invalid ${data.weight} weight. Enter a valid weight`);
       return;
     }
     const info = {
@@ -39,21 +33,9 @@ const Book_A_Parcel = () => {
     console.log(res.data);
     if (res.data.insertedId) {
       reset();
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Booking success",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      notify.success("Booking successful");
     } else {
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Something went wrong",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      notify.error("Something went wrong");
     }
   };
 

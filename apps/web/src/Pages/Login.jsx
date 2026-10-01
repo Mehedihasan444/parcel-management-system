@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
+import { notify } from "../lib/notify";
 import useAuth from "../Hooks/useAuth";
 import loginImg from "../assets/authentication2.png";
 import SocialLogin from "../Components/SocialLogin/SocialLogin";
@@ -19,28 +19,16 @@ const Login = () => {
 
     login(email, password)
       .then((userCredential) => {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Login Success",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-
-        navigate(location?.state || "/");
+        notify.success("Login successful");
+        const from = location?.state?.from || "/";
+        navigate(from);
         const user = userCredential.user;
         console.log(user);
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        Swal.fire({
-          position: "top-end",
-          icon: "error",
-          title: `${errorMessage}`,
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        notify.error(errorMessage);
         console.log("error code:", errorCode, "errorMessage :", errorMessage);
       });
   };

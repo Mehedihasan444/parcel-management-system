@@ -13,6 +13,7 @@ import {
   FiMenu,
 } from "react-icons/fi";
 import { NavLink, Outlet, Link, useNavigate } from "react-router-dom";
+import { Toaster } from "sonner";
 import useAdmin from "../Hooks/useAdmin";
 import useDeliveryMen from "../Hooks/useDeliveryMen";
 import useAuth from "../Hooks/useAuth";
@@ -88,6 +89,7 @@ const Dashboard = () => {
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6">
           <Outlet />
         </main>
+        <Toaster position="top-right" richColors closeButton gap={8} />
       </div>
 
       <div className="drawer-side z-40">

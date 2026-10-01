@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import useAuth from "../Hooks/useAuth";
 import useAxiosPublic from "../Hooks/useAxiosPublic";
-import Swal from "sweetalert2";
+import { notify } from "../lib/notify";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 
@@ -47,21 +47,9 @@ const My_Profile = () => {
         console.log(userRes.data);
         if (userRes.data.modifiedCount > 0) {
           // reset();
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Profile updated Successfully",
-            showConfirmButton: false,
-            timer: 1500,
-          });
+          notify.success("Profile updated successfully");
         } else {
-          Swal.fire({
-            position: "top-end",
-            icon: "error",
-            title: "Something went wrong",
-            showConfirmButton: false,
-            timer: 1500,
-          });
+          notify.error("Something went wrong");
         }
       }
     } else if (data.image.length === 0) {
@@ -78,21 +66,9 @@ const My_Profile = () => {
       console.log(userRes.data);
       if (userRes.data.modifiedCount > 0) {
         // reset();
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Profile updated Successfully",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        notify.success("Profile updated successfully");
       } else {
-        Swal.fire({
-          position: "top-end",
-          icon: "error",
-          title: "Something went wrong",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        notify.error("Something went wrong");
       }
     }
   };

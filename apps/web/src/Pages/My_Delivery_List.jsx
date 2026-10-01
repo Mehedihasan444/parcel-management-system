@@ -2,7 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import useAuth from "../Hooks/useAuth";
-import Swal from "sweetalert2";
+import { notify } from "../lib/notify";
+import { confirmAction } from "../lib/confirm";
 import { Link } from "react-router-dom";
 
 const My_Delivery_List = () => {
@@ -24,82 +25,50 @@ const My_Delivery_List = () => {
     },
   });
   // console.log(deliveryList);
-  const handleDelete = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Cancel it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const info = {
-          status: "Cancelled",
-        };
-        axiosSecure.patch(`/deliveryMen/deliveryList/cancel/deliver/${id}`, info).then((res) => {
-          console.log(res.data);
-          if (res.data.modifiedCount > 0) {
-            refetch();
-            Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: "Cancelled!",
-              text: "Parcel has been Cancelled.",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-          } else {
-            Swal.fire({
-              position: "top-end",
-              icon: "error",
-              title: "Something went wrong",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-          }
-        });
-      }
+  const handleDelete = async (id) => {
+    const confirmed = await confirmAction({
+      title: "Cancel this delivery?",
+      message: "You won't be able to revert this!",
+      confirmLabel: "Yes, cancel it!",
+      tone: "danger",
     });
+    if (!confirmed) return;
+    try {
+      const res = await axiosSecure.patch(`/deliveryMen/deliveryList/cancel/deliver/${id}`, {
+        status: "Cancelled",
+      });
+      if (res.data.modifiedCount > 0) {
+        refetch();
+        notify.success("Parcel cancelled");
+      } else {
+        notify.error("Something went wrong");
+      }
+    } catch {
+      notify.error("Something went wrong");
+    }
   };
 
-  const handleDeliver = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Delivered!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const info = {
-          status: "Delivered",
-        };
-        axiosSecure.patch(`/deliveryMen/deliveryList/cancel/deliver/${id}`, info).then((res) => {
-          console.log(res.data);
-
-          if (res.data.modifiedCount > 0) {
-            refetch();
-            Swal.fire({
-              title: "Deleted!",
-              text: "Your file has been deleted.",
-              icon: "success",
-            });
-          } else {
-            Swal.fire({
-              position: "top-end",
-              icon: "error",
-              title: "Something went wrong",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-          }
-        });
-      }
+  const handleDeliver = async (id) => {
+    const confirmed = await confirmAction({
+      title: "Mark as delivered?",
+      message: "Confirm the parcel reached the receiver.",
+      confirmLabel: "Yes, delivered!",
+      tone: "warning",
     });
+    if (!confirmed) return;
+    try {
+      const res = await axiosSecure.patch(`/deliveryMen/deliveryList/cancel/deliver/${id}`, {
+        status: "Delivered",
+      });
+      if (res.data.modifiedCount > 0) {
+        refetch();
+        notify.success("Parcel marked as delivered");
+      } else {
+        notify.error("Something went wrong");
+      }
+    } catch {
+      notify.error("Something went wrong");
+    }
   };
   return (
     <div className="sm:w-[70vw]">

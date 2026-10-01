@@ -1,4 +1,4 @@
-import Swal from "sweetalert2";
+import { notify } from "../lib/notify";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import useAuth from "../Hooks/useAuth";
 import { useForm } from "react-hook-form";
@@ -34,21 +34,9 @@ const ReviewPage = ({ id }) => {
     console.log(res.data);
     if (res.data.insertedId) {
       reset();
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Review submitted successfully",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      notify.success("Review submitted successfully");
     } else {
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Something went wrong",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      notify.error("Something went wrong");
     }
   };
 

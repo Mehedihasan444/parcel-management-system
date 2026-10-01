@@ -1,4 +1,5 @@
 import { Outlet, useLocation } from "react-router-dom";
+import { Toaster } from "sonner";
 import Navbar from "../Components/Shared/Navbar";
 import Footer from "../Components/Shared/Footer";
 
@@ -10,14 +11,13 @@ const Main = () => {
 
   return (
     <div className="">
-      {noHeaderFooter || <Navbar></Navbar>}
-      {/* <Navbar></Navbar> */}
+      {noHeaderFooter || <Navbar />}
       <div className="">
-        <Outlet></Outlet>
+        <Outlet />
       </div>
 
-      {noHeaderFooter || <Footer></Footer>}
-      {/* <Footer></Footer> */}
+      {noHeaderFooter || <Footer />}
+      <Toaster position="top-right" richColors closeButton gap={8} />
     </div>
   );
 };

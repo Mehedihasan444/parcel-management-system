@@ -1,6 +1,6 @@
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
 import { useForm } from "react-hook-form";
-import Swal from "sweetalert2";
+import { notify } from "../lib/notify";
 import useAuth from "../Hooks/useAuth";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import { useLoaderData } from "react-router-dom";
@@ -24,13 +24,7 @@ const UpdateBooking = () => {
     } else if (data.weight > 2) {
       price = 150;
     } else {
-      Swal.fire({
-        position: "top-end",
-        icon: "warning",
-        title: `Invalid ${data.weight} weight. enter valid weight`,
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      notify.warning(`Invalid ${data.weight} weight. Enter a valid weight`);
       return;
     }
     const info = {
@@ -42,21 +36,9 @@ const UpdateBooking = () => {
     console.log(res.data);
     if (res.data.modifiedCount > 0) {
       reset();
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Update success",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      notify.success("Booking updated");
     } else {
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Something went wrong",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      notify.error("Something went wrong");
     }
   };
 

@@ -2,7 +2,7 @@ import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
 import useAuth from "../../Hooks/useAuth";
 import { useLocation, useNavigate } from "react-router-dom";
 // import useAxiosPublic from "../../Hooks/useAxiosPublic";
-import Swal from "sweetalert2";
+import { notify } from "../../lib/notify";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
 
 const SocialLogin = () => {
@@ -25,13 +25,7 @@ const SocialLogin = () => {
         axiosPublic.post("/users", userInfo).then((res) => {
           console.log(res.data);
           if (res.data.insertedId) {
-            Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: "Your account is registered successfully",
-              showConfirmButton: false,
-              timer: 1500,
-            });
+            notify.success("Your account is registered successfully");
           }
           navigate(location?.state || "/");
         });
