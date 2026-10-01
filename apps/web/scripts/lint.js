@@ -24,7 +24,7 @@ const APP_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 
 // Counted from the original repository at commit ead253a; re-measure with
 // `npm run lint:strict` if the rules or the ESLint version change.
-const BUDGET = 60;
+const BUDGET = 52;
 
 const strict = process.argv.includes("--strict");
 
@@ -93,7 +93,7 @@ if (strict) {
 if (total > BUDGET) {
   console.error("");
   console.error(`FAIL: ${total} problems exceeds the budget of ${BUDGET}.`);
-  console.error("This monorepo inherited 60 pre-existing problems from the");
+  console.error("This monorepo inherited 52 pre-existing problems from the");
   console.error("original repository; fixing them is tracked separately. Either");
   console.error("reduce the count or, intentionally, raise BUDGET in");
   console.error("apps/web/scripts/lint.js.");

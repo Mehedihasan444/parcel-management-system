@@ -17,6 +17,7 @@
     "@stripe/react-stripe-js": "^3.7.0",
     "@stripe/stripe-js": "^7.4.0",
     "@sweetalert2/themes": "^5.0.15",
+    "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-query": "^5.85.0",
     "@types/mapbox-gl": "^2.7.19",
     "apexcharts": "^4.7.0",
@@ -43,13 +44,13 @@
     "@types/react-dom": "^19.1.0",
     "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.4.16",
-    "daisyui": "^4.4.10",
+    "daisyui": "^5.7.47",
     "eslint": "^8.53.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.4",
     "postcss": "^8.4.31",
-    "tailwindcss": "^3.3.5",
+    "tailwindcss": "^4.3.3",
     "vite": "^7.1.7"
   }
 }
