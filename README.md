@@ -80,7 +80,7 @@ apps/
       Firebase/     Firebase Auth initialisation
       Layouts/      Main (site) + Dashboard (role sidebar)
     scripts/
-      lint.js       lints with a problem-count budget (currently 47)
+      lint.js       zero-tolerance ESLint 9 (flat config)
 docs/
   HISTORY.md        provenance, reference tags, recovery notes
 scripts/
@@ -161,17 +161,16 @@ than surfacing as a confusing error on the first request.
 | ----------------- | --------------------------- | --------------------------------------------- |
 | Format            | `npm run format:check`      | Prettier 3; CI fails on drift                 |
 | Route contract    | `npm run test`              | 29 routes probed over HTTP; fails on drift    |
-| Lint              | `npm run lint`              | Budget-based (47); see below                  |
+| Lint                 | `npm run lint`                   | Zero-tolerance; see below                     |
 | Import resolution | `npm run check:imports`     | Catches case-mismatched paths                 |
 | Documentation     | `npm run check:docs`        | Verifies links, commands, paths and tags      |
 | Secret audit      | `npm run audit:secrets`     | Scans all history; non-zero exit on a finding |
 | All of the above  | `npm run check && npm test` | What CI runs (plus format + build)            |
 
 The web app inherited 60 lint problems from the original repository. Successive
-modernizations (prop-types, guard rewrites, premium UI) reduced it to **47**.
-`apps/web/scripts/lint.js` treats 47 as a budget: it passes until the count grows,
-so new problems still fail the build.
-`npm run lint:strict --workspace=@parcel/web` reports every problem.
+modernizations paid them all off: `apps/web/scripts/lint.js` now enforces
+zero tolerance on ESLint 9 (flat config) — any problem fails the build.
+`npm run lint:fix --workspace=@parcel/web` auto-fixes what ESLint can.
 
 ## History
 

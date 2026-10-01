@@ -16,7 +16,7 @@ import { fileURLToPath } from "node:url";
 
 const APP_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-const result = spawnSync("npx", ["eslint", ".", "--ext", "js,jsx", "-f", "json"], {
+const result = spawnSync("npx", ["eslint", ".", "-f", "json"], {
   cwd: APP_ROOT,
   encoding: "utf8",
 });

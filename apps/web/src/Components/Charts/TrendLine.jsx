@@ -25,7 +25,13 @@ export default function TrendLine({ data, height = 220 }) {
       aria-label={`Trend line ending at ${data[n - 1].value}`}
     >
       <path d={area} className="fill-brand-500/15" />
-      <path d={line} fill="none" strokeWidth="2.5" className="stroke-brand-500" strokeLinecap="round" />
+      <path
+        d={line}
+        fill="none"
+        strokeWidth="2.5"
+        className="stroke-brand-500"
+        strokeLinecap="round"
+      />
       {data.map((d, i) => (
         <circle key={d.label} cx={px(i)} cy={py(d.value)} r="3" className="fill-brand-600">
           <title>{`${d.label}: ${d.value}`}</title>
