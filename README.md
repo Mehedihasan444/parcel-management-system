@@ -46,7 +46,7 @@ npm run dev --workspace=@parcel/api    # api on http://localhost:5000
 | `npm run dev:web`      | Runs only the web app                             |
 | `npm run dev:api`      | Runs only the API                                 |
 | `npm run build`        | Builds every app                                  |
-| `npm run test`         | Route contract test (see below)                   |
+| `npm run test`         | API + web test suites (see below)                 |
 | `npm run lint`         | Lints every app                                   |
 | `npm run format`       | Prettier-write the repo                           |
 | `npm run format:check` | Fails on unformatted files (CI)                   |
@@ -71,6 +71,8 @@ apps/
     scripts/
       route-contract.test.js   asserts the public API has not drifted
       smoke.js                 boots the app and exercises live routes
+    test/
+      api.test.js              health, validation, CORS, 404 over real HTTP
   web/
     src/
       config/       runtime config read from Vite env vars
@@ -79,6 +81,8 @@ apps/
       Hooks/        auth, singleton axios, role guards
       Firebase/     Firebase Auth initialisation
       Layouts/      Main (site) + Dashboard (role sidebar)
+      lib/          notify/confirm/pricing shared helpers (unit-tested)
+    test/           Vitest suite: pricing, confirm dialog, notify facade
     scripts/
       lint.js       zero-tolerance ESLint 9 (flat config)
 docs/
@@ -113,7 +117,9 @@ collections through `config/db.js` rather than opening its own connection.
 Hardening: `helmet` headers, `compression`, strict CORS allow-list,
 `express-rate-limit` (300/15min, relaxed in test), `GET /health` +
 `GET /api/v1/health`, JSON `{message,code,detail}` errors, `MONGODB_URI`
-override + `DATABASE_NAME` + `TRUST_PROXY` support.
+override + `DATABASE_NAME` + `TRUST_PROXY` support. Every write route validates
+with zod (`middleware/schemas.js`) — garbage gets a 400 with field-level errors
+before it can reach Stripe or Mongo.
 
 **Mount order is load-bearing.** Several paths overlap — `GET /users/admin`
 sits next to `GET /users/:email` — so routers declare literal segments before
@@ -160,8 +166,10 @@ than surfacing as a confusing error on the first request.
 | Check             | Command                     | Notes                                         |
 | ----------------- | --------------------------- | --------------------------------------------- |
 | Format            | `npm run format:check`      | Prettier 3; CI fails on drift                 |
+| API behaviour     | `npm run test`              | 12 node:test cases: health, validation, CORS  |
 | Route contract    | `npm run test`              | 29 routes probed over HTTP; fails on drift    |
-| Lint                 | `npm run lint`                   | Zero-tolerance; see below                     |
+| Web unit tests    | `npm run test`              | 9 Vitest cases: pricing, confirm, notify      |
+| Lint              | `npm run lint`              | Zero-tolerance; see below                     |
 | Import resolution | `npm run check:imports`     | Catches case-mismatched paths                 |
 | Documentation     | `npm run check:docs`        | Verifies links, commands, paths and tags      |
 | Secret audit      | `npm run audit:secrets`     | Scans all history; non-zero exit on a finding |
