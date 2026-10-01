@@ -10,7 +10,7 @@
     "start": "node src/server.js",
     "build": "node --check src/server.js && node --check src/app.js && echo '@parcel/api: syntax OK'",
     "lint": "node --check src/server.js && node --check src/app.js && node --check src/config/env.js && node --check src/middleware/error.js && echo '@parcel/api: lint OK'",
-    "test": "node scripts/route-contract.test.js",
+    "test": "NODE_ENV=test node --test test/api.test.js && node scripts/route-contract.test.js",
     "clean": "rm -rf dist .turbo"
   },
   "dependencies": {
