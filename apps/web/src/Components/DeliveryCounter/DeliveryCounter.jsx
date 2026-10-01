@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import { useEffect } from "react";
+import PropTypes from "prop-types";
 
 const DeliveryCounter = ({ id }) => {
   const axiosSecure = useAxiosSecure();
 
   console.log(id);
-  const { data: numberOfDelivery, refetch } = useQuery({
+  const { data: numberOfDelivery } = useQuery({
     queryKey: ["numberOfDelivery", id],
     queryFn: async () => {
       const res = await axiosSecure.get(`/deliveryMen/delivery/count/${id}`);
@@ -28,6 +29,10 @@ const DeliveryCounter = ({ id }) => {
       <h1 className="text-center">{numberOfDelivery?.length}</h1>
     </div>
   );
+};
+
+DeliveryCounter.propTypes = {
+  id: PropTypes.string,
 };
 
 export default DeliveryCounter;

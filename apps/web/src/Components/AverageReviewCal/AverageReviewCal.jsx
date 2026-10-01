@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import { useEffect } from "react";
+import PropTypes from "prop-types";
 
 const AverageReviewCal = ({ id }) => {
   const axiosSecure = useAxiosSecure();
 
-  const { data: reviews = [], refetch } = useQuery({
+  const { data: reviews = [] } = useQuery({
     queryKey: ["reviews"], // You might need to adjust the key based on your API response structure
     queryFn: async () => {
       const res = await axiosSecure.get(`/delivery/reviews/${id}`);
@@ -27,6 +28,10 @@ const AverageReviewCal = ({ id }) => {
   }, [axiosSecure, id, result]);
 
   return <div className="text-center">{result}</div>;
+};
+
+AverageReviewCal.propTypes = {
+  id: PropTypes.string,
 };
 
 export default AverageReviewCal;

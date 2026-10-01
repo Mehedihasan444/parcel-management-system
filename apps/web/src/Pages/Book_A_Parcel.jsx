@@ -6,7 +6,7 @@ import useAxiosPublic from "../Hooks/useAxiosPublic";
 const Book_A_Parcel = () => {
   const { user } = useAuth();
   const axiosPublic = useAxiosPublic();
-  const { register, handleSubmit, watch, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const onSubmit = async (data) => {
     // console.log(data.weight);
 
@@ -110,7 +110,7 @@ const Book_A_Parcel = () => {
           <div className="flex justify-between gap-5">
             <div className="flex flex-col flex-1">
               <label htmlFor="receiverName" className="mb-1 text-gray-700">
-                Receiver's Name:
+                Receiver&apos;s Name:
               </label>
               <input
                 {...register("receiverName")}
@@ -143,7 +143,7 @@ const Book_A_Parcel = () => {
 
           <div className="flex flex-col">
             <label htmlFor="receiverPhone" className="mb-1 text-gray-700">
-              Receiver's Phone Number:
+              Receiver&apos;s Phone Number:
             </label>
             <input
               {...register("receiverPhone")}

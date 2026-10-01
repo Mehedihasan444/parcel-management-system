@@ -4,6 +4,7 @@ import { notify } from "../../lib/notify";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import PropTypes from "prop-types";
 
 const CheckoutForm = ({ data }) => {
   const { user } = useAuth();
@@ -123,6 +124,13 @@ const CheckoutForm = ({ data }) => {
       </form>
     </div>
   );
+};
+
+CheckoutForm.propTypes = {
+  data: PropTypes.shape({
+    _id: PropTypes.string,
+    price: PropTypes.number,
+  }),
 };
 
 export default CheckoutForm;

@@ -1,16 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
-import useAuth from "../Hooks/useAuth";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
-import { useEffect } from "react";
 import DeliveryCounter from "../Components/DeliveryCounter/DeliveryCounter";
 import AverageReviewCal from "../Components/AverageReviewCal/AverageReviewCal";
 
 const All_Delivery_Men = () => {
-  const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
 
-  const { data: allDeliveryMen = [], refetch } = useQuery({
+  const { data: allDeliveryMen = [] } = useQuery({
     queryKey: ["allDeliveryMen"],
     queryFn: async () => {
       const res = await axiosSecure.get("/users/admin/deliveryMens");

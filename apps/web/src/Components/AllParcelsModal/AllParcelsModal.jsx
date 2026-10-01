@@ -2,11 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import { notify } from "../../lib/notify";
-import { useState } from "react";
+import PropTypes from "prop-types";
 // import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const AllParcelsModal = ({ id }) => {
-  const { register, handleSubmit, watch } = useForm();
+  const { register, handleSubmit } = useForm();
   const axiosSecure = useAxiosSecure();
 
   const { data: deliveryMen = [], refetch } = useQuery({
@@ -99,6 +99,10 @@ const AllParcelsModal = ({ id }) => {
       </dialog>
     </div>
   );
+};
+
+AllParcelsModal.propTypes = {
+  id: PropTypes.string,
 };
 
 export default AllParcelsModal;

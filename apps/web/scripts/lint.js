@@ -1,18 +1,12 @@
 #!/usr/bin/env node
 /**
- * Lint with a problem-count budget.
+ * Lint the web app. Zero tolerance: any ESLint problem fails the build.
  *
- * The web app was written before this monorepo existed and carries a fixed
- * amount of lint debt: 31 unused variables, 24 missing prop-types and 5
- * unescaped-entity / react-refresh warnings. Fixing all of it is a separate
- * refactor and would bury the history merge in unrelated churn.
+ * The inherited lint debt (unused vars, missing prop-types) was paid off
+ * during modernization, so the old problem-count budget is gone. Keep it
+ * that way — fix new warnings instead of raising a budget.
  *
- * Rather than leave `npm run lint` permanently red (so nobody ever runs it) or
- * disable the rules (so new problems hide), this script treats the current
- * count as a budget: linting passes while the number does not grow, and fails
- * the moment it does. Run with --strict to fail on any problem at all.
- *
- * Usage:  node scripts/lint.js [--strict]
+ * Usage:  node scripts/lint.js
  *
  * This app is an ES module package ("type": "module"), so this file uses ESM.
  */
@@ -21,12 +15,6 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const APP_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-
-// Counted from the original repository at commit ead253a; re-measure with
-// `npm run lint:strict` if the rules or the ESLint version change.
-const BUDGET = 42;
-
-const strict = process.argv.includes("--strict");
 
 const result = spawnSync("npx", ["eslint", ".", "--ext", "js,jsx", "-f", "json"], {
   cwd: APP_ROOT,
@@ -82,25 +70,7 @@ for (const [rule, count] of [...counts.entries()].sort((a, b) => b[1] - a[1])) {
 
 console.log("");
 console.log(`  total: ${total}   auto-fixable: ${fixable}`);
-
-if (strict) {
-  console.log("");
-  console.log("Strict mode: failing on any problem.");
-  process.exit(1);
-}
-
-if (total > BUDGET) {
-  console.error("");
-  console.error(`FAIL: ${total} problems exceeds the budget of ${BUDGET}.`);
-  console.error("This monorepo inherited 42 pre-existing problems from the");
-  console.error("original repository; fixing them is tracked separately. Either");
-  console.error("reduce the count or, intentionally, raise BUDGET in");
-  console.error("apps/web/scripts/lint.js.");
-  process.exit(1);
-}
-
-console.log("");
-console.log(`PASS: ${total} problems, within the inherited budget of ${BUDGET}.`);
-console.log("These are pre-existing issues carried over from the original repository,");
-console.log("not regressions. Run `npm run lint:strict --workspace=@parcel/web`");
-console.log("to see them all, or `npm run lint:fix` to auto-fix what ESLint can.");
+console.error("");
+console.error(`FAIL: ${total} problem(s) found. This repo holds a zero-tolerance`);
+console.error(`lint policy — fix them instead of adding suppressions.`);
+process.exit(1);

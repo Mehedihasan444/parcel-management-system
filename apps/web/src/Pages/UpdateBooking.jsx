@@ -7,7 +7,7 @@ import { useLoaderData } from "react-router-dom";
 const UpdateBooking = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const { register, handleSubmit, watch, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const parcelData = useLoaderData();
 
   // console.log(parcelData)
@@ -111,7 +111,7 @@ const UpdateBooking = () => {
           <div className="flex justify-between gap-5">
             <div className="flex flex-col flex-1">
               <label htmlFor="receiverName" className="mb-1 text-gray-700">
-                Receiver's Name:
+                Receiver&apos;s Name:
               </label>
               <input
                 {...register("receiverName")}
@@ -143,7 +143,7 @@ const UpdateBooking = () => {
 
           <div className="flex flex-col">
             <label htmlFor="receiverPhone" className="mb-1 text-gray-700">
-              Receiver's Phone Number:
+              Receiver&apos;s Phone Number:
             </label>
             <input
               {...register("receiverPhone")}

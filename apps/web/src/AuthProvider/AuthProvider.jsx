@@ -1,4 +1,5 @@
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
@@ -10,7 +11,7 @@ import {
 } from "firebase/auth";
 import auth from "../Firebase/firebase.config";
 import useAxiosPublic from "../Hooks/useAxiosPublic";
-export const AuthContext = createContext(null);
+import { AuthContext } from "./AuthContext";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
@@ -80,6 +81,10 @@ const AuthProvider = ({ children }) => {
     loading,
   };
   return <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>;
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default AuthProvider;

@@ -1,12 +1,13 @@
 import AllParcelsModal from "../AllParcelsModal/AllParcelsModal";
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 const AllParcelsTable = ({ bookings }) => {
   const [id, setId] = useState("");
 
   return (
     <>
-      {bookings?.map((item, idx) => (
+      {bookings?.map((item) => (
         <tr key={item._id}>
           {/* <th>{idx + 1}</th> */}
           <td>{item?.name}</td>
@@ -31,6 +32,10 @@ const AllParcelsTable = ({ bookings }) => {
       ))}
     </>
   );
+};
+
+AllParcelsTable.propTypes = {
+  bookings: PropTypes.array,
 };
 
 export default AllParcelsTable;

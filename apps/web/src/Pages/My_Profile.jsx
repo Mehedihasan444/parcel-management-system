@@ -11,12 +11,12 @@ const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_ke
 
 const My_Profile = () => {
   const { user } = useAuth();
-  const { register, handleSubmit, watch, reset } = useForm();
+  const { register, handleSubmit } = useForm();
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
 
   // console.log(user)
-  const { data: userInfo, refetch } = useQuery({
+  const { data: userInfo } = useQuery({
     queryKey: ["userInfo", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/users/${user?.email}`);

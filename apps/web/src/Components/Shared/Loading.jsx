@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 export default function Loading({ label = "Loading…" }) {
   return (
     <div
@@ -13,3 +15,7 @@ export default function Loading({ label = "Loading…" }) {
     </div>
   );
 }
+
+Loading.propTypes = {
+  label: PropTypes.string,
+};

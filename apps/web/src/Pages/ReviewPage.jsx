@@ -5,9 +5,10 @@ import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import ReviewRating from "../Components/ReviewRating/ReviewRating";
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 const ReviewPage = ({ id }) => {
-  const { register, handleSubmit, watch, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const [ratingValue, setRatingValue] = useState();
@@ -117,6 +118,10 @@ const ReviewPage = ({ id }) => {
       </dialog>
     </div>
   );
+};
+
+ReviewPage.propTypes = {
+  id: PropTypes.string,
 };
 
 export default ReviewPage;
