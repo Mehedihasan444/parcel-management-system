@@ -10,7 +10,8 @@
     "lint": "node scripts/lint.js",
     "lint:strict": "node scripts/lint.js --strict",
     "lint:fix": "eslint . --fix",
-    "clean": "rm -rf dist .turbo"
+    "clean": "rm -rf dist .turbo",
+    "test": "vitest run"
   },
   "dependencies": {
     "@smastrom/react-rating": "^1.5.0",
@@ -43,7 +44,9 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.26",
     "globals": "^16.5.0",
+    "jsdom": "^26.1.0",
     "tailwindcss": "^4.3.3",
-    "vite": "^7.1.7"
+    "vite": "^7.1.7",
+    "vitest": "^3.2.7"
   }
 }

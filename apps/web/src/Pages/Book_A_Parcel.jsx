@@ -2,6 +2,7 @@ import SectionTitle from "../Components/SectionTitle/SectionTitle";
 import { useForm } from "react-hook-form";
 import useAuth from "../Hooks/useAuth";
 import { notify } from "../lib/notify";
+import { calculatePrice } from "../lib/pricing";
 import useAxiosPublic from "../Hooks/useAxiosPublic";
 const Book_A_Parcel = () => {
   const { user } = useAuth();
@@ -10,15 +11,8 @@ const Book_A_Parcel = () => {
   const onSubmit = async (data) => {
     // console.log(data.weight);
 
-    let price;
-
-    if (data.weight === "1") {
-      price = 50;
-    } else if (data.weight === "2") {
-      price = 100;
-    } else if (data.weight > 2) {
-      price = 150;
-    } else {
+    const price = calculatePrice(data.weight);
+    if (price === null) {
       notify.warning(`Invalid ${data.weight} weight. Enter a valid weight`);
       return;
     }
@@ -199,13 +193,6 @@ const Book_A_Parcel = () => {
             />
           </div>
           <div className="flex justify-between mt-4">
-            {/* <button
-            type="button"
-            onClick={calculatePrice}
-            className="bg-green-500 text-white p-2 rounded cursor-pointer"
-          >
-            Calculate Price
-          </button> */}
             <button type="submit" className="btn px-10 text-lg bg-blue-500 text-white ">
               Book
             </button>
