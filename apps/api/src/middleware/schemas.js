@@ -86,7 +86,6 @@ const paymentBody = z
   })
   .passthrough();
 
-const jwtBody = z.object({ email: z.string().email() }).passthrough();
 
 const deliveryStatusBody = z.object({ status: z.string().min(1) }).passthrough();
 
@@ -108,7 +107,7 @@ module.exports = {
   reviewBody,
   paymentIntentBody,
   paymentBody,
-  jwtBody,
+
   deliveryStatusBody,
   averageRatingBody,
   parcelDeliveredBody,

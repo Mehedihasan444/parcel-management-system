@@ -1,5 +1,5 @@
-const jwt = require("jsonwebtoken");
-const { loadConfig } = require("../config/env");
+const { fromNodeHeaders } = require("better-auth/node");
+const { getAuth } = require("../auth");
 const { collections } = require("../config/db");
 const { asyncHandler } = require("../utils/asyncHandler");
 const { toObjectId } = require("../utils/ids");
@@ -8,29 +8,35 @@ const { unauthorized, forbidden, notFound } = require("../utils/responses");
 /**
  * Authentication and authorization.
  *
- * verifyToken authenticates (401). Everything below it authorizes (403/404)
- * and must run after verifyToken so req.decoded is populated. Guards never
- * trust client-supplied identity: ownership is always re-checked against the
- * database, because the React client's role screens are cosmetic.
+ * Sessions come from Better Auth (Bearer `access-token`, cookies fallback).
+ * verifyToken resolves the session and exposes the caller's email as
+ * `req.decoded.email` — the exact shape the old JWT flow produced — so every
+ * guard below it is unchanged. A missing token is a 401 without touching the
+ * database or the auth module.
  */
 
-function verifyToken(req, res, next) {
-  if (!req.headers.authorization) {
+const verifyToken = asyncHandler(async (req, res, next) => {
+  const header = req.headers.authorization;
+  if (!header) {
     return unauthorized(res);
   }
 
-  const token = req.headers.authorization.split(" ")[1];
+  const token = header.split(" ")[1];
+  if (!token) {
+    return unauthorized(res);
+  }
 
-  jwt.verify(token, loadConfig().accessTokenSecret, (err, decoded) => {
-    if (err) {
-      return unauthorized(res);
-    }
-    req.decoded = decoded;
-    next();
-  });
-}
+  const auth = getAuth();
+  const session = await auth.api.getSession({ headers: fromNodeHeaders(req.headers) });
+  if (!session?.user?.email) {
+    return unauthorized(res);
+  }
 
-/** The user document for the JWT subject (null when it names nobody). */
+  req.decoded = { email: session.user.email, id: session.user.id };
+  next();
+});
+
+/** The app user document for the session email (null when it names nobody). */
 async function callerUser(email) {
   const { users } = collections();
   return users.findOne({ email });

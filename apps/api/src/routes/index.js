@@ -1,6 +1,5 @@
 const { Router } = require("express");
 
-const authRoutes = require("../modules/auth/auth.routes");
 const userRoutes = require("../modules/users/user.routes");
 const bookingRoutes = require("../modules/bookings/booking.routes");
 const deliveryRoutes = require("../modules/delivery/delivery.routes");
@@ -10,15 +9,14 @@ const paymentRoutes = require("../modules/payments/payment.routes");
 /**
  * Assembles every feature router under /api/v1.
  *
- * MOUNT ORDER IS SIGNIFICANT, and mirrors the registration order of the
- * original single-file server so each request resolves to the same handler:
+ * Authentication moved to Better Auth at /api/auth/* (mounted in app.js);
+ * the old POST /jwt route is gone. Remaining mount order is significant:
  *
- *   1. auth      /jwt
- *   2. users     /users, /users/admin, /users/:email, ...
- *   3. bookings  /users/bookings..., /users/booking/:id, ...
- *   4. delivery  /deliveryMen..., /users/admin/deliveryMens, /delivery/...
- *   5. admin     /admin/:email, /admin/users/collection
- *   6. payments  /create-payment-intent, /payments, /payments/:email
+ *   1. users     /users, /users/admin, /users/:email, ...
+ *   2. bookings  /users/bookings..., /users/booking/:id, ...
+ *   3. delivery  /deliveryMen/..., /users/admin/deliveryMens, /delivery/...
+ *   4. admin     /admin/:email, /admin/users/collection
+ *   5. payments  /create-payment-intent, /payments, /payments/:email
  *
  * Several paths overlap — `GET /users/admin` sits next to
  * `GET /users/:email`, and `/users/admin/bookings` sits next to
@@ -27,11 +25,10 @@ const paymentRoutes = require("../modules/payments/payment.routes");
  * routers ahead of the ones with catch-all parameters.
  *
  * Reordering anything here is a breaking change: scripts/route-contract.test.js
- * fails if the published route table ever drifts from the original API.
+ * fails if the published route table ever drifts.
  */
 const router = Router();
 
-router.use(authRoutes);
 router.use("/users", userRoutes);
 router.use("/users", bookingRoutes);
 router.use(deliveryRoutes);

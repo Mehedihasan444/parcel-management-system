@@ -7,6 +7,7 @@ const rateLimit = require("express-rate-limit");
 
 const { loadConfig } = require("./config/env");
 const routes = require("./routes");
+const { getAuth } = require("./auth");
 const { notFoundHandler, errorHandler } = require("./middleware/error");
 
 /**
@@ -58,6 +59,15 @@ function createApp() {
       allowedHeaders: ["Content-Type", "Authorization"],
     })
   );
+  // Better Auth owns /api/auth/* (Express 5 splat syntax). It must sit after
+  // CORS (so preflights pass) but before express.json: the handler reads the
+  // raw body itself. The instance builds lazily because the Mongo adapter
+  // needs a live connection.
+  const { toNodeHandler } = require("better-auth/node");
+  app.all("/api/auth/*splat", async (req, res) => {
+    await toNodeHandler(getAuth())(req, res);
+  });
+
   app.use(express.json({ limit: "1mb" }));
 
   app.get("/", (req, res) => {

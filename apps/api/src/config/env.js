@@ -49,7 +49,6 @@ function loadConfig() {
     env,
     mongoUri,
     databaseName: process.env.DATABASE_NAME || DATABASE_NAME,
-    accessTokenSecret: requireEnv("ACCESS_TOKEN_SECRET"),
     stripeSecretKey: requireEnv("STRIPE_SECRET_KEY"),
     trustProxy: process.env.TRUST_PROXY === "1" || env === "production",
     // The original server hardcoded a single dev origin. Keep that default
