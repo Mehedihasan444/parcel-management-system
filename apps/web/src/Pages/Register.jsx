@@ -1,4 +1,4 @@
-import loginImg from "../assets/authentication2.png";
+import loginImg from "../assets/authentication2.webp";
 import { notify } from "../lib/notify";
 import { useNavigate } from "react-router-dom";
 // import useAxiosPublic from "../Hooks/useAxiosPublic";
@@ -57,7 +57,7 @@ const Register = () => {
   return (
     <div className="flex flex-row-reverse justify-between gap-10 items-center h-screen max-w-6xl mx-auto">
       <div className="flex-1">
-        <img src={loginImg} alt="" className="" />
+        <img src={loginImg} alt="Parcel delivery illustration" loading="lazy" decoding="async" width="596" height="419" />
       </div>
       <div className="shadow-md p-10 flex-1">
         <h1 className="text-center font-bold text-2xl">Sign Up </h1>
