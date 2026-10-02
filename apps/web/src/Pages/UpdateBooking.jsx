@@ -49,7 +49,7 @@ const UpdateBooking = () => {
               </label>
               <input
                 {...register("name")}
-                defaultValue={user?.displayName}
+                defaultValue={user?.name}
                 type="text"
                 name="name"
                 readOnly

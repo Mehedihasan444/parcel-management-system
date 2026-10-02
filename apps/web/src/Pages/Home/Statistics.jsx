@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import CountUp from "react-countup";
+import CountUpPkg from "react-countup";
+const CountUp = CountUpPkg.default ?? CountUpPkg;
 import { FiBox, FiCheckCircle, FiUsers } from "react-icons/fi";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import SectionTitle from "../../Components/SectionTitle/SectionTitle";

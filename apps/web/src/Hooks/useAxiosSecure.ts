@@ -8,6 +8,9 @@ import { API_BASE_URL } from "../config/api";
 export const axiosSecure: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   timeout: 15000,
+  // Cookies are the fallback session transport (Google OAuth logins carry no
+  // Bearer token). Same-host deployments send them automatically.
+  withCredentials: true,
 });
 
 let mounted = 0;

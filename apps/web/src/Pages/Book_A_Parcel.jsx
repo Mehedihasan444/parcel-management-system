@@ -46,7 +46,7 @@ const Book_A_Parcel = () => {
               </label>
               <input
                 {...register("name")}
-                defaultValue={user?.displayName}
+                defaultValue={user?.name}
                 type="text"
                 name="name"
 

@@ -1,61 +1,33 @@
 import loginImg from "../assets/authentication2.webp";
-import { notify } from "../lib/notify";
 import { useNavigate } from "react-router-dom";
-// import useAxiosPublic from "../Hooks/useAxiosPublic";
+import { notify } from "../lib/notify";
 import useAuth from "../Hooks/useAuth";
 import SocialLogin from "../Components/SocialLogin/SocialLogin";
-import useAxiosPublic from "../Hooks/useAxiosPublic";
+import DocumentTitle from "../Components/Seo/DocumentTitle";
+
 const Register = () => {
   const navigate = useNavigate();
-  const { createUser, updateUserProfile } = useAuth();
-  const axiosPublic = useAxiosPublic();
+  const { createUser } = useAuth();
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     const form = e.target;
-    const name = form.name.value;
-    const email = form.email.value;
-    const password = form.password.value;
-    // console.log(name, email, password);
-
-    const photo = "https://www.libarts.colostate.edu/wp-content/uploads/2018/02/userphoto.png";
-
-    createUser(email, password)
-      .then((result) => {
-        // Signed in
-        const user = result.user;
-        console.log(user);
-
-        updateUserProfile(name, photo)
-          .then((res) => {
-            console.log("user profile info updated", res);
-            // navigate("/");
-            const userInfo = {
-              name,
-              email,
-              image: photo,
-              role: "user",
-            };
-            axiosPublic.post("/users", userInfo).then((res) => {
-              console.log(res.data);
-              if (res.data.insertedId) {
-                notify.success("Your account is registered successfully");
-                navigate("/");
-              }
-            });
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        console.log("errorMessage :", errorMessage);
+    try {
+      await createUser({
+        name: form.name.value,
+        email: form.email.value,
+        password: form.password.value,
       });
+      notify.success("Your account is registered successfully");
+      navigate("/");
+    } catch (error) {
+      notify.error(error?.message || "Registration failed");
+    }
   };
 
   return (
     <div className="flex flex-row-reverse justify-between gap-10 items-center h-screen max-w-6xl mx-auto">
+      <DocumentTitle title="RapidParcelHub | Register" />
       <div className="flex-1">
         <img
           src={loginImg}
@@ -78,6 +50,7 @@ const Register = () => {
               name="name"
               className="form-control border p-3  w-full"
               placeholder="Enter your Name"
+              required
             />
           </div>
           <div className="mb-3">
@@ -89,6 +62,7 @@ const Register = () => {
               name="email"
               className="form-control border p-3  w-full"
               placeholder="Enter email"
+              required
             />
           </div>
           <div className="mb-3">
@@ -99,7 +73,9 @@ const Register = () => {
               type="password"
               name="password"
               className="form-control border p-3  w-full"
-              placeholder="Password"
+              placeholder="Password (min 8 characters)"
+              minLength={8}
+              required
             />
           </div>
 

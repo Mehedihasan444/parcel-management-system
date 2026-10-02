@@ -7,6 +7,7 @@ import Loading from "../Components/Shared/Loading";
 import Home from "../Pages/Home/Home";
 import Login from "../Pages/Login";
 import Register from "../Pages/Register";
+import OAuthCallback from "../Pages/OAuthCallback";
 import PrivateRoute from "./PrivateRoute";
 import Dashboard from "../Layouts/Dashboard";
 import AdminRoute from "./AdminRoute";
@@ -44,6 +45,7 @@ const Routes = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
+      { path: "oauth/callback", element: <OAuthCallback /> },
       { path: "*", element: <Error /> },
     ],
   },

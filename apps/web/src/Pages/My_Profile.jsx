@@ -59,7 +59,7 @@ const My_Profile = () => {
         name: data.name,
         email: data.email,
         phone: data.phone,
-        image: user.photoURL,
+        image: user.image,
       };
       // console.log(info)
       const userRes = await axiosSecure.put(`/users/updateProfile/${userInfo.email}`, info);

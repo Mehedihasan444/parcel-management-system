@@ -10,27 +10,16 @@ const Login = () => {
   const location = useLocation();
   const { login } = useAuth();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
     const form = e.target;
-    const email = form.email.value;
-    const password = form.password.value;
-
-    login(email, password)
-      .then((userCredential) => {
-        notify.success("Login successful");
-        const from = location?.state?.from || "/";
-        navigate(from);
-        const user = userCredential.user;
-        console.log(user);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        notify.error(errorMessage);
-        console.log("error code:", errorCode, "errorMessage :", errorMessage);
-      });
+    try {
+      await login(form.email.value, form.password.value);
+      notify.success("Login successful");
+      navigate(location?.state?.from || "/");
+    } catch (error) {
+      notify.error(error?.message || "Login failed");
+    }
   };
 
   return (

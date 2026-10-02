@@ -30,7 +30,7 @@ const ReviewPage = ({ id }) => {
     const res = await axiosSecure.post("/users/reviews", {
       ...data,
       rating: ratingValue,
-      image: user?.photoURL,
+      image: user?.image,
     });
     console.log(res.data);
     if (res.data.insertedId) {
@@ -53,7 +53,7 @@ const ReviewPage = ({ id }) => {
             <h3 className="font-bold text-2xl mb-5">Give Review</h3>
             <div className="space-y-3">
               <div className="flex justify-center items-center ">
-                <img src={user?.photoURL} alt="" className="rounded-full" />
+                <img src={user?.image} alt="" className="rounded-full" />
               </div>
               <div className="flex justify-center items-center">
                 <div className="flex flex-col ">

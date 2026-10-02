@@ -84,8 +84,8 @@ const Navbar = () => {
               <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                 <div className="w-9 rounded-full ring-2 ring-brand-500/40 ring-offset-2 ring-offset-base-100">
                   <img
-                    alt={user?.displayName || "User avatar"}
-                    src={user?.photoURL || "https://i.pravatar.cc/80?img=12"}
+                    alt={user?.name || "User avatar"}
+                    src={user?.image || "https://i.pravatar.cc/80?img=12"}
                     referrerPolicy="no-referrer"
                   />
                 </div>
@@ -93,7 +93,7 @@ const Navbar = () => {
               <ul className="menu menu-sm dropdown-content mt-3 w-60 rounded-2xl border border-base-200 bg-base-100 p-2 shadow-xl">
                 <li className="menu-title px-3 pt-2">
                   <span className="truncate text-sm font-semibold normal-case">
-                    {user?.displayName || user?.email}
+                    {user?.name || user?.email}
                   </span>
                 </li>
                 <li>

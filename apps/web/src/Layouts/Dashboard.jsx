@@ -75,7 +75,7 @@ const Dashboard = () => {
               </label>
               <span className={`badge ${roleBadge} badge-sm font-semibold`}>{role}</span>
               <span className="hidden text-sm text-base-content/50 sm:inline">
-                Welcome{user?.displayName ? `, ${user.displayName.split(" ")[0]}` : ""} 👋
+                Welcome{user?.name ? `, ${user.name.split(" ")[0]}` : ""} 👋
               </span>
             </div>
             <div className="flex items-center gap-1.5">
@@ -129,15 +129,15 @@ const Dashboard = () => {
               <div className="avatar">
                 <div className="w-10 rounded-full">
                   <img
-                    src={user?.photoURL || "https://i.pravatar.cc/80?img=12"}
-                    alt={user?.displayName || "User avatar"}
+                    src={user?.image || "https://i.pravatar.cc/80?img=12"}
+                    alt={user?.name || "User avatar"}
                     referrerPolicy="no-referrer"
                   />
                 </div>
               </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold">
-                  {user?.displayName || user?.email || "Guest"}
+                  {user?.name || user?.email || "Guest"}
                 </p>
                 <p className="truncate text-xs text-base-content/60">{user?.email || ""}</p>
               </div>

@@ -56,7 +56,7 @@ const CheckoutForm = ({ data }) => {
         card: card,
         billing_details: {
           email: user?.email || "anonymous",
-          name: user?.displayName || "anonymous",
+          name: user?.name || "anonymous",
         },
       },
     });
