@@ -9,7 +9,13 @@ const {
   updateAverageRating,
   updateParcelDelivered,
 } = require("./delivery.service");
-const { verifyToken } = require("../../middleware/auth");
+const {
+  verifyToken,
+  verifyAdmin,
+  verifySelfOrAdmin,
+  verifyDeliveryUserIdOrAdmin,
+  verifyAssigneeOrAdmin,
+} = require("../../middleware/auth");
 const { validate } = require("../../middleware/validate");
 const {
   emailParam,
@@ -27,18 +33,26 @@ const router = express.Router();
  * the literal "/delivery/count/:id" is registered before "/:email" would
  * otherwise be able to swallow the "delivery" segment.
  */
-router.get("/deliveryMen/:email", verifyToken, validate({ params: emailParam }), isDeliveryMan);
-router.get("/users/admin/deliveryMens", verifyToken, listAllDeliveryMen);
+router.get(
+  "/deliveryMen/:email",
+  verifyToken,
+  validate({ params: emailParam }),
+  verifySelfOrAdmin,
+  isDeliveryMan
+);
+router.get("/users/admin/deliveryMens", verifyToken, verifyAdmin, listAllDeliveryMen);
 router.get(
   "/users/deliveryMen/deliveryList/:id",
   verifyToken,
   validate({ params: objectIdParam }),
+  verifyDeliveryUserIdOrAdmin,
   listDeliveryList
 );
 router.get(
   "/deliveryMen/delivery/count/:id",
   verifyToken,
   validate({ params: objectIdParam }),
+  verifyDeliveryUserIdOrAdmin,
   countDelivered
 );
 /*
@@ -51,24 +65,28 @@ router.patch(
   "/deliveryMen/deliveryList/cancel/deliver/:id",
   verifyToken,
   validate({ params: objectIdParam, body: deliveryStatusBody }),
+  verifyAssigneeOrAdmin,
   updateBookingStatus
 );
 router.get(
   "/delivery/reviews/:id",
   verifyToken,
   validate({ params: objectIdParam }),
+  verifyDeliveryUserIdOrAdmin,
   listReviewsForDeliveryMan
 );
 router.patch(
   "/deliveryMen/reviews/average/:id",
   verifyToken,
   validate({ params: objectIdParam, body: averageRatingBody }),
+  verifyDeliveryUserIdOrAdmin,
   updateAverageRating
 );
 router.patch(
   "/deliveryMen/parcel/delivered/:id",
   verifyToken,
   validate({ params: objectIdParam, body: parcelDeliveredBody }),
+  verifyDeliveryUserIdOrAdmin,
   updateParcelDelivered
 );
 

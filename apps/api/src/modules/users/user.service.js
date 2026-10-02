@@ -16,7 +16,9 @@ const PAGE_SIZE = 5;
 /** Creates a user, or reports that the email is already registered. */
 const createUser = asyncHandler(async (req, res) => {
   const { users } = collections();
-  const user = req.body;
+  // Registration is open, so the role is never trusted from the client:
+  // every signup starts as a plain user; only admins can promote.
+  const user = { ...req.body, role: "user" };
 
   const existingUser = await users.findOne({ email: user.email });
   if (existingUser) {

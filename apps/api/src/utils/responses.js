@@ -15,7 +15,7 @@ function forbidden(res, message = "forbidden access") {
 }
 
 function notFound(res, message = "resource not found") {
-  return res.status(404).send({ message });
+  return res.status(404).send({ message, code: "NOT_FOUND" });
 }
 
 function badRequest(res, message) {

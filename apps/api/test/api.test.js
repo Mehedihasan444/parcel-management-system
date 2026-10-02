@@ -16,6 +16,12 @@ process.env.ACCESS_TOKEN_SECRET ||= "test-secret";
 process.env.STRIPE_SECRET_KEY ||= "sk_test_dummy";
 
 const { createApp } = require("../src/app");
+const jwt = require("jsonwebtoken");
+
+const tokenFor = (email) =>
+  jwt.sign({ email }, process.env.ACCESS_TOKEN_SECRET || "test-secret", {
+    expiresIn: "1h",
+  });
 
 let server;
 let base;
@@ -28,9 +34,10 @@ before(async () => {
 
 after(() => new Promise((resolve) => server.close(resolve)));
 
-async function req(method, path, { body, origin } = {}) {
+async function req(method, path, { body, origin, token } = {}) {
   const headers = { "Content-Type": "application/json" };
   if (origin) headers.Origin = origin;
+  if (token) headers.Authorization = `Bearer ${token}`;
   const res = await fetch(`${base}${path}`, {
     method,
     headers,
@@ -97,19 +104,31 @@ describe("request validation", () => {
     assert.ok(json.errors.some((e) => e.path === "email"));
   });
 
-  it("POST /create-payment-intent rejects non-positive prices", async () => {
+  it("POST /create-payment-intent requires auth, then validates price", async () => {
+    const anon = await req("POST", "/api/v1/create-payment-intent", { body: { price: 50 } });
+    assert.equal(anon.status, 401);
+
+    const token = tokenFor("buyer@example.com");
     for (const price of [-5, 0, "free"]) {
       const { status, json } = await req("POST", "/api/v1/create-payment-intent", {
         body: { price },
+        token,
       });
       assert.equal(status, 400, `price=${price} should be rejected`);
       assert.equal(json.errors[0].path, "price");
     }
   });
 
-  it("POST /payments requires email and transaction id", async () => {
+  it("POST /payments requires auth and matching ownership", async () => {
+    const anon = await req("POST", "/api/v1/payments", {
+      body: { email: "a@b.co", price: 50, transactionId: "tx_1" },
+    });
+    assert.equal(anon.status, 401);
+
+    const token = tokenFor("buyer@example.com");
     const { status, json } = await req("POST", "/api/v1/payments", {
       body: { email: "a@b.co" },
+      token,
     });
     assert.equal(status, 400);
     assert.ok(json.errors.some((e) => e.path === "transactionId"));

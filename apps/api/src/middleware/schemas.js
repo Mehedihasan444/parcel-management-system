@@ -51,7 +51,7 @@ const userBody = z
     name: z.string().min(1),
     email: z.string().email(),
     image: z.string().optional(),
-    role: z.enum(["user", "admin", "deliveryMen"]).optional(),
+    // No role: registration always creates plain users (see createUser).
   })
   .passthrough();
 
