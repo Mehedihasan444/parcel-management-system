@@ -15,12 +15,13 @@ a premium React client and a hardened Express + MongoDB API.
 
 | Layer | Technology                                                                     |
 | ----- | ------------------------------------------------------------------------------ |
-| `web` | React 19, Vite 7, React Router 7, TanStack Query 5, Tailwind CSS 4 + daisyUI 5 |
-| `api` | Express 5, MongoDB driver 6, JWT, Stripe 17, helmet + rate-limit + zod         |
+| `web` | React 19, Vite 8, React Router 7, TanStack Query 5, Tailwind CSS 4 + daisyUI 5 |
+| `api` | Express 5, MongoDB driver 7, JWT, Stripe 23, helmet + rate-limit + zod 4       |
 | Repo  | npm workspaces, Turborepo 2, Prettier 3                                        |
 
 Highlights: dark/light themes, glass sticky navbar, CSS-mesh hero with live-shipment
-card, code-split charts/maps/Stripe chunks, role-guarded dashboard, health-checked API.
+card, code-split charts/maps/Stripe chunks, role-guarded dashboard, installable PWA,
+health-checked API with zod validation on every write route.
 
 ## Getting started
 
@@ -84,7 +85,7 @@ apps/
       lib/          notify/confirm/pricing shared helpers (unit-tested)
     test/           Vitest suite: pricing, confirm dialog, notify facade
     scripts/
-      lint.js       zero-tolerance ESLint 9 (flat config)
+      lint.js       zero-tolerance ESLint 10 (flat config)
 docs/
   HISTORY.md        provenance, reference tags, recovery notes
 scripts/
@@ -177,7 +178,7 @@ than surfacing as a confusing error on the first request.
 
 The web app inherited 60 lint problems from the original repository. Successive
 modernizations paid them all off: `apps/web/scripts/lint.js` now enforces
-zero tolerance on ESLint 9 (flat config) — any problem fails the build.
+zero tolerance on ESLint 10 (flat config) — any problem fails the build.
 `npm run lint:fix --workspace=@parcel/web` auto-fixes what ESLint can.
 
 ## History

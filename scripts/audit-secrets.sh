@@ -31,11 +31,12 @@ echo
 # leaked secret, and must not be reported.
 PATTERNS='sk_live_|sk_test_[0-9A-Za-z]{8,}|pk_live_|whsec_|rk_live_|AIza[0-9A-Za-z_-]{35}|ghp_[0-9A-Za-z]{36}|github_pat_|gho_[0-9A-Za-z]{36}|-----BEGIN [A-Z ]*PRIVATE KEY-----|mongodb(\+srv)?://[^[:space:]"'"'"'$]+:[^[:space:]"'"'"'$]+@'
 
-# Placeholder values used by the test and smoke scripts. These are not
-# credentials. Note that the real Stripe test-key pattern above already
-# requires eight characters after the prefix, so a bare "sk_test_" never
-# matches on its own.
-ALLOW='sk_test_dummy|test-secret|test-user|test-password'
+# Placeholder values used by the test and smoke scripts, plus the angle-bracket
+# placeholders in apps/api/.env.example. These are not credentials: a real
+# leaked URI never contains the literal "<user>:<password>", so allowlisting
+# the literal cannot mask a genuine leak. (The script's own blob is skipped by
+# path instead, because spelling out a *pattern* there would match itself.)
+ALLOW='sk_test_dummy|test-secret|test-user|test-password|<user>:<password>'
 
 status=0
 
