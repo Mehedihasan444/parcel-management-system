@@ -13,11 +13,11 @@ a premium React client and a hardened Express + MongoDB API.
 
 ## Stack
 
-| Layer | Technology                                                                   |
-| ----- | ---------------------------------------------------------------------------- |
-| `web` | React 19, Vite 8, Router 7, Query 5, Tailwind 4 + daisyUI 5, TS (strict lib) |
-| `api` | Express 5, MongoDB driver 7, JWT, Stripe 23, helmet + rate-limit + zod 4     |
-| Repo  | npm workspaces, Turborepo 2, Prettier 3                                      |
+| Layer | Technology                                                                                                   |
+| ----- | ------------------------------------------------------------------------------------------------------------ |
+| `web` | React 19, Vite 8, Router 7, Query 5, Tailwind 4 + daisyUI 5, TS strict (lib/hooks/guards/config; pages next) |
+| `api` | Express 5, MongoDB driver 7, JWT, Stripe 23, helmet + rate-limit + zod 4                                     |
+| Repo  | npm workspaces, Turborepo 2, Prettier 3                                                                      |
 
 Highlights: dark/light themes, glass sticky navbar, CSS-mesh hero with live-shipment
 card, code-split charts/maps/Stripe chunks, role-guarded dashboard, installable PWA,
@@ -168,7 +168,7 @@ than surfacing as a confusing error on the first request.
 | Check             | Command                     | Notes                                         |
 | ----------------- | --------------------------- | --------------------------------------------- |
 | Format            | `npm run format:check`      | Prettier 3; CI fails on drift                 |
-| Typecheck         | `turbo run typecheck`       | Strict TS on web `src/lib` (expanding)        |
+| Typecheck         | `turbo run typecheck`       | Strict TS: lib, hooks, guards, config         |
 | API behaviour     | `npm run test`              | 12 node:test cases: health, validation, CORS  |
 | Route contract    | `npm run test`              | 29 routes probed over HTTP; fails on drift    |
 | Web unit tests    | `npm run test`              | 9 Vitest cases: pricing, confirm, notify      |
