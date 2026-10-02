@@ -1,4 +1,5 @@
 import { getAuth } from "firebase/auth";
+import type { Auth } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 
 // Every value comes from a Vite env var (see apps/web/.env.example). The API
@@ -15,6 +16,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
+const auth: Auth = getAuth(app);
 
 export default auth;

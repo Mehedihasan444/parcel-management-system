@@ -1,6 +1,4 @@
-import PropTypes from "prop-types";
-
-export default function Loading({ label = "Loading…" }) {
+export default function Loading({ label = "Loading…" }: { label?: string }) {
   return (
     <div
       className="grid min-h-[40vh] place-items-center"
@@ -15,7 +13,3 @@ export default function Loading({ label = "Loading…" }) {
     </div>
   );
 }
-
-Loading.propTypes = {
-  label: PropTypes.string,
-};

@@ -1,21 +1,22 @@
 import axios from "axios";
+import type { AxiosInstance } from "axios";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
 import { API_BASE_URL } from "../config/api";
 
-export const axiosSecure = axios.create({
+export const axiosSecure: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   timeout: 15000,
 });
 
 let mounted = 0;
-let reqId = null;
-let resId = null;
+let reqId: number | null = null;
+let resId: number | null = null;
 
-const useAxiosSecure = () => {
+const useAxiosSecure = (): AxiosInstance => {
   const navigate = useNavigate();
-  const { logOut } = useAuth();
+  const auth = useAuth();
 
   useEffect(() => {
     mounted += 1;
@@ -27,16 +28,16 @@ const useAxiosSecure = () => {
           if (token) config.headers.authorization = `Bearer ${token}`;
           return config;
         },
-        (error) => Promise.reject(error)
+        (error: unknown) => Promise.reject(error)
       );
 
       resId = axiosSecure.interceptors.response.use(
         (response) => response,
-        async (error) => {
-          const status = error.response?.status;
+        async (error: unknown) => {
+          const status = axios.isAxiosError(error) ? error.response?.status : undefined;
           if (status === 401 || status === 403) {
             try {
-              await logOut();
+              await auth?.logOut();
             } finally {
               navigate("/login");
             }
