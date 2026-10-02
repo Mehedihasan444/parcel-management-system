@@ -22,8 +22,10 @@ const AdminHomeLineChart = () => {
       counts.set(day, (counts.get(day) || 0) + 1);
     }
     const days = [...counts.entries()].sort(([a], [b]) => (a < b ? -1 : 1)).slice(-14);
-    let acc = 0;
-    return days.map(([label, value]) => ({ label, value: (acc += value) }));
+    return days.map(([label], i) => ({
+      label,
+      value: days.slice(0, i + 1).reduce((sum, [, v]) => sum + v, 0),
+    }));
   }, [bookings]);
 
   return (

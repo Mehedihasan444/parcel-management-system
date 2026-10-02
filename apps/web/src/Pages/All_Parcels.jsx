@@ -1,12 +1,12 @@
+import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import AllParcelsTable from "../Components/AllParcelsTable/AllParcelsTable";
-import { useEffect, useState } from "react";
 
 const All_Parcels = () => {
   const axiosSecure = useAxiosSecure();
-  const [bookings, setBookings] = useState([]);
+  const [range, setRange] = useState({ start: "", end: "" });
 
   const { data: users = [] } = useQuery({
     queryKey: ["users"],
@@ -16,7 +16,7 @@ const All_Parcels = () => {
     },
   });
 
-  const { data: allParcels = [], refetch } = useQuery({
+  const { data: allParcels = [] } = useQuery({
     queryKey: ["allParcels"],
     queryFn: async () => {
       const res = await axiosSecure.get("/users/admin/bookings");
@@ -24,35 +24,25 @@ const All_Parcels = () => {
     },
   });
 
-  useEffect(() => {
-    const filteredBookings = [];
-    for (let i = 0; i < users?.length; i++) {
-      const filteredData = allParcels.filter(
-        (item) =>
-          item?.email.toLowerCase() === users[i]?.email.toLowerCase() && item?.status === "pending"
-        //"On The Way"
-      );
-      filteredBookings.push(...filteredData);
-    }
-    setBookings(filteredBookings);
+  const pendingBookings = useMemo(() => {
+    const emails = new Set(users.map((u) => u?.email?.toLowerCase()));
+    return allParcels.filter(
+      (item) => emails.has(item?.email?.toLowerCase()) && item?.status === "pending"
+    );
   }, [allParcels, users]);
+
+  const bookings = useMemo(() => {
+    if (!range.start || !range.end) return pendingBookings;
+    return pendingBookings.filter((item) => {
+      const date = item?.requestedDeliveryDate;
+      return date >= range.start && date <= range.end;
+    });
+  }, [pendingBookings, range]);
 
   const handleFilter = (e) => {
     e.preventDefault();
     const form = e.target;
-    const start = form.startingDate.value;
-    const end = form.endingDate.value;
-    console.log(start, end);
-
-    const filteredByDate = bookings.filter((item) => {
-      let itemDate = item?.requestedDeliveryDate;
-      //.toLocaleDateString()
-      console.log(itemDate);
-      return itemDate >= start && itemDate <= end;
-    });
-    console.log(filteredByDate);
-    setBookings(filteredByDate);
-    refetch();
+    setRange({ start: form.startingDate.value, end: form.endingDate.value });
   };
 
   return (

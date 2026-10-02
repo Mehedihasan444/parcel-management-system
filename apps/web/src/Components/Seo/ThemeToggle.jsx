@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { FiMoon, FiSun } from "react-icons/fi";
 
-const THEMES = ["light", "dark"];
-
 function getInitial() {
   if (typeof window === "undefined") return "light";
   return localStorage.getItem("rph-theme") || document.documentElement.dataset.theme || "light";
@@ -30,5 +28,3 @@ export default function ThemeToggle() {
     </button>
   );
 }
-
-export { THEMES };

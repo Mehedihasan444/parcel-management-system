@@ -1,8 +1,10 @@
 {
   "description": "Parcel Management System — Turborepo monorepo containing the React web app and the Express API.",
   "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.1",
     "prettier": "^3.3.3",
-    "turbo": "^2.11.5"
+    "turbo": "^2.11.6",
+    "vite": "^8.3.2"
   },
   "engines": {
     "node": ">=20.0.0",

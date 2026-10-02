@@ -2,13 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import SectionTitle from "../Components/SectionTitle/SectionTitle";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import TotalSpendAmountCal from "../Components/TotalSpendAmountCal/TotalSpendAmountCal";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NumberOfParcelBooked from "../Components/NumberOfParcelBooked/NumberOfParcelBooked";
 
 const All_Users = () => {
   const axiosSecure = useAxiosSecure();
   const [currentPage, setCurrentPage] = useState(1);
-  const [numberOfPages, setNumberOfPages] = useState(1);
 
   const { data: allUsers, refetch } = useQuery({
     queryKey: ["allUsers", currentPage],
@@ -17,14 +16,7 @@ const All_Users = () => {
       return res.data;
     },
   });
-  useEffect(() => {
-    if (allUsers) {
-      const count = allUsers?.count;
-      // console.log(count);
-      const NumOfPages = Math.ceil(count / 5);
-      setNumberOfPages(NumOfPages);
-    }
-  }, [allUsers]);
+  const numberOfPages = Math.max(1, Math.ceil((allUsers?.count || 0) / 5));
   const handleMakeAdmin = async (email) => {
     // console.log(email);
     const info = {
@@ -45,7 +37,6 @@ const All_Users = () => {
       refetch();
     });
   };
-  refetch();
   const pages = [...Array(numberOfPages)];
   const handlePreviousPage = () => {
     if (currentPage > 1) {

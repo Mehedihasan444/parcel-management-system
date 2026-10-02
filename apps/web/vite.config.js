@@ -12,11 +12,20 @@ export default defineConfig({
     chunkSizeWarningLimit: 1200,
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ["react", "react-dom", "react-router-dom"],
-          query: ["@tanstack/react-query", "axios"],
-          maps: ["leaflet", "react-leaflet"],
-          payments: ["@stripe/react-stripe-js", "@stripe/stripe-js"],
+        // Object-form manualChunks was removed in Vite 8 (Rolldown).
+        manualChunks(id) {
+          if (!id.includes("node_modules")) return undefined;
+          if (id.includes("react-leaflet") || id.includes("/leaflet/")) return "maps";
+          if (id.includes("@stripe")) return "payments";
+          if (id.includes("@tanstack/react-query") || id.includes("/axios/")) return "query";
+          if (
+            id.includes("/react/") ||
+            id.includes("/react-dom/") ||
+            id.includes("/react-router") ||
+            id.includes("/scheduler/")
+          )
+            return "vendor";
+          return undefined;
         },
       },
     },
