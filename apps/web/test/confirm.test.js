@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { confirmAction } from "../src/lib/confirm.js";
+import { confirmAction } from "../src/lib/confirm";
 
 afterEach(() => {
   document.body.innerHTML = "";

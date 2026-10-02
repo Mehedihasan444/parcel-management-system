@@ -6,7 +6,7 @@
  * 150. Anything else (0, negative, empty, non-numeric) is invalid and
  * returns null so callers can show a warning instead of posting a bad price.
  */
-export function calculatePrice(weight) {
+export function calculatePrice(weight: unknown): number | null {
   const normalized = String(weight ?? "").trim();
   if (normalized === "1" || normalized === "2") {
     return normalized === "1" ? 50 : 100;
@@ -16,7 +16,12 @@ export function calculatePrice(weight) {
   return null;
 }
 
-export const PRICE_TIERS = [
+export interface PriceTier {
+  label: string;
+  price: number;
+}
+
+export const PRICE_TIERS: PriceTier[] = [
   { label: "Up to 1 kg", price: 50 },
   { label: "Up to 2 kg", price: 100 },
   { label: "Above 2 kg", price: 150 },

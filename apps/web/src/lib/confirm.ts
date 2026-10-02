@@ -1,3 +1,18 @@
+export type ConfirmTone = "warning" | "danger";
+
+export interface ConfirmOptions {
+  title?: string;
+  message?: string;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  tone?: ConfirmTone;
+}
+
+function required<T extends Element>(el: T | null, name: string): T {
+  if (!el) throw new Error(`confirm dialog is missing ${name}`);
+  return el;
+}
+
 /**
  * Promise-based confirm dialog rendered into a native <dialog> element.
  * Replaces Swal.fire({ showCancelButton: true }) confirms with a
@@ -11,7 +26,7 @@ export function confirmAction({
   confirmLabel = "Yes, continue",
   cancelLabel = "Cancel",
   tone = "warning",
-} = {}) {
+}: ConfirmOptions = {}): Promise<boolean> {
   return new Promise((resolve) => {
     const dialog = document.createElement("dialog");
     dialog.className = "modal";
@@ -34,23 +49,31 @@ export function confirmAction({
       <form method="dialog" class="modal-backdrop"><button>close</button></form>
     `;
 
-    const cleanup = (value) => {
+    const cleanup = (value: boolean) => {
       dialog.close();
       dialog.remove();
       resolve(value);
     };
 
-    dialog.querySelector("[data-confirm]").addEventListener("click", () => cleanup(true));
-    dialog.querySelector("[data-cancel]").addEventListener("click", () => cleanup(false));
+    required(dialog.querySelector("[data-confirm]"), "[data-confirm]").addEventListener(
+      "click",
+      () => cleanup(true)
+    );
+    required(dialog.querySelector("[data-cancel]"), "[data-cancel]").addEventListener("click", () =>
+      cleanup(false)
+    );
     dialog.addEventListener("cancel", () => cleanup(false));
-    dialog.querySelector(".modal-backdrop button").addEventListener("click", () => cleanup(false));
+    required(
+      dialog.querySelector<HTMLButtonElement>(".modal-backdrop button"),
+      "backdrop button"
+    ).addEventListener("click", () => cleanup(false));
 
     document.body.appendChild(dialog);
     dialog.showModal();
   });
 }
 
-function escapeHtml(s) {
+function escapeHtml(s: unknown): string {
   return String(s ?? "").replace(/[&<>"']/g, (c) => {
     switch (c) {
       case "&":

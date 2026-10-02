@@ -13,11 +13,11 @@ a premium React client and a hardened Express + MongoDB API.
 
 ## Stack
 
-| Layer | Technology                                                                     |
-| ----- | ------------------------------------------------------------------------------ |
-| `web` | React 19, Vite 8, React Router 7, TanStack Query 5, Tailwind CSS 4 + daisyUI 5 |
-| `api` | Express 5, MongoDB driver 7, JWT, Stripe 23, helmet + rate-limit + zod 4       |
-| Repo  | npm workspaces, Turborepo 2, Prettier 3                                        |
+| Layer | Technology                                                                   |
+| ----- | ---------------------------------------------------------------------------- |
+| `web` | React 19, Vite 8, Router 7, Query 5, Tailwind 4 + daisyUI 5, TS (strict lib) |
+| `api` | Express 5, MongoDB driver 7, JWT, Stripe 23, helmet + rate-limit + zod 4     |
+| Repo  | npm workspaces, Turborepo 2, Prettier 3                                      |
 
 Highlights: dark/light themes, glass sticky navbar, CSS-mesh hero with live-shipment
 card, code-split charts/maps/Stripe chunks, role-guarded dashboard, installable PWA,
@@ -41,20 +41,21 @@ npm run dev --workspace=@parcel/api    # api on http://localhost:5000
 
 ### All tasks
 
-| Command                | What it does                                      |
-| ---------------------- | ------------------------------------------------- |
-| `npm run dev`          | Runs both apps together                           |
-| `npm run dev:web`      | Runs only the web app                             |
-| `npm run dev:api`      | Runs only the API                                 |
-| `npm run build`        | Builds every app                                  |
-| `npm run test`         | API + web test suites (see below)                 |
-| `npm run lint`         | Lints every app                                   |
-| `npm run format`       | Prettier-write the repo                           |
-| `npm run format:check` | Fails on unformatted files (CI)                   |
-| `npm run check`        | Import resolution, docs, and secret audit         |
-| `npm run clean`        | Removes build output and `node_modules`           |
-| `npm run api:contract` | Prints the API endpoints the web app depends on   |
-| `npm run graph`        | Writes a task-graph visualisation to `graph.html` |
+| Command                                     | What it does                                      |
+| ------------------------------------------- | ------------------------------------------------- |
+| `npm run dev`                               | Runs both apps together                           |
+| `npm run dev:web`                           | Runs only the web app                             |
+| `npm run dev:api`                           | Runs only the API                                 |
+| `npm run build`                             | Builds every app                                  |
+| `npm run test`                              | API + web test suites (see below)                 |
+| `npm run typecheck --workspace=@parcel/web` | Strict `tsc --noEmit` (web `src/lib`)             |
+| `npm run lint`                              | Lints every app                                   |
+| `npm run format`                            | Prettier-write the repo                           |
+| `npm run format:check`                      | Fails on unformatted files (CI)                   |
+| `npm run check`                             | Import resolution, docs, and secret audit         |
+| `npm run clean`                             | Removes build output and `node_modules`           |
+| `npm run api:contract`                      | Prints the API endpoints the web app depends on   |
+| `npm run graph`                             | Writes a task-graph visualisation to `graph.html` |
 
 ## Layout
 
@@ -167,6 +168,7 @@ than surfacing as a confusing error on the first request.
 | Check             | Command                     | Notes                                         |
 | ----------------- | --------------------------- | --------------------------------------------- |
 | Format            | `npm run format:check`      | Prettier 3; CI fails on drift                 |
+| Typecheck         | `turbo run typecheck`       | Strict TS on web `src/lib` (expanding)        |
 | API behaviour     | `npm run test`              | 12 node:test cases: health, validation, CORS  |
 | Route contract    | `npm run test`              | 29 routes probed over HTTP; fails on drift    |
 | Web unit tests    | `npm run test`              | 9 Vitest cases: pricing, confirm, notify      |

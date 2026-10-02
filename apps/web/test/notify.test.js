@@ -9,7 +9,7 @@ vi.mock("sonner", () => ({
   },
 }));
 
-const { notify } = await import("../src/lib/notify.js");
+const { notify } = await import("../src/lib/notify");
 const { toast } = await import("sonner");
 
 describe("notify", () => {

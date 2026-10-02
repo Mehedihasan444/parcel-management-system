@@ -1,6 +1,6 @@
 /**
  * jsdom lacks HTMLDialogElement.showModal/close — stub them so
- * lib/confirm.js can be unit-tested like a real browser dialog.
+ * lib/confirm.ts can be unit-tested like a real browser dialog.
  */
 if (typeof HTMLDialogElement !== "undefined") {
   if (!HTMLDialogElement.prototype.showModal) {

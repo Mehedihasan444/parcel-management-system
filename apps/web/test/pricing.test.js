@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { calculatePrice, PRICE_TIERS } from "../src/lib/pricing.js";
+import { calculatePrice, PRICE_TIERS } from "../src/lib/pricing";
 
 describe("calculatePrice", () => {
   it("charges the 1kg and 2kg tiers", () => {

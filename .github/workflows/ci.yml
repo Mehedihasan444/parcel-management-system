@@ -40,8 +40,8 @@ jobs:
       - name: Check documentation links and commands
         run: npm run check:docs
 
-      - name: Build, lint and test
-        run: npx turbo run build test lint
+      - name: Build, lint, typecheck and test
+        run: npx turbo run build test lint typecheck
 
       - name: Audit history for secrets
         run: npm run audit:secrets
