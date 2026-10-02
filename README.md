@@ -158,10 +158,25 @@ than surfacing as a confusing error on the first request.
 
 ### `apps/web`
 
-| Variable            | Purpose                                               |
-| ------------------- | ----------------------------------------------------- |
-| `VITE_API_BASE_URL` | API base URL (default `http://localhost:5000/api/v1`) |
-| `VITE_FIREBASE_*`   | Firebase Auth configuration                           |
+| Variable                 | Purpose                                               |
+| ------------------------ | ----------------------------------------------------- |
+| `VITE_API_BASE_URL`      | API base URL (default `http://localhost:5000/api/v1`) |
+| `VITE_FIREBASE_*`        | Firebase Auth configuration                           |
+| `VITE_IMAGE_HOSTING_KEY` | imgbb key for profile-photo uploads (optional)        |
+
+## Authorization
+
+Every API route authenticates with JWT, then authorizes — the dashboard's role
+screens are cosmetic and the server never trusts client-supplied identity:
+
+| Rule                                        | Enforced by                                                    |
+| ------------------------------------------- | -------------------------------------------------------------- |
+| Admin roster, feeds, assignment, role edits | `verifyAdmin` (DB-checked role)                                |
+| Own profile, bookings, payments             | ownership guards re-checked against Mongo                      |
+| Rider delivery transitions                  | assignee match on `deliveryMenID`, else admin                  |
+| Signup                                      | `role` forced to `"user"` server-side; promotion is admin-only |
+
+`apps/api/test/authz.test.js` proves the matrix (20 cases) on in-memory Mongo.
 
 ## Quality gates
 

@@ -1,4 +1,4 @@
-import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
 import useAuth from "../../Hooks/useAuth";
 import { useLocation, useNavigate } from "react-router-dom";
 // import useAxiosPublic from "../../Hooks/useAxiosPublic";
@@ -27,7 +27,7 @@ const SocialLogin = () => {
           if (res.data.insertedId) {
             notify.success("Your account is registered successfully");
           }
-          navigate(location?.state || "/");
+          navigate(location?.state?.from || "/");
         });
       })
       .catch((error) => {
@@ -38,16 +38,13 @@ const SocialLogin = () => {
   return (
     <div>
       <div className="flex gap-5 justify-center">
-        <button>
-          <FaFacebook className="text-4xl " type="" />
-        </button>
-        <button>
-          <FaGoogle onClick={handleGoogleLogin} className="text-4xl " type=""></FaGoogle>
-        </button>
-        <button>
-          <FaGithub className="text-4xl " type=""></FaGithub>
+        <button type="button" aria-label="Continue with Google" onClick={handleGoogleLogin}>
+          <FaGoogle className="text-4xl" />
         </button>
       </div>
+      <p className="mt-2 text-center text-xs text-base-content/50">
+        Google sign-in only — connect Facebook/GitHub OAuth in Firebase to add more.
+      </p>
     </div>
   );
 };
