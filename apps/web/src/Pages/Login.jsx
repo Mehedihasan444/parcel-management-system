@@ -1,79 +1,69 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { notify } from "../lib/notify";
 import useAuth from "../Hooks/useAuth";
-import loginImg from "../assets/authentication2.webp";
 import SocialLogin from "../Components/SocialLogin/SocialLogin";
-import DocumentTitle from "../Components/Seo/DocumentTitle";
+import AuthLayout from "../Components/Auth/AuthLayout";
+import { AuthField, PasswordField } from "../Components/Auth/AuthFields";
+import { FiMail } from "react-icons/fi";
 
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
+  const [pending, setPending] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     const form = e.target;
+    setPending(true);
     try {
       await login(form.email.value, form.password.value);
-      notify.success("Login successful");
+      notify.success("Welcome back — login successful");
       navigate(location?.state?.from || "/");
     } catch (error) {
       notify.error(error?.message || "Login failed");
+    } finally {
+      setPending(false);
     }
   };
 
   return (
-    <div className="flex justify-between gap-10 items-center h-screen max-w-6xl mx-auto">
-      <DocumentTitle title="RapidParcelHub | Login" />
-      <div className="flex-1">
-        <img
-          src={loginImg}
-          alt="Parcel delivery illustration"
-          loading="lazy"
-          decoding="async"
-          width="596"
-          height="419"
+    <AuthLayout
+      title="Welcome back"
+      subtitle="Log in to book, track and manage your parcels."
+      docTitle="RapidParcelHub | Login"
+    >
+      <form onSubmit={handleLogin} className="space-y-4">
+        <AuthField
+          id="email"
+          name="email"
+          label="Email address"
+          icon={FiMail}
+          type="email"
+          placeholder="you@example.com"
+          required
+          autoComplete="email"
         />
-      </div>
-      <div className="shadow-md p-10 flex-1">
-        <h1 className="text-center font-bold text-2xl">Please Login </h1>
-        <form onSubmit={handleLogin}>
-          <div className="mb-3">
-            <label className="form-label" htmlFor="exampleInputEmail1">
-              Email address
-            </label>
-            <input
-              type="email"
-              name="email"
-              className="form-control border p-3  w-full"
-              placeholder="Enter email"
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label" htmlFor="exampleInputPassword1">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              className="form-control border p-3  w-full"
-              placeholder="Password"
-              required
-            />
-          </div>
-
-          <button type="submit" className="btn bg-[#D1A054] text-white w-full ">
-            Login
-          </button>
-        </form>
-        <h3 className="text-[#D1A054] font-medium text-center mt-2">
-          New here? <a href="/register">Create a New Account</a>
-        </h3>
-        <p className="text-center mb-3">Or sign in with </p>
-        <SocialLogin></SocialLogin>
-      </div>
-    </div>
+        <PasswordField name="password" placeholder="Your password" required autoComplete="current-password" />
+        <button
+          type="submit"
+          disabled={pending}
+          className="btn w-full border-0 bg-brand-500 font-semibold text-white hover:bg-brand-600 disabled:opacity-70"
+        >
+          {pending ? <span className="loading loading-spinner loading-sm" aria-hidden="true" /> : null}
+          {pending ? "Logging in…" : "Log in"}
+        </button>
+      </form>
+      <p className="mt-5 text-center text-sm text-base-content/65">
+        New here?{" "}
+        <Link to="/register" className="font-semibold text-brand-600 hover:underline">
+          Create a new account
+        </Link>
+      </p>
+      <div className="divider text-xs text-base-content/50">Or continue with</div>
+      <SocialLogin />
+    </AuthLayout>
   );
 };
 

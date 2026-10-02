@@ -1,17 +1,21 @@
-import loginImg from "../assets/authentication2.webp";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { notify } from "../lib/notify";
 import useAuth from "../Hooks/useAuth";
 import SocialLogin from "../Components/SocialLogin/SocialLogin";
-import DocumentTitle from "../Components/Seo/DocumentTitle";
+import AuthLayout from "../Components/Auth/AuthLayout";
+import { AuthField, PasswordField } from "../Components/Auth/AuthFields";
+import { FiMail, FiUser } from "react-icons/fi";
 
 const Register = () => {
   const navigate = useNavigate();
   const { createUser } = useAuth();
+  const [pending, setPending] = useState(false);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
     const form = e.target;
+    setPending(true);
     try {
       await createUser({
         name: form.name.value,
@@ -22,75 +26,63 @@ const Register = () => {
       navigate("/");
     } catch (error) {
       notify.error(error?.message || "Registration failed");
+    } finally {
+      setPending(false);
     }
   };
 
   return (
-    <div className="flex flex-row-reverse justify-between gap-10 items-center h-screen max-w-6xl mx-auto">
-      <DocumentTitle title="RapidParcelHub | Register" />
-      <div className="flex-1">
-        <img
-          src={loginImg}
-          alt="Parcel delivery illustration"
-          loading="lazy"
-          decoding="async"
-          width="596"
-          height="419"
+    <AuthLayout
+      title="Create your account"
+      subtitle="Free forever to start — book your first parcel in a minute."
+      docTitle="RapidParcelHub | Register"
+    >
+      <form onSubmit={handleSignUp} className="space-y-4">
+        <AuthField
+          id="name"
+          name="name"
+          label="Full name"
+          icon={FiUser}
+          type="text"
+          placeholder="Jane Doe"
+          required
+          autoComplete="name"
         />
-      </div>
-      <div className="shadow-md p-10 flex-1">
-        <h1 className="text-center font-bold text-2xl">Sign Up </h1>
-        <form onSubmit={handleSignUp}>
-          <div className="mb-3">
-            <label className="form-label" htmlFor="exampleInputEmail1">
-              Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              className="form-control border p-3  w-full"
-              placeholder="Enter your Name"
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label" htmlFor="exampleInputEmail1">
-              Email address
-            </label>
-            <input
-              type="email"
-              name="email"
-              className="form-control border p-3  w-full"
-              placeholder="Enter email"
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label" htmlFor="exampleInputPassword1">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              className="form-control border p-3  w-full"
-              placeholder="Password (min 8 characters)"
-              minLength={8}
-              required
-            />
-          </div>
-
-          <button type="submit" className="btn bg-[#D1A054] text-white w-full ">
-            Sign Up
-          </button>
-        </form>
-        <h3 className="text-[#D1A054] font-medium text-center mt-2">
-          Already registered? <a href="/login"> Go to login</a>
-        </h3>
-        <p className="text-center mb-3">Or sign up with </p>
-
-        <SocialLogin></SocialLogin>
-      </div>
-    </div>
+        <AuthField
+          id="email"
+          name="email"
+          label="Email address"
+          icon={FiMail}
+          type="email"
+          placeholder="you@example.com"
+          required
+          autoComplete="email"
+        />
+        <PasswordField
+          name="password"
+          placeholder="Min 8 characters"
+          minLength={8}
+          required
+          autoComplete="new-password"
+        />
+        <button
+          type="submit"
+          disabled={pending}
+          className="btn w-full border-0 bg-brand-500 font-semibold text-white hover:bg-brand-600 disabled:opacity-70"
+        >
+          {pending ? <span className="loading loading-spinner loading-sm" aria-hidden="true" /> : null}
+          {pending ? "Creating account…" : "Sign up"}
+        </button>
+      </form>
+      <p className="mt-5 text-center text-sm text-base-content/65">
+        Already registered?{" "}
+        <Link to="/login" className="font-semibold text-brand-600 hover:underline">
+          Go to login
+        </Link>
+      </p>
+      <div className="divider text-xs text-base-content/50">Or sign up with</div>
+      <SocialLogin />
+    </AuthLayout>
   );
 };
 
