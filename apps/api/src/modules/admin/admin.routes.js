@@ -11,12 +11,6 @@ const router = express.Router();
  * wins over the parameter route.
  */
 router.get("/users/collection", verifyToken, verifyAdmin, listUserCollection);
-router.get(
-  "/:email",
-  verifyToken,
-  validate({ params: emailParam }),
-  verifySelfOrAdmin,
-  isAdmin
-);
+router.get("/:email", verifyToken, validate({ params: emailParam }), verifySelfOrAdmin, isAdmin);
 
 module.exports = router;
