@@ -4,24 +4,19 @@
  * Runs on Node's built-in test runner: `npm test --workspace=@parcel/api`.
  * Every case boots the real Express app on an ephemeral port and talks HTTP,
  * so middleware ordering (rate-limit → CORS → auth → validation) is exercised
- * exactly as deployed. Cases that need Mongo are left to the route-contract
- * probe, which asserts router reachability without a connection.
+ * exactly as deployed. Cases that need Mongo live in authz.test.js, which
+ * seeds an in-memory database and signs in for real.
  */
 const { describe, it, before, after } = require("node:test");
 const assert = require("node:assert/strict");
 
 process.env.DATABASE_LOCAL_USERNAME ||= "test-user";
 process.env.DATABASE_LOCAL_PASSWORD ||= "test-password";
-process.env.ACCESS_TOKEN_SECRET ||= "test-secret";
 process.env.STRIPE_SECRET_KEY ||= "sk_test_dummy";
+process.env.BETTER_AUTH_SECRET ||= "test-secret-0123456789abcdef-test-secret";
+process.env.BETTER_AUTH_URL ||= "http://localhost:5000";
 
 const { createApp } = require("../src/app");
-const jwt = require("jsonwebtoken");
-
-const tokenFor = (email) =>
-  jwt.sign({ email }, process.env.ACCESS_TOKEN_SECRET || "test-secret", {
-    expiresIn: "1h",
-  });
 
 let server;
 let base;
@@ -82,13 +77,6 @@ describe("health and root", () => {
 });
 
 describe("request validation", () => {
-  it("POST /jwt rejects a body without email", async () => {
-    const { status, json } = await req("POST", "/api/v1/jwt", { body: { probe: true } });
-    assert.equal(status, 400);
-    assert.equal(json.message, "Validation failed");
-    assert.equal(json.errors[0].path, "email");
-  });
-
   it("POST /users lists every missing field", async () => {
     const { status, json } = await req("POST", "/api/v1/users", { body: {} });
     assert.equal(status, 400);
@@ -104,34 +92,16 @@ describe("request validation", () => {
     assert.ok(json.errors.some((e) => e.path === "email"));
   });
 
-  it("POST /create-payment-intent requires auth, then validates price", async () => {
+  it("POST /create-payment-intent requires auth", async () => {
     const anon = await req("POST", "/api/v1/create-payment-intent", { body: { price: 50 } });
     assert.equal(anon.status, 401);
-
-    const token = tokenFor("buyer@example.com");
-    for (const price of [-5, 0, "free"]) {
-      const { status, json } = await req("POST", "/api/v1/create-payment-intent", {
-        body: { price },
-        token,
-      });
-      assert.equal(status, 400, `price=${price} should be rejected`);
-      assert.equal(json.errors[0].path, "price");
-    }
   });
 
-  it("POST /payments requires auth and matching ownership", async () => {
+  it("POST /payments requires auth", async () => {
     const anon = await req("POST", "/api/v1/payments", {
       body: { email: "a@b.co", price: 50, transactionId: "tx_1" },
     });
     assert.equal(anon.status, 401);
-
-    const token = tokenFor("buyer@example.com");
-    const { status, json } = await req("POST", "/api/v1/payments", {
-      body: { email: "a@b.co" },
-      token,
-    });
-    assert.equal(status, 400);
-    assert.ok(json.errors.some((e) => e.path === "transactionId"));
   });
 });
 

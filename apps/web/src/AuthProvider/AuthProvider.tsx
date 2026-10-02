@@ -22,10 +22,12 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const ensureAppProfile = async (profile: AppUser) => {
     // Idempotent: the API reports "user already exists" for returning users.
+    // image may be null (email signups have no photo); the schema only
+    // accepts string|undefined, so omit it rather than sending null.
     await axiosPublic.post("/users", {
       name: profile.name,
       email: profile.email,
-      image: profile.image,
+      image: profile.image ?? undefined,
       role: "user",
     });
   };

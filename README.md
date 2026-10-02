@@ -16,12 +16,13 @@ a premium React client and a hardened Express + MongoDB API.
 | Layer | Technology                                                                                                   |
 | ----- | ------------------------------------------------------------------------------------------------------------ |
 | `web` | React 19, Vite 8, Router 7, Query 5, Tailwind 4 + daisyUI 5, TS strict (lib/hooks/guards/config; pages next) |
-| `api` | Express 5, MongoDB driver 7, JWT, Stripe 23, helmet + rate-limit + zod 4                                     |
+| `api` | Express 5, MongoDB 7, Better Auth 1.7 (Bearer sessions), Stripe 23, helmet + rate-limit + zod 4              |
 | Repo  | npm workspaces, Turborepo 2, Prettier 3                                                                      |
 
 Highlights: dark/light themes, glass sticky navbar, CSS-mesh hero with live-shipment
 card, code-split charts/maps/Stripe chunks, role-guarded dashboard, installable PWA,
-health-checked API with zod validation on every write route.
+health-checked API with zod validation and DB-checked authorization on every route,
+Better Auth email/password (+ optional Google) with Bearer-token API sessions.
 
 ## Getting started
 
@@ -48,7 +49,7 @@ npm run dev --workspace=@parcel/api    # api on http://localhost:5000
 | `npm run dev:api`                           | Runs only the API                                 |
 | `npm run build`                             | Builds every app                                  |
 | `npm run test`                              | API + web test suites (see below)                 |
-| `npm run typecheck --workspace=@parcel/web` | Strict `tsc --noEmit` (web `src/lib`)             |
+| `npm run typecheck --workspace=@parcel/web` | Strict `tsc --noEmit` (lib/hooks/guards/config)   |
 | `npm run lint`                              | Lints every app                                   |
 | `npm run format`                            | Prettier-write the repo                           |
 | `npm run format:check`                      | Fails on unformatted files (CI)                   |
@@ -64,7 +65,8 @@ apps/
   api/
     src/
       config/       env validation and the single MongoClient
-      middleware/   auth guards, zod validate, 404, central error handler
+      auth/         Better Auth instance (Mongo adapter, bearer, email+Google)
+      middleware/   session auth, ownership/role guards, zod validate, 404/errors
       modules/      one folder per feature, each with routes + service
       utils/        asyncHandler, ObjectId parsing, response helpers
       routes/       mounts every feature router
@@ -75,15 +77,16 @@ apps/
       smoke.js                 boots the app and exercises live routes
     test/
       api.test.js              health, validation, CORS, 404 over real HTTP
+      authz.test.js            23 forbidden-vs-ok cases on in-memory Mongo
   web/
     src/
       config/       runtime config read from Vite env vars
       Components/   Seo (DocumentTitle, ThemeToggle), Shared, SectionTitle, charts
       Pages/        route-level screens (Home lazy-splits Admin/Stripe/Map)
-      Hooks/        auth, singleton axios, role guards
-      Firebase/     Firebase Auth initialisation
+      Hooks/        typed auth/axios/role hooks (singleton interceptors)
+      AuthProvider/ Better Auth session provider + typed context
       Layouts/      Main (site) + Dashboard (role sidebar)
-      lib/          notify/confirm/pricing shared helpers (unit-tested)
+      lib/          auth-client/notify/confirm/pricing (typed, unit-tested)
     test/           Vitest suite: pricing, confirm dialog, notify facade
     scripts/
       lint.js       zero-tolerance ESLint 10 (flat config)
@@ -103,9 +106,11 @@ The server was originally a single 443-line `index.js`. It is now split by
 feature, so a change to one area does not require reading the whole server:
 
 ```
+Authentication lives in Better Auth at /api/auth/* (email/password +
+optional Google, Bearer-token API sessions). The old POST /jwt route is gone.
+
 src/routes/index.js
    |
-   +-- modules/auth/      POST /jwt
    +-- modules/users/     /users, /users/admin, /users/:email
    +-- modules/bookings/  /users/bookings/..., /users/booking/:id
    +-- modules/delivery/  /deliveryMen/..., /users/admin/deliveryMens
@@ -126,7 +131,7 @@ before it can reach Stripe or Mongo.
 **Mount order is load-bearing.** Several paths overlap — `GET /users/admin`
 sits next to `GET /users/:email` — so routers declare literal segments before
 parameter segments. `apps/api/scripts/route-contract.test.js` boots the app and
-probes all 29 routes over real HTTP, so a renamed, dropped or shadowed route
+probes all 28 routes over real HTTP, so a renamed, dropped or shadowed route
 fails the build instead of breaking the client at runtime.
 
 ## Environment
@@ -141,17 +146,20 @@ cp apps/web/.env.example apps/web/.env
 
 ### `apps/api`
 
-| Variable                  | Purpose                                            |
-| ------------------------- | -------------------------------------------------- |
-| `PORT`                    | API port (default `5000`)                          |
-| `MONGODB_URI`             | Full Mongo URI (preferred; overrides split pair)   |
-| `DATABASE_LOCAL_USERNAME` | MongoDB Atlas username (legacy split style)        |
-| `DATABASE_LOCAL_PASSWORD` | MongoDB Atlas password (legacy split style)        |
-| `DATABASE_NAME`           | DB name (default `parcelManagementDB`)             |
-| `ACCESS_TOKEN_SECRET`     | JWT signing secret for access tokens               |
-| `STRIPE_SECRET_KEY`       | Stripe secret key for payment intents              |
-| `CORS_ORIGINS`            | Comma-separated allowed origins                    |
-| `TRUST_PROXY`             | Set `1` behind Render/Fly/Nginx for real-IP limits |
+| Variable                  | Purpose                                                     |
+| ------------------------- | ----------------------------------------------------------- |
+| `PORT`                    | API port (default `5000`)                                   |
+| `MONGODB_URI`             | Full Mongo URI (preferred; overrides split pair)            |
+| `DATABASE_LOCAL_USERNAME` | MongoDB Atlas username (legacy split style)                 |
+| `DATABASE_LOCAL_PASSWORD` | MongoDB Atlas password (legacy split style)                 |
+| `DATABASE_NAME`           | DB name (default `parcelManagementDB`)                      |
+| `BETTER_AUTH_SECRET`      | Session/token secret, min 32 chars (see below)              |
+| `BETTER_AUTH_URL`         | Public origin of this API, e.g. dev `http://localhost:5000` |
+| `GOOGLE_CLIENT_ID`        | Google OAuth client id (optional; email auth always works)  |
+| `GOOGLE_CLIENT_SECRET`    | Google OAuth secret (optional)                              |
+| `STRIPE_SECRET_KEY`       | Stripe secret key for payment intents                       |
+| `CORS_ORIGINS`            | Comma-separated allowed origins                             |
+| `TRUST_PROXY`             | Set `1` behind Render/Fly/Nginx for real-IP limits          |
 
 Missing values fail fast at startup with a message naming the variable, rather
 than surfacing as a confusing error on the first request.
@@ -161,13 +169,13 @@ than surfacing as a confusing error on the first request.
 | Variable                 | Purpose                                               |
 | ------------------------ | ----------------------------------------------------- |
 | `VITE_API_BASE_URL`      | API base URL (default `http://localhost:5000/api/v1`) |
-| `VITE_FIREBASE_*`        | Firebase Auth configuration                           |
 | `VITE_IMAGE_HOSTING_KEY` | imgbb key for profile-photo uploads (optional)        |
 
 ## Authorization
 
-Every API route authenticates with JWT, then authorizes — the dashboard's role
-screens are cosmetic and the server never trusts client-supplied identity:
+Every API route authenticates with a Better Auth session (Bearer `access-token`,
+cookies as fallback), then authorizes — the dashboard's role screens are cosmetic
+and the server never trusts client-supplied identity:
 
 | Rule                                        | Enforced by                                                    |
 | ------------------------------------------- | -------------------------------------------------------------- |
@@ -176,7 +184,8 @@ screens are cosmetic and the server never trusts client-supplied identity:
 | Rider delivery transitions                  | assignee match on `deliveryMenID`, else admin                  |
 | Signup                                      | `role` forced to `"user"` server-side; promotion is admin-only |
 
-`apps/api/test/authz.test.js` proves the matrix (20 cases) on in-memory Mongo.
+`apps/api/test/authz.test.js` proves the matrix (23 cases, all on real
+sign-up/sign-in sessions) on in-memory Mongo.
 
 ## Quality gates
 
@@ -184,8 +193,9 @@ screens are cosmetic and the server never trusts client-supplied identity:
 | ----------------- | --------------------------- | --------------------------------------------- |
 | Format            | `npm run format:check`      | Prettier 3; CI fails on drift                 |
 | Typecheck         | `turbo run typecheck`       | Strict TS: lib, hooks, guards, config         |
-| API behaviour     | `npm run test`              | 12 node:test cases: health, validation, CORS  |
-| Route contract    | `npm run test`              | 29 routes probed over HTTP; fails on drift    |
+| API behaviour     | `npm run test`              | 11 node:test cases: health, validation, CORS  |
+| API auth matrix   | `npm run test`              | 23 cases on real Better Auth sessions         |
+| Route contract    | `npm run test`              | 28 routes probed over HTTP; fails on drift    |
 | Web unit tests    | `npm run test`              | 9 Vitest cases: pricing, confirm, notify      |
 | Lint              | `npm run lint`              | Zero-tolerance; see below                     |
 | Import resolution | `npm run check:imports`     | Catches case-mismatched paths                 |
@@ -214,11 +224,11 @@ a single import commit.
 See [`docs/HISTORY.md`](docs/HISTORY.md) for the full provenance table, how the
 merge was performed, and recovery instructions.
 
-> **Security note.** A Firebase API key was committed in the original client
-> repository. It has been removed from this repository's history and moved to
-> `VITE_FIREBASE_API_KEY`, but it is still present in the archives and on the
-> original GitHub repositories. **Rotate it** and purge those histories before
-> deploying. See the security section of [`docs/HISTORY.md`](docs/HISTORY.md).
+> **Security note.** Firebase is gone — auth is now Better Auth (email/password
+> plus optional Google) with secrets in `BETTER_AUTH_SECRET`, so no Firebase key
+> rotation is needed for this app. The original client repositories still contain
+> their old Firebase key in their own histories; rotate it there if those apps
+> are ever deployed. See [`docs/HISTORY.md`](docs/HISTORY.md) for provenance.
 
 ## License
 

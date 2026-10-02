@@ -24,7 +24,12 @@ const OAuthCallback = () => {
     }
     synced.current = true;
     axiosPublic
-      .post("/users", { name: user.name, email: user.email, image: user.image, role: "user" })
+      .post("/users", {
+        name: user.name,
+        email: user.email,
+        image: user.image ?? undefined,
+        role: "user",
+      })
       .catch(() => {
         // The profile write is best-effort here; admins can repair later.
       })

@@ -86,6 +86,7 @@ for (const doc of DOCS) {
 
 // 3. Paths mentioned inside fenced code blocks as repo files should exist.
 const TREE_ENTRIES = [
+  "apps/api/src/auth",
   "apps/api/src/config",
   "apps/api/src/middleware",
   "apps/api/src/modules",
@@ -95,11 +96,13 @@ const TREE_ENTRIES = [
   "apps/api/src/server.js",
   "apps/api/scripts/route-contract.test.js",
   "apps/api/scripts/smoke.js",
+  "apps/api/test/authz.test.js",
   "apps/web/src/config",
   "apps/web/src/Components",
   "apps/web/src/Pages",
   "apps/web/src/Hooks",
-  "apps/web/src/Firebase",
+  "apps/web/src/AuthProvider",
+  "apps/web/src/lib",
   "apps/web/scripts/lint.js",
   "docs/HISTORY.md",
   "scripts/audit-secrets.sh",

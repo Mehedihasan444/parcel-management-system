@@ -41,7 +41,11 @@ function getAuth() {
     // Google is optional: local email auth always works; the client shows the
     // Google button regardless and surfaces a clear error when unconfigured.
     ...(googleClientId && googleClientSecret
-      ? { socialProviders: { google: { clientId: googleClientId, clientSecret: googleClientSecret } } }
+      ? {
+          socialProviders: {
+            google: { clientId: googleClientId, clientSecret: googleClientSecret },
+          },
+        }
       : {}),
     // Bearer tokens (localStorage `access-token`, same as the old JWT flow)
     // authenticate API calls; cookies remain a fallback (OAuth logins).

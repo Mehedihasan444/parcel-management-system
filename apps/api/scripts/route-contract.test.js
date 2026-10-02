@@ -17,6 +17,9 @@
  * Any status other than 404 means the router resolved the request to a real
  * handler, which is exactly what must not regress during modularisation.
  *
+ * Authentication now lives in Better Auth at /api/auth/* (mounted in src/app.js),
+ * so the old POST /jwt entry was deliberately removed: 28 routes remain.
+ *
  * Run with:  npm run test --workspace=@parcel/api
  */
 const assert = require("assert");
@@ -24,7 +27,7 @@ const assert = require("assert");
 // The config module validates these at require() time. No connection is made.
 process.env.DATABASE_LOCAL_USERNAME ||= "test-user";
 process.env.DATABASE_LOCAL_PASSWORD ||= "test-password";
-process.env.ACCESS_TOKEN_SECRET ||= "test-secret";
+process.env.BETTER_AUTH_SECRET ||= "test-secret-0123456789abcdef-test-secret";
 process.env.STRIPE_SECRET_KEY ||= "sk_test_dummy";
 
 const { createApp } = require("../src/app");
@@ -36,7 +39,6 @@ const { createApp } = require("../src/app");
  */
 const EXPECTED_ROUTES = [
   ["GET", "/"],
-  ["POST", "/api/v1/jwt"],
   ["POST", "/api/v1/users"],
   ["GET", "/api/v1/users/admin"],
   ["GET", "/api/v1/users/:email"],
@@ -141,7 +143,7 @@ async function run() {
     process.exit(1);
   }
 
-  console.log(`PASS: all ${EXPECTED_ROUTES.length} routes match the original API exactly.`);
+  console.log(`PASS: all ${EXPECTED_ROUTES.length} routes match the expected contract.`);
 }
 
 run().catch((err) => {

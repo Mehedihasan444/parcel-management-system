@@ -4,3 +4,4 @@ coverage
 .turbo
 node_modules
 graph.html
+.kilo/

@@ -86,7 +86,6 @@ const paymentBody = z
   })
   .passthrough();
 
-
 const deliveryStatusBody = z.object({ status: z.string().min(1) }).passthrough();
 
 const averageRatingBody = z.object({ rating: z.coerce.number().min(0).max(5) }).passthrough();
