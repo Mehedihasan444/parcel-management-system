@@ -41,7 +41,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (email: string, password: string) => {
     const res = await authClient.signIn.email({ email, password });
     if (res.error) throw new Error(res.error.message || "Login failed");
-    // The Bearer token is stored by the auth client's global onSuccess.
+    // Wait for session to be available (Better Auth updates session async)
+    await new Promise((r) => setTimeout(r, 100));
   };
 
   const googleLogin = async () => {
