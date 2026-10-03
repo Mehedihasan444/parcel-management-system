@@ -7,6 +7,9 @@ const {
   assignDeliveryMan,
   deleteBooking,
   updateBooking,
+  bulkAssignDeliveryMen,
+  bulkUpdateStatus,
+  bulkDeleteBookings,
 } = require("./booking.service");
 const {
   verifyToken,
@@ -22,6 +25,9 @@ const {
   assignBody,
   emailParam,
   objectIdParam,
+  bulkAssignBody,
+  bulkStatusBody,
+  bulkDeleteBody,
 } = require("../../middleware/schemas");
 
 const router = express.Router();
@@ -75,6 +81,27 @@ router.patch(
   validate({ params: objectIdParam, body: bookingUpdateBody }),
   verifyBookingOwnerOrAdmin,
   updateBooking
+);
+router.post(
+  "/bookings/bulk/assign",
+  verifyToken,
+  validate({ body: bulkAssignBody }),
+  verifyAdmin,
+  bulkAssignDeliveryMen
+);
+router.patch(
+  "/bookings/bulk/status",
+  verifyToken,
+  validate({ body: bulkStatusBody }),
+  verifyAdmin,
+  bulkUpdateStatus
+);
+router.delete(
+  "/bookings/bulk",
+  verifyToken,
+  validate({ body: bulkDeleteBody }),
+  verifyAdmin,
+  bulkDeleteBookings
 );
 
 module.exports = router;

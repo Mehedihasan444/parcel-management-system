@@ -7,7 +7,6 @@ const { toObjectId } = require("../../utils/ids");
  * delivery man, cancellation and in-place editing.
  */
 
-/** Fields the update-booking screen is allowed to overwrite. */
 const UPDATABLE_FIELDS = [
   "phone",
   "parcelType",
@@ -60,6 +59,9 @@ const assignDeliveryMan = asyncHandler(async (req, res) => {
   const { bookings } = collections();
   const data = req.body;
 
+  // Generate 6-digit OTP for proof of delivery
+  const deliveryOtp = Math.floor(100000 + Math.random() * 900000).toString();
+
   const result = await bookings.updateOne(
     { _id: toObjectId(req.params.id) },
     {
@@ -67,10 +69,11 @@ const assignDeliveryMan = asyncHandler(async (req, res) => {
         status: "On The Way",
         deliveryMenID: data.selectedDeliveryMen,
         approximateDeliveryDate: data.approximateDeliveryDate,
+        deliveryOtp,
       },
     }
   );
-  res.send(result);
+  res.send({ ...result, deliveryOtp });
 });
 
 /** Cancels a booking. */
@@ -94,6 +97,51 @@ const updateBooking = asyncHandler(async (req, res) => {
   res.send(result);
 });
 
+/** Bulk assign delivery men to multiple parcels. */
+const bulkAssignDeliveryMen = asyncHandler(async (req, res) => {
+  const { bookings } = collections();
+  const { ids, selectedDeliveryMen, approximateDeliveryDate } = req.body;
+
+  const objectIds = ids.map((id) => toObjectId(id));
+
+  const bulkOps = objectIds.map((id) => ({
+    updateOne: {
+      filter: { _id: id },
+      update: {
+        $set: {
+          status: "On The Way",
+          deliveryMenID: selectedDeliveryMen,
+          approximateDeliveryDate,
+          deliveryOtp: Math.floor(100000 + Math.random() * 900000).toString(),
+        },
+      },
+    },
+  }));
+
+  const result = await bookings.bulkWrite(bulkOps);
+  res.send({ modifiedCount: result.modifiedCount, matchedCount: result.matchedCount });
+});
+
+/** Bulk update status for multiple parcels. */
+const bulkUpdateStatus = asyncHandler(async (req, res) => {
+  const { bookings } = collections();
+  const { ids, status } = req.body;
+
+  const objectIds = ids.map((id) => toObjectId(id));
+  const result = await bookings.updateMany({ _id: { $in: objectIds } }, { $set: { status } });
+  res.send({ modifiedCount: result.modifiedCount, matchedCount: result.matchedCount });
+});
+
+/** Bulk delete multiple parcels. */
+const bulkDeleteBookings = asyncHandler(async (req, res) => {
+  const { bookings } = collections();
+  const { ids } = req.body;
+
+  const objectIds = ids.map((id) => toObjectId(id));
+  const result = await bookings.deleteMany({ _id: { $in: objectIds } });
+  res.send({ deletedCount: result.deletedCount });
+});
+
 module.exports = {
   createBooking,
   listAllBookings,
@@ -102,5 +150,8 @@ module.exports = {
   assignDeliveryMan,
   deleteBooking,
   updateBooking,
+  bulkAssignDeliveryMen,
+  bulkUpdateStatus,
+  bulkDeleteBookings,
   UPDATABLE_FIELDS,
 };
