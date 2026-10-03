@@ -2,8 +2,9 @@ import { createAuthClient } from "better-auth/react";
 import { API_BASE_URL } from "../config/api";
 
 // The API base URL carries the /api/v1 suffix; the auth client needs the bare
-// origin because it appends /api/auth/* itself.
-const API_ORIGIN = new URL(API_BASE_URL).origin;
+// origin because it appends /api/auth/* itself. A relative "/api/v1" (the
+// same-origin Vercel default) resolves against the current page origin.
+const API_ORIGIN = new URL(API_BASE_URL, window.location.origin).origin;
 
 export const authClient = createAuthClient({
   baseURL: API_ORIGIN,

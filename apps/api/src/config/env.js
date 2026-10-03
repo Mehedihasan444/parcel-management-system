@@ -53,10 +53,18 @@ function loadConfig() {
     trustProxy: process.env.TRUST_PROXY === "1" || env === "production",
     // The original server hardcoded a single dev origin. Keep that default
     // but allow extra origins (comma separated) for other environments.
-    corsOrigins: (process.env.CORS_ORIGINS || "http://localhost:5173,http://localhost:5174")
-      .split(",")
-      .map((origin) => origin.trim())
-      .filter(Boolean),
+    // On Vercel the frontend and API share one domain, so the deployed URL
+    // (VERCEL_URL / VERCEL_PROJECT_PRODUCTION_URL) is trusted automatically.
+    corsOrigins: [
+      ...(process.env.CORS_ORIGINS || "http://localhost:5173,http://localhost:5174")
+        .split(",")
+        .map((origin) => origin.trim())
+        .filter(Boolean),
+      ...(process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? [`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL.trim()}`]
+        : []),
+      ...(process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL.trim()}`] : []),
+    ],
   };
 }
 

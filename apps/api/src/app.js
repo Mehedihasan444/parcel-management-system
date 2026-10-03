@@ -57,6 +57,7 @@ function createApp() {
       credentials: true,
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization"],
+      exposedHeaders: ["set-auth-token"],
     })
   );
   // Better Auth owns /api/auth/* (Express 5 splat syntax). It must sit after

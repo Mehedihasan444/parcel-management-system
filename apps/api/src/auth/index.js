@@ -34,7 +34,13 @@ function getAuth() {
 
   cached = betterAuth({
     appName: "RapidParcelHub",
-    baseURL: process.env.BETTER_AUTH_URL || "http://localhost:5000",
+    baseURL:
+      process.env.BETTER_AUTH_URL ||
+      (process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL.trim()}`
+        : process.env.VERCEL_URL
+          ? `https://${process.env.VERCEL_URL.trim()}`
+          : "http://localhost:5000"),
     secret,
     database: mongodbAdapter(getDb()),
     emailAndPassword: { enabled: true },

@@ -8,7 +8,9 @@
 
 // Single source of truth for the API base URL. Both axios instances import it,
 // so the endpoint is configured in exactly one place.
-export const API_BASE_URL: string =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api/v1";
+// Defaults to the same-origin `/api/v1` so a single-domain Vercel deployment
+// works with no extra config; override with VITE_API_BASE_URL for local dev
+// (http://localhost:5000/api/v1) or a split frontend/backend deployment.
+export const API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL || "/api/v1";
 
 export default { API_BASE_URL };
