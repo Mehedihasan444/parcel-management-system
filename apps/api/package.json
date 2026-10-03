@@ -9,12 +9,14 @@
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
     "build": "node --check src/server.js && node --check src/app.js && echo '@parcel/api: syntax OK'",
-    "lint": "node --check src/server.js && node --check src/app.js && node --check src/config/env.js && node --check src/middleware/error.js && echo '@parcel/api: lint OK'",
-    "test": "NODE_ENV=test node --test test/api.test.js test/authz.test.js && node scripts/route-contract.test.js",
+    "lint": "node --check src/server.js && node --check src/app.js && node --check src/config/env.js && node --check src/config/cloudinary.js && node --check src/middleware/error.js && node --check src/middleware/upload.js && node --check src/modules/uploads/upload.routes.js && node --check src/modules/uploads/upload.service.js && echo '@parcel/api: lint OK'",
+    "test": "NODE_ENV=test node --test test/api.test.js test/authz.test.js test/uploads.test.js && node scripts/route-contract.test.js",
+    "seed:demo": "node scripts/seed-demo-users.js",
     "clean": "rm -rf dist .turbo"
   },
   "dependencies": {
     "better-auth": "^1.7.7",
+    "cloudinary": "^2.11.0",
     "compression": "^1.8.2",
     "cors": "^2.8.5",
     "dotenv": "^18.0.5",
@@ -23,6 +25,7 @@
     "helmet": "^8.3.0",
     "mongodb": "^7.7.0",
     "morgan": "^1.12.1",
+    "multer": "^2.4.0",
     "stripe": "^23.0.0",
     "zod": "^4.6.5"
   },
