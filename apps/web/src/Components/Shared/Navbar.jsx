@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { FiMenu, FiX, FiBell, FiArrowRight, FiPackage } from "react-icons/fi";
+import { FiMenu, FiX, FiArrowRight, FiPackage } from "react-icons/fi";
 import { Link, NavLink } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
 import useAdmin from "../../Hooks/useAdmin";
 import useDeliveryMen from "../../Hooks/useDeliveryMen";
 import ThemeToggle from "../Seo/ThemeToggle";
+import Avatar from "../UI/Avatar";
 
 function dashboardPath(isAdmin, isDeliveryMen) {
   if (isAdmin) return "/dashboard/adminHome";
@@ -30,7 +31,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
 
   const handleLogOut = () => {
-    logOut().catch((error) => console.log(error));
+    logOut().catch(() => {});
   };
 
   const dest = dashboardPath(isAdmin, isDeliveryMen);
@@ -72,21 +73,16 @@ const Navbar = () => {
 
         <div className="flex items-center gap-1.5">
           <ThemeToggle />
-          <button type="button" className="btn btn-ghost btn-circle" aria-label="Notifications">
-            <span className="indicator">
-              <FiBell className="text-lg" />
-              <span className="badge badge-xs badge-primary indicator-item" />
-            </span>
-          </button>
 
           {user ? (
             <div className="dropdown dropdown-end">
               <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                <div className="w-9 rounded-full ring-2 ring-brand-500/40 ring-offset-2 ring-offset-base-100">
-                  <img
-                    alt={user?.name || "User avatar"}
-                    src={user?.image || "https://i.pravatar.cc/80?img=12"}
-                    referrerPolicy="no-referrer"
+                <div className="rounded-full ring-2 ring-brand-500/40 ring-offset-2 ring-offset-base-100">
+                  <Avatar
+                    src={user?.image}
+                    name={user?.name}
+                    email={user?.email}
+                    className="h-9 w-9 rounded-full text-xs"
                   />
                 </div>
               </div>
