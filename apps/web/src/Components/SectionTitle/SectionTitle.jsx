@@ -2,8 +2,8 @@ import PropTypes from "prop-types";
 
 const SectionTitle = ({ heading, subHeading, align = "center", tone = "light" }) => {
   const centered = align === "center";
-  const eyebrowColor = tone === "dark" ? "text-brand-300" : "text-brand-600";
-  const titleColor = tone === "dark" ? "text-white" : "text-ink-900";
+  const eyebrowColor = tone === "dark" ? "text-brand-300" : "text-brand-600 dark:text-brand-300";
+  const titleColor = tone === "dark" ? "text-white" : "text-base-content";
   return (
     <div className={`max-w-2xl ${centered ? "mx-auto text-center" : "text-left"} mb-10`}>
       <p

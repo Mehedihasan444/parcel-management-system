@@ -13,9 +13,8 @@ const NumberOfParcelBooked = ({ email }) => {
   });
 
   const parcelBooked = allParcels.filter(
-    (parcel) => parcel.email.toLowerCase() === email.toLowerCase()
+    (parcel) => parcel.email?.toLowerCase() === email?.toLowerCase()
   );
-  console.log(parcelBooked);
   return <div>{parcelBooked.length}</div>;
 };
 

@@ -7,27 +7,25 @@ const AverageReviewCal = ({ id }) => {
   const axiosSecure = useAxiosSecure();
 
   const { data: reviews = [] } = useQuery({
-    queryKey: ["reviews"], // You might need to adjust the key based on your API response structure
+    queryKey: ["averageReviews", id],
     queryFn: async () => {
       const res = await axiosSecure.get(`/delivery/reviews/${id}`);
       return res.data;
     },
+    enabled: Boolean(id),
   });
-  // console.log(reviews.length);
   let avgReview = 0;
   for (let i = 0; i < reviews.length; i++) {
     avgReview += reviews[i].rating;
   }
-  let result = avgReview / reviews.length;
-  console.log(result);
+  const result = reviews.length ? avgReview / reviews.length : 0;
 
   useEffect(() => {
-    axiosSecure.patch(`/deliveryMen/reviews/average/${id}`, { rating: result }).then((res) => {
-      console.log(res.data);
-    });
+    if (!id || !Number.isFinite(result)) return;
+    axiosSecure.patch(`/deliveryMen/reviews/average/${id}`, { rating: result }).catch(() => {});
   }, [axiosSecure, id, result]);
 
-  return <div className="text-center">{result}</div>;
+  return <div className="text-center">{reviews.length ? result.toFixed(1) : "—"}</div>;
 };
 
 AverageReviewCal.propTypes = {

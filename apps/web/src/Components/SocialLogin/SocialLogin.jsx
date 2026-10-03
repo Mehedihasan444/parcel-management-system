@@ -25,9 +25,9 @@ const SocialLogin = () => {
           <FaGoogle className="text-4xl" />
         </button>
       </div>
-      <p className="mt-2 text-center text-xs text-base-content/50">
+      {/* <p className="mt-2 text-center text-xs text-base-content/50">
         Google sign-in only — more providers can be added via the API&apos;s socialProviders.
-      </p>
+      </p> */}
     </div>
   );
 };

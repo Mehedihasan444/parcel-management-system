@@ -11,7 +11,7 @@ export default function PageHeader({ eyebrow, title, description, actions, tone 
         {eyebrow && (
           <p
             className={`text-xs font-semibold uppercase tracking-[0.2em] ${
-              tone === "dark" ? "text-brand-300" : "text-brand-600"
+              tone === "dark" ? "text-brand-300" : "text-brand-600 dark:text-brand-300"
             }`}
           >
             {eyebrow}
@@ -19,13 +19,15 @@ export default function PageHeader({ eyebrow, title, description, actions, tone 
         )}
         <h1
           className={`font-display mt-1.5 text-2xl font-bold tracking-tight text-balance sm:text-3xl ${
-            tone === "dark" ? "text-white" : "text-ink-900"
+            tone === "dark" ? "text-white" : "text-base-content"
           }`}
         >
           {title}
         </h1>
         {description && (
-          <p className={`mt-1.5 text-sm leading-relaxed ${tone === "dark" ? "text-white/70" : "text-base-content/70"}`}>
+          <p
+            className={`mt-1.5 text-sm leading-relaxed ${tone === "dark" ? "text-white/70" : "text-base-content/70"}`}
+          >
             {description}
           </p>
         )}
