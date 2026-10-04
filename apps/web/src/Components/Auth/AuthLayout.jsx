@@ -25,7 +25,8 @@ export default function AuthLayout({ title, subtitle, docTitle, children }) {
           </Link>
           <div>
             <h2 className="font-display max-w-md text-balance text-4xl font-extrabold leading-tight">
-              Delivery you can <span className="font-accent font-normal italic text-brand-300">watch</span> happen.
+              Delivery you can{" "}
+              <span className="font-accent font-normal italic text-brand-300">watch</span> happen.
             </h2>
             <ul className="mt-8 space-y-3">
               {POINTS.map((p) => (
