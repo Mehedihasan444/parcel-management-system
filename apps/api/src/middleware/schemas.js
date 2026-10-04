@@ -94,6 +94,28 @@ const parcelDeliveredBody = z
   .object({ parcelDelivered: z.coerce.number().int().min(0) })
   .passthrough();
 
+/** Bulk operations on parcels (admin only) */
+const bulkAssignBody = z
+  .object({
+    ids: z.array(z.string().regex(/^[0-9a-fA-F]{24}$/)).min(1),
+    selectedDeliveryMen: z.string().min(1),
+    approximateDeliveryDate: z.string().min(1),
+  })
+  .passthrough();
+
+const bulkStatusBody = z
+  .object({
+    ids: z.array(z.string().regex(/^[0-9a-fA-F]{24}$/)).min(1),
+    status: z.enum(["pending", "assigned", "On The Way", "delivered", "cancelled", "returned"]),
+  })
+  .passthrough();
+
+const bulkDeleteBody = z
+  .object({
+    ids: z.array(z.string().regex(/^[0-9a-fA-F]{24}$/)).min(1),
+  })
+  .passthrough();
+
 module.exports = {
   emailParam,
   objectIdParam,
@@ -110,4 +132,7 @@ module.exports = {
   deliveryStatusBody,
   averageRatingBody,
   parcelDeliveredBody,
+  bulkAssignBody,
+  bulkStatusBody,
+  bulkDeleteBody,
 };

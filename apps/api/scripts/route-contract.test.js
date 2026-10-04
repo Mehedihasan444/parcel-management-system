@@ -18,7 +18,8 @@
  * handler, which is exactly what must not regress during modularisation.
  *
  * Authentication now lives in Better Auth at /api/auth/* (mounted in src/app.js),
- * so the old POST /jwt entry was deliberately removed: 28 routes remain.
+ * so the old POST /jwt entry was deliberately removed, and image uploads were
+ * deliberately added: 29 routes remain.
  *
  * Run with:  npm run test --workspace=@parcel/api
  */
@@ -56,6 +57,9 @@ const EXPECTED_ROUTES = [
   ["GET", "/api/v1/admin/:email"],
   ["GET", "/api/v1/admin/users/collection"],
   ["GET", "/api/v1/deliveryMen/:email"],
+  // Rider earnings, added for the web console's My Earnings page.
+  ["GET", "/api/v1/deliveryMen/earnings"],
+  ["GET", "/api/v1/deliveryMen/earnings/stats"],
   ["GET", "/api/v1/users/admin/deliveryMens"],
   ["GET", "/api/v1/users/deliveryMen/deliveryList/:id"],
   ["GET", "/api/v1/deliveryMen/delivery/count/:id"],
@@ -66,6 +70,31 @@ const EXPECTED_ROUTES = [
   ["POST", "/api/v1/create-payment-intent"],
   ["GET", "/api/v1/payments/:email"],
   ["POST", "/api/v1/payments"],
+  ["POST", "/api/v1/uploads/image"],
+  ["GET", "/api/v1/tracking/:identifier"],
+  ["GET", "/api/v1/tracking/:identifier/events"],
+  ["POST", "/api/v1/users/bookings/bulk/assign"],
+  ["PATCH", "/api/v1/users/bookings/bulk/status"],
+  ["DELETE", "/api/v1/users/bookings/bulk"],
+  ["GET", "/api/v1/reports/revenue"],
+  ["GET", "/api/v1/reports/volume"],
+  ["GET", "/api/v1/reports/sla"],
+  ["GET", "/api/v1/reports/rider-performance"],
+  ["GET", "/api/v1/reports/customer-analytics"],
+  ["GET", "/api/v1/reports/exceptions"],
+  ["POST", "/api/v1/reports/export"],
+  ["GET", "/api/v1/bulk-shipping/template"],
+  ["POST", "/api/v1/bulk-shipping/upload"],
+  ["GET", "/api/v1/addresses"],
+  ["POST", "/api/v1/addresses"],
+  ["PATCH", "/api/v1/addresses/:addressId"],
+  ["PATCH", "/api/v1/addresses/:addressId/default"],
+  ["DELETE", "/api/v1/addresses/:addressId"],
+  ["GET", "/api/v1/payment-methods"],
+  ["POST", "/api/v1/payment-methods"],
+  ["PATCH", "/api/v1/payment-methods/:paymentMethodId"],
+  ["PATCH", "/api/v1/payment-methods/:paymentMethodId/default"],
+  ["DELETE", "/api/v1/payment-methods/:paymentMethodId"],
 ];
 
 /** Substitutes concrete, safe sample values into the ":param" placeholders. */
