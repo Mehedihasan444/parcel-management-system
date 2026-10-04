@@ -41,3 +41,6 @@ Thumbs.db
 
 # Turborepo task graph output
 graph.html
+
+# Local browser-automation artifacts (Playwright MCP dumps)
+.playwright-mcp/

@@ -116,6 +116,7 @@ src/routes/index.js
    +-- modules/delivery/  /deliveryMen/..., /users/admin/deliveryMens
    +-- modules/admin/     /admin/:email, /admin/users/collection
    +-- modules/payments/  /create-payment-intent, /payments
+   +-- modules/uploads/   /uploads/image (Multer + Cloudinary)
 ```
 
 Each module owns its route table and its service, and receives the Mongo
@@ -131,8 +132,13 @@ before it can reach Stripe or Mongo.
 **Mount order is load-bearing.** Several paths overlap — `GET /users/admin`
 sits next to `GET /users/:email` — so routers declare literal segments before
 parameter segments. `apps/api/scripts/route-contract.test.js` boots the app and
-probes all 28 routes over real HTTP, so a renamed, dropped or shadowed route
+probes all 29 routes over real HTTP, so a renamed, dropped or shadowed route
 fails the build instead of breaking the client at runtime.
+
+Image uploads (`POST /uploads/image`) accept a single multipart `image` field
+(max 5 MB, JPEG/PNG/WebP/GIF/AVIF), held in memory by Multer and streamed to
+Cloudinary (1024px cap, auto quality/format). My Profile posts there and saves
+the returned `url` on the user document — no client-side hosting key needed.
 
 ## Environment
 
@@ -158,18 +164,27 @@ cp apps/web/.env.example apps/web/.env
 | `GOOGLE_CLIENT_ID`        | Google OAuth client id (optional; email auth always works)  |
 | `GOOGLE_CLIENT_SECRET`    | Google OAuth secret (optional)                              |
 | `STRIPE_SECRET_KEY`       | Stripe secret key for payment intents                       |
+| `CLOUDINARY_CLOUD_NAME`   | Cloudinary cloud name for image uploads                     |
+| `CLOUDINARY_API_KEY`      | Cloudinary API key                                          |
+| `CLOUDINARY_API_SECRET`   | Cloudinary API secret                                       |
 | `CORS_ORIGINS`            | Comma-separated allowed origins                             |
 | `TRUST_PROXY`             | Set `1` behind Render/Fly/Nginx for real-IP limits          |
+
+Without the `CLOUDINARY_*` trio the API still boots, but `POST /uploads/image`
+answers 503 naming the missing vars.
 
 Missing values fail fast at startup with a message naming the variable, rather
 than surfacing as a confusing error on the first request.
 
 ### `apps/web`
 
-| Variable                 | Purpose                                               |
-| ------------------------ | ----------------------------------------------------- |
-| `VITE_API_BASE_URL`      | API base URL (default `http://localhost:5000/api/v1`) |
-| `VITE_IMAGE_HOSTING_KEY` | imgbb key for profile-photo uploads (optional)        |
+| Variable                  | Purpose                                                                      |
+| ------------------------- | ---------------------------------------------------------------------------- |
+| `VITE_API_BASE_URL`       | API base URL (default `http://localhost:5000/api/v1`)                        |
+| `VITE_PAYMENT_GATEWAY_PK` | Stripe publishable key for Payments page (optional, shows notice if missing) |
+
+Profile photos upload through the API (`POST /uploads/image`, Multer +
+Cloudinary), so the client needs no image-hosting key.
 
 ## Authorization
 
@@ -195,7 +210,8 @@ sign-up/sign-in sessions) on in-memory Mongo.
 | Typecheck         | `turbo run typecheck`       | Strict TS: lib, hooks, guards, config         |
 | API behaviour     | `npm run test`              | 11 node:test cases: health, validation, CORS  |
 | API auth matrix   | `npm run test`              | 23 cases on real Better Auth sessions         |
-| Route contract    | `npm run test`              | 28 routes probed over HTTP; fails on drift    |
+| API uploads       | `npm run test`              | 5 cases: auth, type, size, presence, 503      |
+| Route contract    | `npm run test`              | 29 routes probed over HTTP; fails on drift    |
 | Web unit tests    | `npm run test`              | 9 Vitest cases: pricing, confirm, notify      |
 | Lint              | `npm run lint`              | Zero-tolerance; see below                     |
 | Import resolution | `npm run check:imports`     | Catches case-mismatched paths                 |
