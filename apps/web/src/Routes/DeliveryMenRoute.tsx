@@ -11,7 +11,9 @@ const DeliveryMenRoute = ({ children }: { children: ReactNode }) => {
 
   if (auth?.loading || isDeliveryMenLoading) return <Loading label="Verifying rider access…" />;
   if (auth?.user && isDeliveryMen) return children;
-  return <Navigate to="/" state={{ from: location?.pathname }} replace />;
+  return (
+    <Navigate to="/" state={{ from: location?.pathname + (location?.search || "") }} replace />
+  );
 };
 
 export default DeliveryMenRoute;

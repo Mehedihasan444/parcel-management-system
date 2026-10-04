@@ -11,7 +11,7 @@ const AdminRoute = ({ children }: { children: ReactNode }) => {
 
   if (auth?.loading || isAdminLoading) return <Loading label="Verifying admin access…" />;
   if (auth?.user && isAdmin) return children;
-  return <Navigate to="/" state={{ from: location.pathname }} replace />;
+  return <Navigate to="/" state={{ from: location.pathname + location.search }} replace />;
 };
 
 export default AdminRoute;

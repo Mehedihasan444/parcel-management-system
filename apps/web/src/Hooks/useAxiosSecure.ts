@@ -38,11 +38,23 @@ const useAxiosSecure = (): AxiosInstance => {
         (response) => response,
         async (error: unknown) => {
           const status = axios.isAxiosError(error) ? error.response?.status : undefined;
-          if (status === 401 || status === 403) {
-            try {
-              await auth?.logOut();
-            } finally {
-              navigate("/login");
+          // 403 = authenticated but forbidden (e.g. a customer hitting an
+          // admin-only probe like the public home-page stats). That must NOT
+          // destroy the session — the caller already swallows it.
+          // 401 without a Bearer token = anonymous probe on a public page —
+          // must NOT bounce to /login or fire sign-out floods.
+          // Only a 401 on a request that actually sent a token means the
+          // session expired/was revoked, so only then log out + redirect.
+          if (status === 401) {
+            const hadToken = Boolean(
+              axios.isAxiosError(error) && error.config?.headers?.authorization
+            );
+            if (hadToken) {
+              try {
+                await auth?.logOut();
+              } finally {
+                navigate("/login");
+              }
             }
           }
           return Promise.reject(error);

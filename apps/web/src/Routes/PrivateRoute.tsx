@@ -9,7 +9,7 @@ const PrivateRoute = ({ children }: { children: ReactNode }) => {
 
   if (auth?.loading) return <Loading label="Checking your session…" />;
   if (auth?.user) return children;
-  return <Navigate to="/login" state={{ from: location.pathname }} replace />;
+  return <Navigate to="/login" state={{ from: location.pathname + location.search }} replace />;
 };
 
 export default PrivateRoute;
