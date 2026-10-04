@@ -25,7 +25,7 @@ const STEPS = [
 
 const HowItWorks = () => {
   return (
-    <section className="border-y border-base-200 bg-base-200/40">
+    <section id="how-it-works" className="scroll-mt-24 border-y border-base-200 bg-base-200/40">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24">
         <SectionTitle heading="From doorstep to doorstep" subHeading="How it works" />
         <div className="relative grid gap-5 md:grid-cols-3">

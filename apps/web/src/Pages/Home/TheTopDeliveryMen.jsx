@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import SectionTitle from "../../Components/SectionTitle/SectionTitle";
 import Reveal from "../../Components/UI/Reveal";
+import Avatar from "../../Components/UI/Avatar";
 
 const TheTopDeliveryMen = () => {
   const axiosSecure = useAxiosSecure();
@@ -44,13 +45,16 @@ const TheTopDeliveryMen = () => {
           <Reveal key={card?._id || card?.email} delay={(i % 5) * 0.07} className="h-full">
             <article className="group h-full overflow-hidden rounded-3xl border border-base-200 bg-base-100 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl">
               <div className="relative h-44 overflow-hidden bg-base-200">
-                <img
-                  src={card?.image || `https://i.pravatar.cc/300?u=${card?.email}`}
-                  alt={`${card?.name || "Delivery partner"} profile photo`}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
+                <Avatar
+                  src={card?.image}
+                  name={card?.name}
+                  email={card?.email}
+                  className="h-full w-full text-4xl transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/50 to-transparent" aria-hidden="true" />
+                <div
+                  className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/50 to-transparent"
+                  aria-hidden="true"
+                />
                 <span className="badge absolute left-3 top-3 border-0 bg-base-100/90 text-xs font-semibold">
                   <FiTruck className="mr-1" aria-hidden="true" />
                   {card?.parcelDelivered || 0} delivered

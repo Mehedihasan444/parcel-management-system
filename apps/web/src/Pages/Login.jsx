@@ -3,6 +3,7 @@ import { useLocation, useNavigate, Link } from "react-router-dom";
 import { notify } from "../lib/notify";
 import useAuth from "../Hooks/useAuth";
 import SocialLogin from "../Components/SocialLogin/SocialLogin";
+import DemoAccounts from "../Components/Auth/DemoAccounts";
 import AuthLayout from "../Components/Auth/AuthLayout";
 import { AuthField, PasswordField } from "../Components/Auth/AuthFields";
 import { FiMail } from "react-icons/fi";
@@ -45,13 +46,20 @@ const Login = () => {
           required
           autoComplete="email"
         />
-        <PasswordField name="password" placeholder="Your password" required autoComplete="current-password" />
+        <PasswordField
+          name="password"
+          placeholder="Your password"
+          required
+          autoComplete="current-password"
+        />
         <button
           type="submit"
           disabled={pending}
           className="btn w-full border-0 bg-brand-500 font-semibold text-white hover:bg-brand-600 disabled:opacity-70"
         >
-          {pending ? <span className="loading loading-spinner loading-sm" aria-hidden="true" /> : null}
+          {pending ? (
+            <span className="loading loading-spinner loading-sm" aria-hidden="true" />
+          ) : null}
           {pending ? "Logging in…" : "Log in"}
         </button>
       </form>
@@ -63,6 +71,9 @@ const Login = () => {
       </p>
       <div className="divider text-xs text-base-content/50">Or continue with</div>
       <SocialLogin />
+      <div className="mt-5">
+        <DemoAccounts />
+      </div>
     </AuthLayout>
   );
 };

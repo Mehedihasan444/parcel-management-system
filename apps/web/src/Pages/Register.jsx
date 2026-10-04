@@ -70,7 +70,9 @@ const Register = () => {
           disabled={pending}
           className="btn w-full border-0 bg-brand-500 font-semibold text-white hover:bg-brand-600 disabled:opacity-70"
         >
-          {pending ? <span className="loading loading-spinner loading-sm" aria-hidden="true" /> : null}
+          {pending ? (
+            <span className="loading loading-spinner loading-sm" aria-hidden="true" />
+          ) : null}
           {pending ? "Creating account…" : "Sign up"}
         </button>
       </form>

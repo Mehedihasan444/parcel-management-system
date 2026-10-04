@@ -16,11 +16,12 @@ export default function CtaBand() {
               Get started in minutes
             </p>
             <h2 className="font-display mx-auto mt-3 max-w-2xl text-balance text-3xl font-extrabold sm:text-5xl">
-              Ready to ship <span className="font-accent font-normal italic text-brand-200">smarter?</span>
+              Ready to ship{" "}
+              <span className="font-accent font-normal italic text-brand-200">smarter?</span>
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-white/70">
-              Create a free account, book your first parcel in under a minute, and track it
-              all the way to the doorstep.
+              Create a free account, book your first parcel in under a minute, and track it all the
+              way to the doorstep.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Link

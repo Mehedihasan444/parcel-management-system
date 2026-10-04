@@ -1,20 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FiBox, FiMapPin, FiUser } from "react-icons/fi";
 import useAuth from "../Hooks/useAuth";
 import { notify } from "../lib/notify";
 import { calculatePrice, PRICE_TIERS } from "../lib/pricing";
-import useAxiosPublic from "../Hooks/useAxiosPublic";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
 import PageHeader from "../Components/UI/PageHeader";
 import FormField, { inputClass } from "../Components/UI/FormField";
 
 /* eslint-disable react-hooks/incompatible-library */
 export default function Book_A_Parcel() {
   const { user } = useAuth();
-  const axiosPublic = useAxiosPublic();
-  const { register, handleSubmit, reset, watch } = useForm();
+  const axiosSecure = useAxiosSecure();
+  const { register, handleSubmit, reset, watch, setValue } = useForm();
   const [pending, setPending] = useState(false);
   const livePrice = calculatePrice(watch("weight"));
+
+  useEffect(() => {
+    if (user?.name) setValue("name", user.name);
+    if (user?.email) setValue("email", user.email);
+  }, [user?.name, user?.email, setValue]);
 
   const onSubmit = async (data) => {
     const price = calculatePrice(data.weight);
@@ -31,7 +36,7 @@ export default function Book_A_Parcel() {
         status: "pending",
         deliveryMenID: "",
       };
-      const res = await axiosPublic.post("/users/bookings", info);
+      const res = await axiosSecure.post("/users/bookings", info);
       if (res.data.insertedId) {
         reset();
         notify.success("Booking successful — track it in My Parcels");
@@ -109,7 +114,11 @@ export default function Book_A_Parcel() {
                 required
               />
             </FormField>
-            <FormField label="Weight (kg)" htmlFor="weight" hint="1 kg → ৳50 · 2 kg → ৳100 · above → ৳150">
+            <FormField
+              label="Weight (kg)"
+              htmlFor="weight"
+              hint="1 kg → ৳50 · 2 kg → ৳100 · above → ৳150"
+            >
               <input
                 {...register("weight")}
                 type="number"
@@ -169,7 +178,11 @@ export default function Book_A_Parcel() {
                 required
               />
             </FormField>
-            <FormField label="Requested delivery date" htmlFor="requestedDeliveryDate" className="sm:col-span-2">
+            <FormField
+              label="Requested delivery date"
+              htmlFor="requestedDeliveryDate"
+              className="sm:col-span-2"
+            >
               <input
                 {...register("requestedDeliveryDate")}
                 type="date"
@@ -185,8 +198,14 @@ export default function Book_A_Parcel() {
             disabled={pending}
             className="btn mt-7 w-full border-0 bg-brand-500 text-base font-semibold text-white hover:bg-brand-600 disabled:opacity-70 sm:w-auto sm:px-12"
           >
-            {pending ? <span className="loading loading-spinner loading-sm" aria-hidden="true" /> : null}
-            {pending ? "Booking…" : livePrice !== null ? `Book parcel · ৳${livePrice}` : "Book parcel"}
+            {pending ? (
+              <span className="loading loading-spinner loading-sm" aria-hidden="true" />
+            ) : null}
+            {pending
+              ? "Booking…"
+              : livePrice !== null
+                ? `Book parcel · ৳${livePrice}`
+                : "Book parcel"}
           </button>
         </form>
 
@@ -215,6 +234,4 @@ export default function Book_A_Parcel() {
       </div>
     </div>
   );
-};
-
-;
+}

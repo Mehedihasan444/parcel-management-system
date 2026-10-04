@@ -1,161 +1,160 @@
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { FiCamera } from "react-icons/fi";
 import useAuth from "../Hooks/useAuth";
-import useAxiosPublic from "../Hooks/useAxiosPublic";
 import { notify } from "../lib/notify";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
+import useAxiosPublic from "../Hooks/useAxiosPublic";
+import PageHeader from "../Components/UI/PageHeader";
+import DocumentTitle from "../Components/Seo/DocumentTitle";
+import FormField, { inputClass } from "../Components/UI/FormField";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
-
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
+/* eslint-disable react-hooks/incompatible-library */
 const My_Profile = () => {
   const { user } = useAuth();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, watch, setValue } = useForm();
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
+  const [pending, setPending] = useState(false);
+  const [preview, setPreview] = useState(null);
 
-  // console.log(user)
   const { data: userInfo } = useQuery({
     queryKey: ["userInfo", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/users/${user?.email}`);
       return res.data;
     },
+    enabled: Boolean(user?.email),
   });
-  // console.log(userInfo)
-  const onSubmit = async (data) => {
-    // console.log(watch(data));
-    if (data.image.length > 0) {
-      // console.log("from >0",data);
-      const imageFile = { image: data.image[0] };
-      const res = await axiosPublic.post(image_hosting_api, imageFile, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log(res.data);
-      if (res.data.success) {
-        const info = {
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          image: res.data.data.display_url,
-        };
-        // console.log(info)
-        const userRes = await axiosSecure.put(`/users/updateProfile/${userInfo.email}`, info);
-        console.log(userRes.data);
-        if (userRes.data.modifiedCount > 0) {
-          // reset();
-          notify.success("Profile updated successfully");
-        } else {
-          notify.error("Something went wrong");
-        }
-      }
-    } else if (data.image.length === 0) {
-      // console.log("from =0",data);
 
-      const info = {
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        image: user.image,
-      };
-      // console.log(info)
-      const userRes = await axiosSecure.put(`/users/updateProfile/${userInfo.email}`, info);
-      console.log(userRes.data);
-      if (userRes.data.modifiedCount > 0) {
-        // reset();
-        notify.success("Profile updated successfully");
-      } else {
-        notify.error("Something went wrong");
-      }
+  useEffect(() => {
+    if (userInfo?.name) setValue("name", userInfo.name);
+    if (userInfo?.email) setValue("email", userInfo.email);
+    if (userInfo?.phone) setValue("phone", userInfo.phone);
+  }, [userInfo?.name, userInfo?.email, userInfo?.phone, setValue]);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setPreview(URL.createObjectURL(file));
     }
   };
 
+  const onSubmit = async (data) => {
+    setPending(true);
+    try {
+      let imageUrl = userInfo?.image;
+      const file = watch("image");
+      if (file?.length > 0) {
+        if (!image_hosting_key) {
+          notify.warning("Add VITE_IMAGE_HOSTING_KEY to upload a new photo — saving without it");
+        } else {
+          const imageFile = { image: file[0] };
+          const res = await axiosPublic.post(image_hosting_api, imageFile, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+          if (res.data.success) {
+            imageUrl = res.data.data.display_url;
+          } else {
+            throw new Error("Image upload failed");
+          }
+        }
+      }
+      const info = { name: data.name, email: data.email, phone: data.phone, image: imageUrl };
+      const res = await axiosSecure.put(`/users/updateProfile/${userInfo.email}`, info);
+      if (res.data.modifiedCount > 0) {
+        notify.success("Profile updated successfully");
+      } else {
+        notify.info("Nothing changed");
+      }
+    } catch {
+      notify.error("Something went wrong");
+    } finally {
+      setPending(false);
+    }
+  };
+
+  const src = preview || userInfo?.image || `https://i.pravatar.cc/150?u=${user?.email}`;
+
   return (
-    <div className="">
-      <div className="max-w-lg mx-auto mt-8 p-6 bg-white rounded shadow-md">
-        <h2 className="text-2xl font-semibold mb-4 text-center">My Profile</h2>
-
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col justify-center items-center">
-            <div className="mb-4">
-              {/* <label htmlFor="profilePicture">Current Profile Picture:</label> */}
-              <img
-                src={userInfo?.image}
-                alt="Current Profile"
-                className="rounded-full h-20 w-20 object-cover mb-2"
-              />
-            </div>
-          </div>
-          <div className="flex justify-between gap-2 items-center mb-4">
-            <label htmlFor="newProfilePicture" className="font-medium">
-              Change Picture:{" "}
-            </label>
-            <input
-              type="file"
-              {...register("image")}
-              id="image"
-              name="image"
-              //   accept="image/*"
-              //   onChange={handleFileChange}
-              className="form-input"
+    <div>
+      <DocumentTitle title="RapidParcelHub | My profile" />
+      <PageHeader
+        eyebrow="Account"
+        title="Profile"
+        description="Manage your personal details and profile picture."
+      />
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 max-w-md mx-auto">
+        <div className="flex flex-col items-center">
+          <label className="relative">
+            <img
+              src={src}
+              alt="Profile picture"
+              className="h-24 w-24 rounded-full object-cover border-4 border-base-200"
             />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="name" className="font-medium">
-              Name:{" "}
-            </label>
-            <input
-              {...register("name")}
-              type="text"
-              id="name"
-              name="name"
-              defaultValue={userInfo?.name}
-              className="form-input w-3/4"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="email" className="font-medium">
-              Email:{" "}
-            </label>
-            <input
-              {...register("email")}
-              type="email"
-              id="email"
-              name="email"
-              defaultValue={userInfo?.email}
-              className="form-input w-3/4"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="phone" className="font-medium">
-              Phone Number:{" "}
-            </label>
-            <input
-              {...register("phone")}
-              type="tel"
-              id="phone"
-              name="phone"
-              defaultValue={userInfo?.phone}
-              className="form-input"
-            />
-          </div>
-
-          <div className="mb-4">
-            <button
-              type="submit"
-              //    onClick={updateProfile}
-              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            <label
+              className="btn btn-ghost btn-circle absolute bottom-0 right-0 bg-base-100 shadow-lg"
+              aria-label="Change profile picture"
             >
-              Update Profile
-            </button>
-          </div>
-        </form>
-      </div>
+              <FiCamera className="text-base-content/70" />
+              <input
+                {...register("image")}
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+              />
+            </label>
+          </label>
+        </div>
+
+        <FormField label="Name" htmlFor="name">
+          <input
+            {...register("name")}
+            id="name"
+            defaultValue={userInfo?.name}
+            className={inputClass}
+            required
+          />
+        </FormField>
+
+        <FormField label="Email" htmlFor="email">
+          <input
+            {...register("email")}
+            id="email"
+            type="email"
+            defaultValue={userInfo?.email}
+            className={inputClass}
+            required
+          />
+        </FormField>
+
+        <FormField label="Phone" htmlFor="phone">
+          <input
+            {...register("phone")}
+            id="phone"
+            type="tel"
+            defaultValue={userInfo?.phone}
+            className={inputClass}
+            placeholder="+880 1XXX-XXXXXX"
+          />
+        </FormField>
+
+        <button
+          type="submit"
+          disabled={pending}
+          className="btn w-full border-0 bg-brand-500 font-semibold text-white hover:bg-brand-600 disabled:opacity-70"
+        >
+          {pending ? (
+            <span className="loading loading-spinner loading-sm" aria-hidden="true" />
+          ) : null}
+          {pending ? "Saving…" : "Save changes"}
+        </button>
+      </form>
     </div>
   );
 };

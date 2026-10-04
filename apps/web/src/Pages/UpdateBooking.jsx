@@ -1,209 +1,288 @@
-import SectionTitle from "../Components/SectionTitle/SectionTitle";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { FiBox, FiMapPin, FiUser } from "react-icons/fi";
 import { notify } from "../lib/notify";
-import { calculatePrice } from "../lib/pricing";
+import { calculatePrice, PRICE_TIERS } from "../lib/pricing";
 import useAuth from "../Hooks/useAuth";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
-import { useLoaderData } from "react-router-dom";
-const UpdateBooking = () => {
+import PageHeader from "../Components/UI/PageHeader";
+import FormField, { inputClass } from "../Components/UI/FormField";
+import Loading from "../Components/Shared/Loading";
+import DocumentTitle from "../Components/Seo/DocumentTitle";
+
+/* eslint-disable react-hooks/incompatible-library */
+function UpdateBooking() {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const { register, handleSubmit, reset } = useForm();
-  const parcelData = useLoaderData();
+  const { register, handleSubmit, reset, watch, setValue } = useForm();
+  const [pending, setPending] = useState(false);
 
-  // console.log(parcelData)
+  const {
+    data: parcelData,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["booking", id],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/users/booking/${id}`);
+      return res.data;
+    },
+    enabled: Boolean(id),
+  });
+
+  useEffect(() => {
+    if (user?.name) setValue("name", user.name);
+    if (user?.email) setValue("email", user.email);
+  }, [user?.name, user?.email, setValue]);
+
+  useEffect(() => {
+    if (!parcelData) return;
+    for (const key of [
+      "phone",
+      "parcelType",
+      "weight",
+      "receiverName",
+      "receiverPhone",
+      "deliveryAddressLatitude",
+      "deliveryAddressLongitude",
+      "requestedDeliveryDate",
+    ]) {
+      if (parcelData[key] !== undefined) setValue(key, parcelData[key]);
+    }
+  }, [parcelData, setValue]);
+
+  const livePrice = calculatePrice(watch("weight"));
 
   const onSubmit = async (data) => {
-    // console.log(data.weight);
-
     const price = calculatePrice(data.weight);
     if (price === null) {
       notify.warning(`Invalid ${data.weight} weight. Enter a valid weight`);
       return;
     }
-    const info = {
-      ...data,
-      bookingDate: new Date(),
-      price: price,
-    };
-    const res = await axiosSecure.patch(`/users/updateBooking/${parcelData._id}`, info);
-    console.log(res.data);
-    if (res.data.modifiedCount > 0) {
-      reset();
-      notify.success("Booking updated");
-    } else {
+    setPending(true);
+    try {
+      const info = { ...data, bookingDate: new Date(), price };
+      const res = await axiosSecure.patch(`/users/updateBooking/${id}`, info);
+      if (res.data.modifiedCount > 0) {
+        reset();
+        notify.success("Booking updated");
+        navigate("/dashboard/myParcels");
+      } else {
+        notify.error("Nothing changed — update not saved");
+      }
+    } catch {
       notify.error("Something went wrong");
+    } finally {
+      setPending(false);
     }
   };
 
+  if (isLoading) return <Loading label="Loading booking…" />;
+  if (isError || !parcelData) {
+    return (
+      <div>
+        <DocumentTitle title="RapidParcelHub | Update booking" />
+        <PageHeader
+          eyebrow="Edit shipment"
+          title="Update booking"
+          description="This booking could not be loaded. It may have been deleted or you may not own it."
+        />
+        <button type="button" className="btn btn-ghost" onClick={() => navigate(-1)}>
+          Go back
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <SectionTitle heading={" Book a Parcel"} subHeading={"Make Your Life Easy"}></SectionTitle>
-      {/* <div className="divider"></div> */}
-      <div className=" shadow-md rounded-md sm:w-[60vw] p-10 bg-slate-200">
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
-          <div className="flex justify-between gap-5">
-            <div className="flex flex-col flex-1">
-              <label htmlFor="name" className="mb-1 text-gray-700">
-                Name:
-              </label>
+      <DocumentTitle title="RapidParcelHub | Update booking" />
+      <PageHeader
+        eyebrow="Edit shipment"
+        title="Update booking"
+        description="Modify the details — the price updates live as you adjust the weight."
+      />
+      <div className="grid items-start gap-5 lg:grid-cols-[1fr_320px]">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="rounded-3xl border border-base-200 bg-base-100 p-6 shadow-sm sm:p-8"
+        >
+          <fieldset className="grid gap-4 sm:grid-cols-2">
+            <legend className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-base-content/60">
+              <FiUser aria-hidden="true" /> Sender
+            </legend>
+            <FormField label="Name" htmlFor="name">
               <input
                 {...register("name")}
                 defaultValue={user?.name}
                 type="text"
-                name="name"
+                id="name"
                 readOnly
-                className="p-2 border rounded"
+                className={`${inputClass} opacity-70`}
               />
-            </div>
-            <div className="flex flex-col flex-1">
-              <label htmlFor="email" className="mb-1 text-gray-700">
-                Email:
-              </label>
+            </FormField>
+            <FormField label="Email" htmlFor="email">
               <input
                 {...register("email")}
                 defaultValue={user?.email}
                 type="email"
-                name="email"
+                id="email"
                 readOnly
-                className="p-2 border rounded"
+                className={`${inputClass} opacity-70`}
               />
-            </div>
-          </div>
-
-          <div className="flex justify-between gap-5">
-            <div className="flex flex-col flex-1">
-              <label htmlFor="phone" className="mb-1 text-gray-700">
-                Phone Number:
-              </label>
+            </FormField>
+            <FormField label="Phone number" htmlFor="phone" className="sm:col-span-2">
               <input
                 {...register("phone")}
-                defaultValue={parcelData?.phone}
                 type="tel"
-                name="phone"
-                placeholder="Phone Number"
-                className="p-2 border rounded"
+                id="phone"
+                placeholder="+880 1XXX-XXXXXX"
+                className={inputClass}
                 required
               />
-            </div>
-            <div className="flex flex-col flex-1">
-              <label htmlFor="parcelType" className="mb-1 text-gray-700">
-                Parcel Type:
-              </label>
+            </FormField>
+          </fieldset>
+
+          <div className="divider" />
+
+          <fieldset className="grid gap-4 sm:grid-cols-2">
+            <legend className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-base-content/60">
+              <FiBox aria-hidden="true" /> Parcel & receiver
+            </legend>
+            <FormField label="Parcel type" htmlFor="parcelType">
               <input
                 {...register("parcelType")}
-                defaultValue={parcelData?.parcelType}
                 type="text"
-                name="parcelType"
+                id="parcelType"
                 placeholder="Parcel Type"
-                className="p-2 border rounded"
+                className={inputClass}
                 required
               />
-            </div>
-          </div>
-
-          <div className="flex justify-between gap-5">
-            <div className="flex flex-col flex-1">
-              <label htmlFor="receiverName" className="mb-1 text-gray-700">
-                Receiver&apos;s Name:
-              </label>
-              <input
-                {...register("receiverName")}
-                defaultValue={parcelData?.receiverName}
-                type="text"
-                name="receiverName"
-                placeholder="Receiver's Name"
-                className="p-2 border rounded"
-                required
-              />
-            </div>
-            <div className="flex flex-col flex-1">
-              <label htmlFor="parcelWeight" className="mb-1 text-gray-700">
-                Parcel Weight (kg):
-              </label>
+            </FormField>
+            <FormField
+              label="Weight (kg)"
+              htmlFor="weight"
+              hint="1 kg → ৳50 · 2 kg → ৳100 · above → ৳150"
+            >
               <input
                 {...register("weight")}
-                defaultValue={parcelData?.weight}
                 type="number"
-                name="weight"
-                placeholder="Parcel Weight (kg)"
+                id="weight"
+                placeholder="e.g. 2"
                 min="0.1"
                 step="0.1"
-                className="p-2 border rounded"
+                className={inputClass}
                 required
               />
-            </div>
-          </div>
+            </FormField>
+            <FormField label="Receiver's name" htmlFor="receiverName">
+              <input
+                {...register("receiverName")}
+                type="text"
+                id="receiverName"
+                placeholder="Receiver's Name"
+                className={inputClass}
+                required
+              />
+            </FormField>
+            <FormField label="Receiver's phone" htmlFor="receiverPhone">
+              <input
+                {...register("receiverPhone")}
+                type="tel"
+                id="receiverPhone"
+                placeholder="+880 1XXX-XXXXXX"
+                className={inputClass}
+                required
+              />
+            </FormField>
+          </fieldset>
 
-          <div className="flex flex-col">
-            <label htmlFor="receiverPhone" className="mb-1 text-gray-700">
-              Receiver&apos;s Phone Number:
-            </label>
-            <input
-              {...register("receiverPhone")}
-              defaultValue={parcelData?.receiverPhone}
-              type="tel"
-              name="receiverPhone"
-              placeholder="Receiver's Phone Number"
-              className="p-2 border rounded"
-              required
-            />
-          </div>
-          <div className="flex justify-between items-center gap-5">
-            <div className="flex flex-col flex-1">
-              <label htmlFor="deliveryAddressLatitude " className="mb-1 text-gray-700">
-                Delivery Address Latitude
-              </label>
+          <div className="divider" />
+
+          <fieldset className="grid gap-4 sm:grid-cols-2">
+            <legend className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-base-content/60">
+              <FiMapPin aria-hidden="true" /> Destination
+            </legend>
+            <FormField label="Latitude" htmlFor="deliveryAddressLatitude">
               <input
                 {...register("deliveryAddressLatitude")}
-                defaultValue={parcelData?.deliveryAddressLatitude}
-
                 type="text"
-                name="deliveryAddressLatitude"
-                placeholder="i.e 21.121365496"
-                className="p-2 border rounded"
+                id="deliveryAddressLatitude"
+                placeholder="i.e 23.8103"
+                className={inputClass}
                 required
               />
-            </div>
-            <div className="flex flex-col flex-1">
-              <label htmlFor="deliveryAddressLongitude" className="mb-1 text-gray-700">
-                Delivery Address longitude
-              </label>
+            </FormField>
+            <FormField label="Longitude" htmlFor="deliveryAddressLongitude">
               <input
                 {...register("deliveryAddressLongitude")}
-                defaultValue={parcelData?.deliveryAddressLongitude}
-
                 type="text"
-                name="deliveryAddressLongitude"
-                placeholder="i.e 21.121365496"
-                className="p-2 border rounded"
+                id="deliveryAddressLongitude"
+                placeholder="i.e 90.4125"
+                className={inputClass}
                 required
               />
-            </div>
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="requestedDeliveryDate" className="mb-1 text-gray-700">
-              Requested Delivery Date:
-            </label>
-            <input
-              {...register("requestedDeliveryDate")}
-              defaultValue={parcelData?.requestedDeliveryDate}
+            </FormField>
+            <FormField
+              label="Requested delivery date"
+              htmlFor="requestedDeliveryDate"
+              className="sm:col-span-2"
+            >
+              <input
+                {...register("requestedDeliveryDate")}
+                type="date"
+                id="requestedDeliveryDate"
+                className={inputClass}
+                required
+              />
+            </FormField>
+          </fieldset>
 
-              type="date"
-              name="requestedDeliveryDate"
-              className="p-2 border rounded"
-              required
-            />
-          </div>
-          <div className="flex justify-between mt-4">
-            <button type="submit" className="btn px-10 text-lg bg-blue-500 text-white ">
-              Update
-            </button>
-          </div>
+          <button
+            type="submit"
+            disabled={pending}
+            className="btn mt-7 w-full border-0 bg-brand-500 text-base font-semibold text-white hover:bg-brand-600 disabled:opacity-70 sm:w-auto sm:px-12"
+          >
+            {pending ? (
+              <span className="loading loading-spinner loading-sm" aria-hidden="true" />
+            ) : null}
+            {pending
+              ? "Updating…"
+              : livePrice !== null
+                ? `Update parcel · ৳${livePrice}`
+                : "Update parcel"}
+          </button>
         </form>
+
+        <aside className="hero-mesh sticky top-20 overflow-hidden rounded-3xl p-6 text-white shadow-xl lg:top-24">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-300">
+            Order summary
+          </p>
+          <p className="font-display mt-3 text-5xl font-extrabold">
+            {livePrice !== null ? `৳${livePrice}` : "—"}
+          </p>
+          <p className="mt-1 text-sm text-white/65">
+            {livePrice !== null ? "Estimated total" : "Enter a weight to estimate"}
+          </p>
+          <ul className="mt-5 space-y-2 border-t border-white/10 pt-5 text-sm">
+            {PRICE_TIERS.map((t) => (
+              <li key={t.label} className="flex items-center justify-between text-white/75">
+                <span>{t.label}</span>
+                <span className="font-semibold text-white">৳{t.price}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-5 rounded-2xl bg-white/10 p-3 text-xs leading-relaxed text-white/70">
+            Pay after booking from My Parcels. Insured handling included on every tier.
+          </p>
+        </aside>
       </div>
     </div>
   );
-};
+}
 
 export default UpdateBooking;

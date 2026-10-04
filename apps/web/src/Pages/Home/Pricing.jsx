@@ -4,11 +4,15 @@ import { PRICE_TIERS } from "../../lib/pricing";
 import SectionTitle from "../../Components/SectionTitle/SectionTitle";
 import Reveal from "../../Components/UI/Reveal";
 
-const BLURBS = ["Live cost estimate while booking", "Insured handling included", "No hidden fees, ever"];
+const BLURBS = [
+  "Live cost estimate while booking",
+  "Insured handling included",
+  "No hidden fees, ever",
+];
 
 const Pricing = () => {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24">
+    <section id="pricing" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 sm:py-24">
       <SectionTitle heading="Simple pricing, no surprises" subHeading="What it costs" />
       <div className="grid items-stretch gap-5 md:grid-cols-3">
         {PRICE_TIERS.map((tier, i) => {
@@ -30,7 +34,9 @@ const Pricing = () => {
                 <h3 className="font-display text-base font-bold">{tier.label}</h3>
                 <p className="mt-3 flex items-baseline gap-1">
                   <span className="font-display text-5xl font-extrabold">৳{tier.price}</span>
-                  <span className={`text-sm ${featured ? "text-white/70" : "text-base-content/60"}`}>
+                  <span
+                    className={`text-sm ${featured ? "text-white/70" : "text-base-content/60"}`}
+                  >
                     flat
                   </span>
                 </p>
@@ -41,7 +47,9 @@ const Pricing = () => {
                         className={`mt-0.5 shrink-0 ${featured ? "text-brand-300" : "text-brand-600"}`}
                         aria-hidden="true"
                       />
-                      <span className={featured ? "text-white/80" : "text-base-content/75"}>{b}</span>
+                      <span className={featured ? "text-white/80" : "text-base-content/75"}>
+                        {b}
+                      </span>
                     </li>
                   ))}
                 </ul>

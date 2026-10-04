@@ -2,7 +2,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { motion, useReducedMotion } from "framer-motion";
 import { FiSearch, FiShield, FiTruck, FiZap, FiMapPin, FiCheck } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const TRUST = [
   { icon: FiZap, label: "Same-day dispatch" },
@@ -22,12 +22,17 @@ const fadeUp = {
 const Banner = ({ setSearch }) => {
   const [value, setValue] = useState("");
   const reduce = useReducedMotion();
+  const navigate = useNavigate();
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setSearch?.(value.trim());
-    if (value.trim()) {
-      document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
+    const q = value.trim();
+    // Keep the optional controlled hook for embeds/tests, but the search is
+    // now real: jump to the dashboard list filtered by tracking ID, parcel
+    // type, receiver or status. PrivateRoute bounces anonymous users to login.
+    setSearch?.(q);
+    if (q) {
+      navigate(`/dashboard/myParcels?q=${encodeURIComponent(q)}`);
     }
   };
 
@@ -83,7 +88,8 @@ const Banner = ({ setSearch }) => {
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 name="tracking"
-                type="text"
+                type="search"
+                aria-label="Track parcel by ID, type, receiver or status"
                 placeholder="Enter tracking ID or destination…"
                 className="input input-lg w-full border-white/15 bg-white/10 pl-11 text-white placeholder:text-white/50 focus:border-brand-400 focus:outline-none"
               />

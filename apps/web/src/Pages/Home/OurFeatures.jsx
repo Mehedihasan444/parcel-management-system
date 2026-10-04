@@ -12,7 +12,10 @@ const CARDS = [
     visual: (
       <div className="mt-5 flex flex-wrap gap-2" aria-hidden="true">
         {["1 kg · ৳50", "2 kg · ৳100", "2 kg+ · ৳150"].map((t) => (
-          <span key={t} className="rounded-full bg-brand-500/10 px-3 py-1.5 text-xs font-semibold text-brand-700 dark:text-brand-300">
+          <span
+            key={t}
+            className="rounded-full bg-brand-500/10 px-3 py-1.5 text-xs font-semibold text-brand-700 dark:text-brand-300"
+          >
             {t}
           </span>
         ))}
@@ -27,7 +30,10 @@ const CARDS = [
     visual: (
       <div className="mt-5 space-y-2" aria-hidden="true">
         {["Picked up", "Hub scan", "Out for delivery"].map((s, i) => (
-          <div key={s} className="flex items-center gap-2.5 text-xs font-medium text-base-content/70">
+          <div
+            key={s}
+            className="flex items-center gap-2.5 text-xs font-medium text-base-content/70"
+          >
             <span
               className={`grid h-5 w-5 place-items-center rounded-full text-[10px] text-white ${
                 i < 2 ? "bg-brand-500" : "bg-base-300 text-base-content/60"
@@ -90,7 +96,7 @@ const OurFeatures = () => {
         {CARDS.map(({ icon: Icon, title, description, span, visual }, i) => (
           <Reveal key={title} delay={(i % 3) * 0.08} className={span}>
             <article className="group h-full rounded-3xl border border-base-200 bg-base-100 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-500/10 sm:p-7">
-              <div className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-500/10 text-brand-600 transition-colors duration-300 group-hover:bg-brand-500 group-hover:text-white">
+              <div className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-500/10 text-brand-600 transition-colors duration-300 group-hover:bg-brand-500 group-hover:text-white dark:text-brand-300">
                 <Icon className="text-xl" aria-hidden="true" />
               </div>
               <h3 className="font-display mt-5 text-lg font-bold">{title}</h3>
